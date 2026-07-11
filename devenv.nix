@@ -7,6 +7,11 @@
 {
   name = "storm-software/telepathic";
 
+  cachix = {
+    push = "github-telepathic";
+    pull = [ "github-telepathic" ];
+  };
+
   overlays = [
     inputs.sccache.overlays.default
   ];

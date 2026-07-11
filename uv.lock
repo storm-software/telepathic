@@ -5,4 +5,4 @@ requires-python = ">=3.10"
 [[package]]
 name = "telepathic"
 version = "0.0.1"
-source = { virtual = "." }
+source = { editable = "." }
