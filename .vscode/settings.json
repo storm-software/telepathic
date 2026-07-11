@@ -145,7 +145,7 @@
     "source.fixAll.eslint": "explicit",
     "source.organizeImports": "never"
   },
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
   "[javascript]": {
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "dbaeumer.vscode-eslint",
@@ -188,7 +188,7 @@
   },
   "[markdown]": {
     "editor.formatOnSave": true,
-    "editor.defaultFormatter": "DavidAnson.vscode-markdownlint",
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
     "editor.formatOnPaste": true
   },
   "[mdx]": {
@@ -218,15 +218,15 @@
   },
   "[toml]": {
     "editor.formatOnSave": true,
-    "editor.defaultFormatter": "tamasfe.even-better-toml"
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   },
   "[yaml]": {
     "editor.formatOnSave": true,
-    "editor.defaultFormatter": "redhat.vscode-yaml"
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   },
   "[css]": {
     "editor.formatOnSave": true,
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   },
   "[nix]": {
     "editor.formatOnSave": true,

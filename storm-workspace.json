@@ -1,10 +1,16 @@
 {
   "$schema": "https://public.storm-cdn.com/schemas/storm-workspace.schema.json",
   "extends": "@storm-software/config/presets/storm-software.json",
-  "name": "powerlines-monorepo-template",
-  "namespace": "powerlines-monorepo-template",
-  "repository": "https://github.com/storm-software/powerlines-monorepo-template",
+  "name": "telepathic",
+  "namespace": "telepathic",
+  "repository": "https://github.com/storm-software/telepathic",
   "packageManager": "pnpm",
-  "logLevel": "trace",
-  "docs": "https://docs.stormsoftware.com/projects/powerlines-monorepo-template"
+  "logLevel": "info",
+  "docs": "https://docs.telepathic.sh",
+  "release": {
+    "banner": {
+      "url": "https://public.storm-cdn.com/telepathic/media/banner-1280x320-dark.gif",
+      "alt": "Telepathic's logo banner"
+    }
+  }
 }

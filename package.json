@@ -1,13 +1,13 @@
 {
-  "name": "@powerlines-monorepo-template/monorepo",
+  "name": "@telepathic/monorepo",
   "version": "0.0.1",
   "type": "module",
-  "description": "⚡ A monorepo containing TypeScript utility packages with shared functionality common to many Storm Software applications.",
+  "description": "🔮 Let your models read your mind.",
   "repository": {
     "type": "github",
-    "url": "https://github.com/storm-software/powerlines-monorepo-template.git"
+    "url": "https://github.com/storm-software/telepathic.git"
   },
-  "homepage": "https://stormsoftware.com",
+  "homepage": "https://telepathic.sh",
   "bugs": {
     "url": "https://stormsoftware.com/support",
     "email": "support@stormsoftware.com"
@@ -23,15 +23,14 @@
   },
   "license": "Apache-2.0",
   "private": true,
-  "packageManager": "pnpm@11.1.2",
+  "packageManager": "pnpm@11.9.0",
   "engines": {
-    "node": ">=26.3.0",
-    "pnpm": ">=11.1.2"
+    "node": ">=24.16.0",
+    "pnpm": ">=11.9.0"
   },
   "keywords": [
+    "telepathic",
     "storm-software",
-    "template",
-    "github-template",
     "monorepo"
   ],
   "scripts": {
@@ -75,9 +74,11 @@
     "@storm-software/config-tools": "catalog:",
     "@storm-software/cspell": "catalog:",
     "@storm-software/eslint": "catalog:",
+    "@storm-software/eslint-plugin-tsdoc": "catalog:",
     "@storm-software/git-tools": "catalog:",
     "@storm-software/linting-tools": "catalog:",
     "@storm-software/markdownlint": "catalog:",
+    "@storm-software/pnpm-tools": "catalog:",
     "@storm-software/prettier": "catalog:",
     "@storm-software/tsconfig": "catalog:",
     "@storm-software/untyped": "catalog:",
@@ -97,18 +98,11 @@
     "vitest": "catalog:",
     "zx": "catalog:"
   },
-  "devEngines": {
-    "runtime": {
-      "name": "node",
-      "version": "^26.3.0",
-      "onFail": "download"
-    }
-  },
   "manypkg": {
     "defaultBranch": "main",
     "workspaceProtocol": "require"
   },
-  "namespace": "@powerlines-monorepo-template",
+  "namespace": "@telepathic",
   "nx": {
     "includedScripts": [
       "lint-knip",
