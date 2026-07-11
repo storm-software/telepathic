@@ -1,0 +1,30 @@
+[package]
+authors       = { workspace = true }
+categories    = { workspace = true }
+description   = 'Core data models for the Telepathic runtime.'
+documentation = 'https://docs.rs/telepathic'
+edition       = { workspace = true }
+homepage      = { workspace = true }
+keywords      = { workspace = true }
+license       = { workspace = true }
+name          = 'telepathic-models'
+publish       = true
+readme        = './README.md'
+repository    = { workspace = true }
+version       = '0.0.1'
+
+[lib]
+doctest = false
+
+[lints]
+workspace = true
+
+[dependencies]
+chrono     = { workspace = true, features = ['serde'] }
+serde      = { workspace = true, features = ['derive'], optional = true }
+serde_json = { workspace = true }
+uuid       = { workspace = true }
+
+[features]
+default = ['serde']
+serde   = ['dep:serde']

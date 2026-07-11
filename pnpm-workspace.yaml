@@ -1,6 +1,6 @@
 packages:
   - tools/*
-  - packages/*
+  - bindings/*
   - docs/*
 catalog:
   "@ls-lint/ls-lint": ^2.3.1
@@ -11,9 +11,13 @@ catalog:
   "@nx/vite": 23.0.2
   "@nx/vitest": 23.0.2
   "@nx/workspace": 23.0.2
+  "@emnapi/core": 1.11.2
+  "@emnapi/runtime": 1.11.2
   "@powerlines/nx": ^0.13.182
   "@powerlines/tsconfig": ^0.4.191
   "@powerlines/tsdoc": ^0.2.139
+  "@powerlines/plugin-napi-rs": ^0.2.196
+  "@powerlines/plugin-tsdown": ^0.1.544
   "@storm-software/config": ^1.138.29
   "@storm-software/config-tools": ^1.190.92
   "@storm-software/cspell": ^0.46.160
@@ -27,14 +31,21 @@ catalog:
   "@storm-software/tsconfig": ^0.48.159
   "@storm-software/untyped": ^0.24.234
   "@storm-software/workspace-tools": ^1.296.72
+  "@napi-rs/cli": ^3.7.2
+  "@napi-rs/wasm-runtime": ^1.1.6
   "@types/node": ^25.9.5
   "@typescript/native-preview": 7.0.0-dev.20251218.3
   copyfiles: ^2.4.1
   eslint: ^10.6.0
+  emnapi: 1.11.2
   lefthook: ^1.13.6
   log4brains: ^1.1.0
+  signal-exit: ^4.1.0
   nx: 23.0.2
   prettier: ^3.9.5
+  powerlines: ^0.47.143
+  jiti: ^2.7.0
+  tsdown: ^0.22.4
   rimraf: ^6.1.3
   verdaccio: 6.0.5
   vite: ^8.1.4
@@ -44,6 +55,7 @@ overrides:
   "@telepathic/tools-config": workspace:*
   "@telepathic/tools-scripts": workspace:*
   "@telepathic/tools-cspell": workspace:*
+  "@telepathic/bindings": workspace:*
   cookie: ">=0.7.0"
   debug: ">=4.4.0"
   follow-redirects: ">=1.15.9"
@@ -96,6 +108,7 @@ minimumReleaseAgeExclude:
   - "@nx/workspace@23.0.2"
   - nx@23.0.2
 allowBuilds:
+  "@parcel/watcher": true
   "@swc/core": true
   core-js: true
   esbuild: true

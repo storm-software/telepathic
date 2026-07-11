@@ -1,8 +1,8 @@
 <div align="center">
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://public.storm-cdn.com/storm-software/media/banner-1280x640-dark.gif">
-  <source media="(prefers-color-scheme: light)" srcset="https://public.storm-cdn.com/storm-software/media/banner-1280x640-light.gif">
-<img src="https://public.storm-cdn.com/storm-software/media/banner-1280x640-dark.gif" width="100%" alt="Storm Software" />
+  <source media="(prefers-color-scheme: dark)" srcset="https://public.storm-cdn.com/telepathic/media/banner-1280x640-dark.gif">
+  <source media="(prefers-color-scheme: light)" srcset="https://public.storm-cdn.com/telepathic/media/banner-1280x640-light.gif">
+<img src="https://public.storm-cdn.com/telepathic/media/banner-1280x640-dark.gif" width="100%" alt="Telepathic" />
 </picture>
 </div>
 <br />
@@ -10,24 +10,17 @@
 <br />
 <div align="center">
 <b>
-<a href="https://stormsoftware.com" target="_blank">Website</a>  •
+<a href="https://telepathic.sh" target="_blank">Website</a>  •
 <a href="https://github.com/storm-software/telepathic" target="_blank">GitHub</a>  •
-<a href="https://discord.gg/MQ6YVzakM5">Discord</a>  •  <a href="https://stormstack.github.io/stormstack/" target="_blank">Docs</a>  •  <a href="https://stormsoftware.com/contact" target="_blank">Contact</a>  •
-<a href="https://github.com/storm-software/stack/issues/new?assignees=&labels=bug&template=bug-report.yml&title=Bug Report%3A+">Report a Bug</a>
+<a href="https://discord.gg/MQ6YVzakM5">Discord</a>  •  <a href="https://docs.telepathic.sh" target="_blank">Docs</a>  •  <a href="https://stormsoftware.com/contact" target="_blank">Contact</a>  •
+<a href="https://github.com/storm-software/telepathic/issues/new?assignees=&labels=bug&template=bug-report.yml&title=Bug Report%3A+">Report a Bug</a>
 </b>
 </div>
 <br />
 
-Storm Software's **Telepathic** monorepo containing TypeScript utility packages
-with shared functionality common to many Storm Software applications
+The **🔮 Telepathic** monorepo contains various packages and applications that both dramatically reduce your AI token spending, and significantly increase the accuracy of these models.
 
 <br />
-
-**Telepathic** is built using <a href="https://nx.dev/" target="_blank">Nx</a>, a
-set of extensible dev tools for monorepos, which helps you develop like Google,
-Facebook, and Microsoft. Building on top of Nx, the Open System provides a set
-of tools and patterns that help you scale your monorepo to many teams while
-keeping the codebase maintainable.
 
 <h3 align="center">💻 Visit <a href="https://stormsoftware.com" target="_blank">stormsoftware.com</a> to stay up to date with this developer</h3>
 <br />
@@ -44,7 +37,7 @@ keeping the codebase maintainable.
 <!-- prettier-ignore-end -->
 
 <div align="center">
-<b>Be sure to ⭐ this repository on GitHub so you can keep up to date on any daily progress!</b>
+<a href="https://github.com/storm-software/telepathic" target="_blank"><b>Be sure to ⭐ this repository on GitHub so you can keep up to date on any daily progress!</b></a>
 </div>
 
 <!-- START doctoc -->

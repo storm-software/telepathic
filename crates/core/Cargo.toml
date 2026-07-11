@@ -1,0 +1,36 @@
+[package]
+authors       = { workspace = true }
+categories    = { workspace = true }
+description   = 'Shared functionality and type definitions used across the Telepathic runtime.'
+documentation = 'https://docs.rs/telepathic'
+edition       = {    workspace = true }
+homepage      = { workspace = true }
+keywords      = { workspace = true }
+license       = { workspace = true }
+name          = 'telepathic-core'
+publish       = true
+readme        = './README.md'
+repository    = { workspace = true }
+version       = '0.0.1'
+
+[lib]
+doctest = false
+
+[lints]
+workspace = true
+
+[dependencies]
+camino             = { workspace = true }
+chrono             = { workspace = true }
+config             = { workspace = true, features = ['json'] }
+derive_more        = { workspace = true }
+dirs               = { workspace = true }
+telepathic-models = { workspace = true }
+serde              = { workspace = true, features = ['derive'], optional = true }
+serde_json         = { workspace = true }
+uuid               = { workspace = true }
+whoami             = { workspace = true }
+
+[features]
+default = ['serde']
+serde   = ['dep:serde']

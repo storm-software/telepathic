@@ -1,0 +1,38 @@
+{
+  "name": "@telepathic/bindings-android-arm-eabi",
+  "version": "0.0.1",
+  "cpu": [
+    "arm"
+  ],
+  "main": "telepathic-napi-rs.android-arm-eabi.node",
+  "files": [
+    "telepathic-napi-rs.android-arm-eabi.node"
+  ],
+  "description": "🔮 Let your models read your mind",
+  "keywords": [
+    "telepathic",
+    "storm-software"
+  ],
+  "author": {
+    "name": "Storm Software",
+    "email": "contact@stormsoftware.com",
+    "url": "https://stormsoftware.com"
+  },
+  "homepage": "https://telepathic.sh",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "github",
+    "url": "https://github.com/storm-software/telepathic.git",
+    "directory": "bindings/npm"
+  },
+  "bugs": {
+    "url": "https://stormsoftware.com/support",
+    "email": "support@stormsoftware.com"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "os": [
+    "android"
+  ]
+}

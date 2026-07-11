@@ -1,0 +1,48 @@
+{
+  "name": "@telepathic/bindings-wasm32-wasi",
+  "version": "0.0.1",
+  "cpu": [
+    "wasm32"
+  ],
+  "main": "telepathic-napi-rs.wasi.cjs",
+  "files": [
+    "telepathic-napi-rs.wasm32-wasi.wasm",
+    "telepathic-napi-rs.wasi.cjs",
+    "telepathic-napi-rs.wasi-browser.js",
+    "wasi-worker.mjs",
+    "wasi-worker-browser.mjs"
+  ],
+  "description": "🔮 Let your models read your mind",
+  "keywords": [
+    "telepathic",
+    "storm-software"
+  ],
+  "author": {
+    "name": "Storm Software",
+    "email": "contact@stormsoftware.com",
+    "url": "https://stormsoftware.com"
+  },
+  "homepage": "https://telepathic.sh",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "github",
+    "url": "https://github.com/storm-software/telepathic.git",
+    "directory": "bindings/npm"
+  },
+  "bugs": {
+    "url": "https://stormsoftware.com/support",
+    "email": "support@stormsoftware.com"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "browser": "telepathic-napi-rs.wasi-browser.js",
+  "dependencies": {
+    "@napi-rs/wasm-runtime": "^1.1.6",
+    "@emnapi/core": "1.11.2",
+    "@emnapi/runtime": "1.11.2"
+  }
+}

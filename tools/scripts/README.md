@@ -1,5 +1,12 @@
-# Telepathic - Shared Scripts Tools
+# Telepathic - Internal Scripts
 
-A collection of tools for managing shared configuration files used in the Telepathic monorepo.
+An internal set of scripts used in the Telepathic monorepo.
 
-This library was generated with [Nx](https://nx.dev).
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+> [!IMPORTANT] 
+> This is an internal Telepathic tooling package, and should not be used outside of the Telepathic monorepo. It is not intended for public consumption, and may change or be removed at any time without notice. 
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->

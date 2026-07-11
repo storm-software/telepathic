@@ -28,11 +28,7 @@
     "node": ">=24.16.0",
     "pnpm": ">=11.9.0"
   },
-  "keywords": [
-    "telepathic",
-    "storm-software",
-    "monorepo"
-  ],
+  "keywords": ["telepathic", "storm-software", "monorepo"],
   "scripts": {
     "adr": "pnpm log4brains adr new",
     "adr-preview": "pnpm log4brains preview",
@@ -48,6 +44,8 @@
     "help": "nx help",
     "lint": "pnpm exec zx tools/scripts/src/lint.mjs",
     "local-registry": "nx local-registry monorepo",
+    "new-lang": "pnpm exec zx tools/scripts/src/new-lang.mjs",
+    "codegen-lang": "pnpm exec zx tools/scripts/src/codegen-lang.mjs",
     "nuke": "pnpm exec zx tools/scripts/src/nuke.mjs",
     "nx": "nx",
     "postinstall": "pnpm bootstrap",

@@ -1,0 +1,37 @@
+[package]
+authors       = { workspace = true }
+build         = 'build.rs'
+categories    = { workspace = true }
+description   = 'Tree-sitter grammars and parser used by the Telepathic runtime to extract metadata from a codebase.'
+documentation = 'https://docs.rs/telepathic'
+edition       = { workspace = true }
+homepage      = { workspace = true }
+keywords      = { workspace = true }
+license       = { workspace = true }
+name          = 'telepathic-tree-sitter'
+publish       = true
+readme        = './README.md'
+repository    = { workspace = true }
+version       = '0.0.1'
+
+[lib]
+doctest = false
+
+[lints]
+workspace = true
+
+[dependencies]
+glob                 = { workspace = true }
+serde_json           = { workspace = true }
+thiserror            = { workspace = true }
+tree-sitter          = { workspace = true }
+tree-sitter-language = { workspace = true }
+telepathic-core     = { workspace = true }
+
+[target.'cfg(not(target_family = "wasm"))'.dependencies]
+rayon = { workspace = true }
+
+[build-dependencies]
+cc         = { workspace = true }
+serde      = { workspace = true }
+serde_json = { workspace = true }

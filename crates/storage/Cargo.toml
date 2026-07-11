@@ -1,0 +1,41 @@
+[package]
+authors       = { workspace = true }
+categories    = { workspace = true }
+description   = 'Persistence for the Telepathic runtime.'
+documentation = 'https://docs.rs/telepathic'
+edition       = { workspace = true }
+homepage      = { workspace = true }
+keywords      = { workspace = true }
+license       = { workspace = true }
+name          = 'telepathic-storage'
+publish       = true
+readme        = './README.md'
+repository    = { workspace = true }
+version       = '0.0.1'
+
+[lib]
+doctest = false
+
+[lints]
+workspace = true
+
+[dependencies]
+blake3             = { workspace = true }
+camino             = { workspace = true }
+chrono             = { workspace = true, features = ['serde'], optional = true }
+lbug               = { workspace = true, optional = true }
+telepathic-core   = { workspace = true }
+telepathic-models = { workspace = true }
+serde              = { workspace = true, features = ['derive'] }
+serde_json         = { workspace = true }
+thiserror          = '2.0.12'
+
+[features]
+default = []
+ladybug = ['dep:chrono', 'dep:lbug']
+testing = []
+
+[dev-dependencies]
+chrono             = { workspace = true, features = ['serde'] }
+telepathic-models = { workspace = true }
+serde_json         = { workspace = true }

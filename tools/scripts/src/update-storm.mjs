@@ -1,7 +1,7 @@
 #!/usr/bin/env zx
 /* -------------------------------------------------------------------
 
-            ⚡ Storm Software - Telepathic
+                   🗲 Storm Software - Telepathic
 
  This code was released as part of the Telepathic project. Telepathic
  is maintained by Storm Software under the Apache-2.0 license, and is
@@ -10,7 +10,7 @@
 
  Website:                  https://stormsoftware.com
  Repository:               https://github.com/storm-software/telepathic
- Documentation:            https://docs.stormsoftware.com/projects/telepathic
+ Documentation:            https://docs.telepathic.sh
  Contact:                  https://stormsoftware.com/contact
 
  SPDX-License-Identifier:  Apache-2.0

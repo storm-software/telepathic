@@ -3,8 +3,8 @@
   "extends": "@storm-software/workspace-tools/config/recommended.json",
   "release": {
     "groups": {
-      "packages": {
-        "projects": ["packages/*"],
+      "bindings": {
+        "projects": ["bindings/*"],
         "projectsRelationship": "independent"
       }
     }
@@ -22,6 +22,7 @@
     "@storm-software/workspace-tools/plugins/typescript",
     "@storm-software/workspace-tools/plugins/typescript/untyped",
     "@storm-software/workspace-tools/plugins/typescript/tsdown",
+    "@storm-software/workspace-tools/plugins/rust",
     "@powerlines/nx/plugin"
   ],
   "sync": {

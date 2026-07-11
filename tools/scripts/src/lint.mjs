@@ -1,7 +1,7 @@
 #!/usr/bin/env zx
 /* -------------------------------------------------------------------
 
-            ⚡ Storm Software - Telepathic
+                   🗲 Storm Software - Telepathic
 
  This code was released as part of the Telepathic project. Telepathic
  is maintained by Storm Software under the Apache-2.0 license, and is
@@ -10,7 +10,7 @@
 
  Website:                  https://stormsoftware.com
  Repository:               https://github.com/storm-software/telepathic
- Documentation:            https://docs.stormsoftware.com/projects/telepathic
+ Documentation:            https://docs.telepathic.sh
  Contact:                  https://stormsoftware.com/contact
 
  SPDX-License-Identifier:  Apache-2.0
@@ -22,11 +22,11 @@ import { $, argv, chalk, echo } from "zx";
 try {
   echo`${chalk.whiteBright(" 📋  Linting the monorepo...")}`;
 
-  let filesArg = "--all";
+  //   let filesArg = "--all";
   let filesList = "";
   if (argv._ && argv._.length > 0) {
     filesList = argv._.join(" ");
-    filesArg = `--files ${argv._.join(",")}`;
+    // filesArg = `--files ${argv._.join(",")}`;
   }
 
   let proc =
@@ -43,19 +43,20 @@ try {
     );
   }
 
-  proc =
-    $`pnpm nx run-many --target=lint ${filesArg} --exclude=monorepo --outputStyle=dynamic-legacy --parallel=5`.timeout(
-      `${30 * 60}s`
-    );
-  proc.stdout.on("data", data => {
-    echo`${data}`;
-  });
-  result = await proc;
-  if (result.exitCode !== 0) {
-    throw new Error(
-      `An error occurred while linting the monorepo: \n\n${result.message}\n`
-    );
-  }
+  //   proc =
+  //     $`pnpm nx run-many --target=lint ${filesArg} --exclude=monorepo --outputStyle=dynamic-legacy --parallel=5`.timeout(
+  //       `${30 * 60}s`
+  //     );
+  //   proc.stdout.on("data", data => {
+  //     echo`${data}`;
+  //   });
+  //   result = await proc;
+  //   if (result.exitCode !== 0) {
+  //     throw new Error(
+  //       `An error occurred while linting the monorepo: \n\n${result.message}\n`
+  //     );
+  //   }
+
   proc = $`pnpm exec storm-lint all --skip-cspell --skip-circular-deps`.timeout(
     `${30 * 60}s`
   );
