@@ -73,7 +73,6 @@ overrides:
   shell-quote: ">=1.8.2"
   simple-git: ">=3.27.0"
 shamefullyHoist: true
-engineStrict: true
 fetchTimeout: 450000
 dedupeDirectDeps: true
 dedupePeerDependents: true
@@ -87,26 +86,6 @@ minimumReleaseAgeExclude:
   - "@stryke/*"
   - "@powerlines/*"
   - powerlines
-  - "@nx/devkit@23.0.2"
-  - "@nx/eslint-plugin@23.0.2"
-  - "@nx/eslint@23.0.2"
-  - "@nx/jest@23.0.2"
-  - "@nx/js@23.0.2"
-  - "@nx/nx-darwin-arm64@23.0.2"
-  - "@nx/nx-darwin-x64@23.0.2"
-  - "@nx/nx-freebsd-x64@23.0.2"
-  - "@nx/nx-linux-arm-gnueabihf@23.0.2"
-  - "@nx/nx-linux-arm64-gnu@23.0.2"
-  - "@nx/nx-linux-arm64-musl@23.0.2"
-  - "@nx/nx-linux-x64-gnu@23.0.2"
-  - "@nx/nx-linux-x64-musl@23.0.2"
-  - "@nx/nx-win32-arm64-msvc@23.0.2"
-  - "@nx/nx-win32-x64-msvc@23.0.2"
-  - "@nx/plugin@23.0.2"
-  - "@nx/vite@23.0.2"
-  - "@nx/vitest@23.0.2"
-  - "@nx/workspace@23.0.2"
-  - nx@23.0.2
 allowBuilds:
   "@parcel/watcher": true
   "@swc/core": true
