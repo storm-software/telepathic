@@ -22,12 +22,12 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_php_only) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_php_only) };
 
-pub const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/php/queries/highlights.scm");
-pub const INJECTIONS_TEXT_SCM_QUERY: &str = include_str!("../../grammars/php/queries/injections-text.scm");
-pub const INJECTIONS_SCM_QUERY: &str = include_str!("../../grammars/php/queries/injections.scm");
-pub const TAGS_SCM_QUERY: &str = include_str!("../../grammars/php/queries/tags.scm");
+pub(crate) const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/php/queries/highlights.scm");
+pub(crate) const INJECTIONS_TEXT_SCM_QUERY: &str = include_str!("../../vendored/php/queries/injections-text.scm");
+pub(crate) const INJECTIONS_SCM_QUERY: &str = include_str!("../../vendored/php/queries/injections.scm");
+pub(crate) const TAGS_SCM_QUERY: &str = include_str!("../../vendored/php/queries/tags.scm");
 
 #[cfg(test)]
 mod tests {

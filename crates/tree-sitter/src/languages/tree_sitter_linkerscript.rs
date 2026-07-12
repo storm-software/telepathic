@@ -22,18 +22,18 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_linkerscript) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_linkerscript) };
 
 /// The content of the [`node-types.json`][] file for this grammar.
 ///
 /// [`node-types.json`]: https://tree-sitter.github.io/tree-sitter/using-parsers#static-node-types
-pub const NODE_TYPES: &str = include_str!("../../grammars/linkerscript/node-types.json");
+pub(crate) const NODE_TYPES: &str = include_str!("../../vendored/linkerscript/node-types.json");
 
-pub const FOLDS_SCM_QUERY: &str = include_str!("../../grammars/linkerscript/queries/folds.scm");
-pub const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/linkerscript/queries/highlights.scm");
-pub const INDENTS_SCM_QUERY: &str = include_str!("../../grammars/linkerscript/queries/indents.scm");
-pub const INJECTIONS_SCM_QUERY: &str = include_str!("../../grammars/linkerscript/queries/injections.scm");
-pub const LOCALS_SCM_QUERY: &str = include_str!("../../grammars/linkerscript/queries/locals.scm");
+pub(crate) const FOLDS_SCM_QUERY: &str = include_str!("../../vendored/linkerscript/queries/folds.scm");
+pub(crate) const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/linkerscript/queries/highlights.scm");
+pub(crate) const INDENTS_SCM_QUERY: &str = include_str!("../../vendored/linkerscript/queries/indents.scm");
+pub(crate) const INJECTIONS_SCM_QUERY: &str = include_str!("../../vendored/linkerscript/queries/injections.scm");
+pub(crate) const LOCALS_SCM_QUERY: &str = include_str!("../../vendored/linkerscript/queries/locals.scm");
 
 #[cfg(test)]
 mod tests {

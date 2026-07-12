@@ -1,7 +1,8 @@
 use crate::session::Session;
+use serde::{Deserialize, Serialize};
 
 /// Output of session loading.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetSessionOutput {
   /// The current session.
   pub session: Session,

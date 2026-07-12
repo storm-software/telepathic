@@ -16,8 +16,63 @@
 
  ------------------------------------------------------------------- */
 
-import type { BindingSession } from "../bindings.cjs";
+import type {
+  BindingDefinition,
+  BindingExportOkfInput,
+  BindingExportOkfOutput,
+  BindingGetSchemaOutput,
+  BindingIndexRepositoryOutput,
+  BindingListProjectsInput,
+  BindingListProjectsOutput,
+  BindingListRepositoriesOutput,
+  BindingQueryGraphInput,
+  BindingQueryGraphOutput,
+  BindingReadGraphInput,
+  BindingReadGraphOutput,
+  BindingSearchGraphInput,
+  BindingSearchGraphOutput,
+  BindingSession,
+  BindingTraceGraphInput,
+  BindingTraceGraphOutput,
+  BindingWriteGraphInput,
+  BindingWriteGraphOutput
+} from "../bindings.cjs";
+
+export type {
+  BindingDefinition,
+  BindingExportOkfInput,
+  BindingExportOkfOutput,
+  BindingGetSchemaOutput,
+  BindingIndexRepositoryOutput,
+  BindingListProjectsInput,
+  BindingListProjectsOutput,
+  BindingListRepositoriesOutput,
+  BindingQueryGraphInput,
+  BindingQueryGraphOutput,
+  BindingReadGraphInput,
+  BindingReadGraphOutput,
+  BindingSearchGraphInput,
+  BindingSearchGraphOutput,
+  BindingTraceGraphInput,
+  BindingTraceGraphOutput,
+  BindingWriteGraphInput,
+  BindingWriteGraphOutput
+};
 
 export interface Engine {
   session: BindingSession;
+  getSchema(): Promise<BindingGetSchemaOutput>;
+  listRepositories(): Promise<BindingListRepositoriesOutput>;
+  indexRepository(): Promise<BindingIndexRepositoryOutput>;
+  listProjects(
+    input: BindingListProjectsInput
+  ): Promise<BindingListProjectsOutput>;
+  writeGraph(input: BindingWriteGraphInput): Promise<BindingWriteGraphOutput>;
+  readGraph(input: BindingReadGraphInput): Promise<BindingReadGraphOutput>;
+  queryGraph(input: BindingQueryGraphInput): Promise<BindingQueryGraphOutput>;
+  searchGraph(
+    input: BindingSearchGraphInput
+  ): Promise<BindingSearchGraphOutput>;
+  traceGraph(input: BindingTraceGraphInput): Promise<BindingTraceGraphOutput>;
+  exportOkf(input: BindingExportOkfInput): Promise<BindingExportOkfOutput>;
 }

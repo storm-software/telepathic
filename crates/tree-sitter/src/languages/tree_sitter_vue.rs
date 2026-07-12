@@ -22,15 +22,15 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_vue) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_vue) };
 
-pub const HTML_TAGS_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/vue/queries/html_tags/highlights.scm");
-pub const HTML_TAGS_INDENTS_SCM_QUERY: &str = include_str!("../../grammars/vue/queries/html_tags/indents.scm");
-pub const HTML_TAGS_INJECTIONS_SCM_QUERY: &str = include_str!("../../grammars/vue/queries/html_tags/injections.scm");
-pub const VUE_FOLDS_SCM_QUERY: &str = include_str!("../../grammars/vue/queries/vue/folds.scm");
-pub const VUE_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/vue/queries/vue/highlights.scm");
-pub const VUE_INDENTS_SCM_QUERY: &str = include_str!("../../grammars/vue/queries/vue/indents.scm");
-pub const VUE_INJECTIONS_SCM_QUERY: &str = include_str!("../../grammars/vue/queries/vue/injections.scm");
+pub(crate) const HTML_TAGS_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/vue/queries/html_tags/highlights.scm");
+pub(crate) const HTML_TAGS_INDENTS_SCM_QUERY: &str = include_str!("../../vendored/vue/queries/html_tags/indents.scm");
+pub(crate) const HTML_TAGS_INJECTIONS_SCM_QUERY: &str = include_str!("../../vendored/vue/queries/html_tags/injections.scm");
+pub(crate) const VUE_FOLDS_SCM_QUERY: &str = include_str!("../../vendored/vue/queries/vue/folds.scm");
+pub(crate) const VUE_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/vue/queries/vue/highlights.scm");
+pub(crate) const VUE_INDENTS_SCM_QUERY: &str = include_str!("../../vendored/vue/queries/vue/indents.scm");
+pub(crate) const VUE_INJECTIONS_SCM_QUERY: &str = include_str!("../../vendored/vue/queries/vue/injections.scm");
 
 #[cfg(test)]
 mod tests {

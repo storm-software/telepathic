@@ -22,17 +22,17 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_ada) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_ada) };
 
 /// The content of the [`node-types.json`][] file for this grammar.
 ///
 /// [`node-types.json`]: https://tree-sitter.github.io/tree-sitter/using-parsers#static-node-types
-pub const NODE_TYPES: &str = include_str!("../../grammars/ada/node-types.json");
+pub(crate) const NODE_TYPES: &str = include_str!("../../vendored/ada/node-types.json");
 
-pub const FOLDS_SCM_QUERY: &str = include_str!("../../grammars/ada/queries/folds.scm");
-pub const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/ada/queries/highlights.scm");
-pub const LOCALS_SCM_QUERY: &str = include_str!("../../grammars/ada/queries/locals.scm");
-pub const TEXTOBJECTS_SCM_QUERY: &str = include_str!("../../grammars/ada/queries/textobjects.scm");
+pub(crate) const FOLDS_SCM_QUERY: &str = include_str!("../../vendored/ada/queries/folds.scm");
+pub(crate) const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/ada/queries/highlights.scm");
+pub(crate) const LOCALS_SCM_QUERY: &str = include_str!("../../vendored/ada/queries/locals.scm");
+pub(crate) const TEXTOBJECTS_SCM_QUERY: &str = include_str!("../../vendored/ada/queries/textobjects.scm");
 
 #[cfg(test)]
 mod tests {

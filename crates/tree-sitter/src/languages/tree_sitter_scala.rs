@@ -22,12 +22,12 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_scala) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_scala) };
 
-pub const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/scala/queries/highlights.scm");
-pub const INDENTS_SCM_QUERY: &str = include_str!("../../grammars/scala/queries/indents.scm");
-pub const LOCALS_SCM_QUERY: &str = include_str!("../../grammars/scala/queries/locals.scm");
-pub const TAGS_SCM_QUERY: &str = include_str!("../../grammars/scala/queries/tags.scm");
+pub(crate) const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/scala/queries/highlights.scm");
+pub(crate) const INDENTS_SCM_QUERY: &str = include_str!("../../vendored/scala/queries/indents.scm");
+pub(crate) const LOCALS_SCM_QUERY: &str = include_str!("../../vendored/scala/queries/locals.scm");
+pub(crate) const TAGS_SCM_QUERY: &str = include_str!("../../vendored/scala/queries/tags.scm");
 
 #[cfg(test)]
 mod tests {

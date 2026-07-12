@@ -1,23 +1,24 @@
 use derive_more::Debug;
 use std::future::{Future, ready};
-use std::sync::Arc;
 use telepathic_core::{
   Options,
   context::Context,
-  inputs::{RecallInput, SearchInput, StoreInput},
-  outputs::{GetSessionOutput, GetSettingsOutput, RecallOutput, SearchOutput, StoreOutput},
+  inputs::{
+    ExportOKFInput, ListProjectsInput, QueryGraphInput, ReadGraphInput, SearchGraphInput,
+    TraceGraphInput, WriteGraphInput,
+  },
+  outputs::{
+    ExportOKFOutput, GetSchemaOutput, GetSessionOutput, GetSettingsOutput, IndexRepositoryOutput,
+    ListProjectsOutput, ListRepositoriesOutput, QueryGraphOutput, ReadGraphOutput,
+    SearchGraphOutput, TraceGraphOutput, WriteGraphOutput,
+  },
 };
-#[cfg(feature = "ladybug")]
-use telepathic_storage::IndexedExecutionStore;
-use telepathic_storage::{ExecutionStore, FsExecutionStore, StorageError};
 
 use crate::{EngineError, EngineResult};
 
 #[derive(Debug, Clone)]
 pub struct Engine {
   pub(super) context: Context,
-  #[debug(skip)]
-  pub(super) execution_store: Arc<dyn ExecutionStore>,
   pub(super) is_closed: bool,
 }
 
@@ -26,10 +27,7 @@ impl Engine {
   pub fn new(options: Options) -> EngineResult<Self> {
     let context = Context::new(options);
 
-    let executions_path = context.settings.paths.data.join("executions").into();
-    let execution_store = create_execution_store(executions_path)?;
-
-    Ok(Self { context, execution_store, is_closed: false })
+    Ok(Self { context, is_closed: false })
   }
 
   pub fn is_closed(&self) -> bool {
@@ -46,36 +44,80 @@ impl Engine {
     Ok(GetSessionOutput::from(self.context.session.clone()))
   }
 
-  #[tracing::instrument(skip(self, input), fields(execution_id = %input.execution.meta.id), level = "trace")]
-  pub fn store(&mut self, input: StoreInput) -> EngineResult<StoreOutput> {
+  #[tracing::instrument(skip_all, level = "trace")]
+  pub fn get_schema(&self) -> EngineResult<GetSchemaOutput> {
     self.create_error_if_closed()?;
 
-    let execution_id = input.execution.meta.id.clone();
-    tracing::trace!(action = "StoreStart", execution_id = %execution_id);
-
-    self.execution_store.store(&input.execution).map_err(storage_error)?;
-
-    tracing::trace!(action = "StoreEnd", execution_id = %execution_id);
-
-    Ok(StoreOutput { success: true, errors: vec![] })
+    Ok(GetSchemaOutput { schema: String::new() })
   }
 
-  #[tracing::instrument(skip(self, input), fields(execution_id = %input.execution_id), level = "trace")]
-  pub fn recall(&mut self, input: RecallInput) -> EngineResult<RecallOutput> {
+  #[tracing::instrument(skip_all, level = "trace")]
+  pub fn list_repositories(&self) -> EngineResult<ListRepositoriesOutput> {
     self.create_error_if_closed()?;
 
-    let execution = self.execution_store.recall(&input.execution_id).map_err(storage_error)?;
-
-    Ok(RecallOutput { execution })
+    Ok(ListRepositoriesOutput { repositories: vec![] })
   }
 
-  #[tracing::instrument(skip(self, input), fields(query = ?input.query, executed_by = ?input.executed_by, limit = ?input.limit), level = "trace")]
-  pub fn search(&mut self, input: SearchInput) -> EngineResult<SearchOutput> {
+  #[tracing::instrument(skip_all, level = "trace")]
+  pub fn index_repository(&mut self) -> EngineResult<IndexRepositoryOutput> {
     self.create_error_if_closed()?;
 
-    let output = self.execution_store.search(&input).map_err(storage_error)?;
+    Ok(IndexRepositoryOutput { success: true, errors: vec![] })
+  }
 
-    Ok(output)
+  #[tracing::instrument(skip(self, input), level = "trace")]
+  pub fn list_projects(&self, input: ListProjectsInput) -> EngineResult<ListProjectsOutput> {
+    self.create_error_if_closed()?;
+    let _ = input;
+
+    Ok(ListProjectsOutput { projects: vec![] })
+  }
+
+  #[tracing::instrument(skip(self, input), level = "trace")]
+  pub fn write_graph(&mut self, input: WriteGraphInput) -> EngineResult<WriteGraphOutput> {
+    self.create_error_if_closed()?;
+    let _ = input;
+
+    Ok(WriteGraphOutput { success: true, errors: vec![] })
+  }
+
+  #[tracing::instrument(skip(self, input), level = "trace")]
+  pub fn read_graph(&self, input: ReadGraphInput) -> EngineResult<ReadGraphOutput> {
+    self.create_error_if_closed()?;
+
+    Ok(ReadGraphOutput { node: input.name })
+  }
+
+  #[tracing::instrument(skip(self, input), level = "trace")]
+  pub fn query_graph(&self, input: QueryGraphInput) -> EngineResult<QueryGraphOutput> {
+    self.create_error_if_closed()?;
+    let _ = input;
+
+    Ok(QueryGraphOutput { results: vec![] })
+  }
+
+  #[tracing::instrument(skip(self, input), level = "trace")]
+  pub fn search_graph(&self, input: SearchGraphInput) -> EngineResult<SearchGraphOutput> {
+    self.create_error_if_closed()?;
+    let _ = input;
+
+    Ok(SearchGraphOutput { results: vec![] })
+  }
+
+  #[tracing::instrument(skip(self, input), level = "trace")]
+  pub fn trace_graph(&self, input: TraceGraphInput) -> EngineResult<TraceGraphOutput> {
+    self.create_error_if_closed()?;
+    let _ = input;
+
+    Ok(TraceGraphOutput { results: vec![] })
+  }
+
+  #[tracing::instrument(skip(self, input), level = "trace")]
+  pub fn export_okf(&mut self, input: ExportOKFInput) -> EngineResult<ExportOKFOutput> {
+    self.create_error_if_closed()?;
+    let _ = input;
+
+    Ok(ExportOKFOutput { success: true, errors: vec![] })
   }
 
   #[must_use = "Future must be awaited to do the actual cleanup work"]
@@ -94,32 +136,6 @@ impl Engine {
   }
 }
 
-fn storage_error(error: StorageError) -> EngineError {
-  EngineError::StorageError(error.to_string())
-}
-
-fn create_execution_store(
-  executions_path: camino::Utf8PathBuf,
-) -> EngineResult<Arc<dyn ExecutionStore>> {
-  let fs_store = FsExecutionStore::new(executions_path.clone());
-
-  #[cfg(feature = "ladybug")]
-  {
-    let index_path = executions_path
-      .parent()
-      .map(|path| path.join("execution-index"))
-      .unwrap_or_else(|| executions_path.join("index"));
-
-    let store = IndexedExecutionStore::new(fs_store, index_path.as_str()).map_err(storage_error)?;
-    return Ok(Arc::new(store));
-  }
-
-  #[cfg(not(feature = "ladybug"))]
-  {
-    Ok(Arc::new(fs_store))
-  }
-}
-
 #[cfg(test)]
 #[allow(
   clippy::unwrap_used,
@@ -128,75 +144,90 @@ fn create_execution_store(
 )]
 mod tests {
   use super::*;
-  use chrono::Utc;
-  use telepathic_core::inputs::SearchInput;
-  use telepathic_models::{
-    Execution, ExecutionDocument, ExecutionMeta, ExecutionSource, ExecutionSourceMeta,
-    GeneratorMeta, InputMeta, Meta, OutputMeta, SchemaMeta,
+  use telepathic_core::{
+    Definition, NormalizedOptions, Repository, session::Session,
+    settings::{EnvPaths, LogLevel, Mode, Settings},
   };
-  use telepathic_storage::InMemoryExecutionStore;
 
-  fn sample_execution(id: &str) -> Execution {
-    let meta = Meta {
-      id: "schema".into(),
-      name: "schema".into(),
-      version: serde_json::json!("1.0.0"),
-      description: "desc".into(),
-      title: "title".into(),
-      usage: None,
-      deprecated: None,
-      tags: None,
-      links: vec![],
+  fn test_engine() -> Engine {
+    let options = Options::default();
+    let normalized_options = NormalizedOptions::from(options.clone());
+    let context = Context {
+      user_options: options,
+      options: normalized_options,
+      settings: Settings::new(
+        Mode::default(),
+        LogLevel::default(),
+        EnvPaths::default(),
+        false,
+        "tester".into(),
+      ),
+      session: Session::default(),
+      repository: Repository::default(),
     };
 
-    Execution {
-      documents: vec![ExecutionDocument {
-        path: "src/doc.ts".into(),
-        source: vec![ExecutionSource {
-          language: "typescript".into(),
-          content: "export {}".into(),
-          meta: ExecutionSourceMeta {
-            options: serde_json::json!({}),
-            spec: serde_json::json!({}),
-            generator: GeneratorMeta { description: None },
-            schema: SchemaMeta { meta: meta.clone(), examples: vec![] },
-            input: InputMeta { meta: meta.clone(), input: None },
-            output: OutputMeta { meta, produces: None },
-          },
-        }],
-      }],
-      meta: ExecutionMeta { id: id.into(), executed_at: Utc::now(), executed_by: "tester".into() },
-    }
-  }
-
-  fn engine_with_store(store: Arc<dyn ExecutionStore>) -> Engine {
-    Engine { context: Context::new(Options::default()), execution_store: store, is_closed: false }
+    Engine { context, is_closed: false }
   }
 
   #[test]
-  fn store_recall_and_search_execution() {
-    let store = Arc::new(InMemoryExecutionStore::default());
-    let mut engine = engine_with_store(store);
-    let execution = sample_execution("exec-1");
+  fn graph_operations_return_expected_defaults() {
+    let mut engine = test_engine();
 
-    let store_output = engine.store(StoreInput { execution: execution.clone() }).unwrap();
-    assert!(store_output.success);
+    let write_output = engine
+      .write_graph(WriteGraphInput { node: Definition::default(), properties: None })
+      .unwrap();
+    assert!(write_output.success);
 
-    let recall_output = engine.recall(RecallInput { execution_id: "exec-1".into() }).unwrap();
-    assert_eq!(recall_output.execution, execution);
+    let read_output = engine.read_graph(ReadGraphInput { name: "node".into() }).unwrap();
+    assert_eq!(read_output.node, "node");
+
+    let query_output = engine
+      .query_graph(QueryGraphInput { query: "MATCH (n) RETURN n".into(), params: None })
+      .unwrap();
+    assert!(query_output.results.is_empty());
 
     let search_output = engine
-      .search(SearchInput {
-        query: Some("doc".into()),
-        executed_by: Some("tester".into()),
-        schema: None,
-        generator: None,
-        tags: None,
+      .search_graph(SearchGraphInput {
+        query: Some("query".into()),
+        last_user_id: None,
+        name: String::new(),
+        qualified_name: String::new(),
+        label: String::new(),
+        file_path: None,
+        labels: None,
         embedding: None,
         limit: Some(10),
       })
       .unwrap();
-    assert_eq!(search_output.hits.len(), 1);
-    assert_eq!(search_output.hits[0].execution_id, "exec-1");
+    assert!(search_output.results.is_empty());
+
+    let trace_output = engine
+      .trace_graph(TraceGraphInput {
+        call_site_name: "call".into(),
+        qualified_name: "module.call".into(),
+        strategy: "static".into(),
+        confidence: 1.0,
+      })
+      .unwrap();
+    assert!(trace_output.results.is_empty());
+
+    let export_output = engine
+      .export_okf(ExportOKFInput { output_path: std::path::PathBuf::from("/tmp/okf") })
+      .unwrap();
+    assert!(export_output.success);
+
+    let projects_output = engine
+      .list_projects(ListProjectsInput { repository_id: None, depends_on: None })
+      .unwrap();
+    assert!(projects_output.projects.is_empty());
+
+    let repositories_output = engine.list_repositories().unwrap();
+    assert!(repositories_output.repositories.is_empty());
+
+    let index_output = engine.index_repository().unwrap();
+    assert!(index_output.success);
+
+    let schema_output = engine.get_schema().unwrap();
+    assert!(schema_output.schema.is_empty());
   }
 }

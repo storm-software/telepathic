@@ -22,9 +22,9 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_commonlisp) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_commonlisp) };
 
-pub const TAGS_SCM_QUERY: &str = include_str!("../../grammars/commonlisp/queries/tags.scm");
+pub(crate) const TAGS_SCM_QUERY: &str = include_str!("../../vendored/commonlisp/queries/tags.scm");
 
 #[cfg(test)]
 mod tests {

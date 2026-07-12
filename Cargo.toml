@@ -1,3 +1,5 @@
+cargo-features = ["codegen-backend"]
+
 [workspace]
 members = ["crates/*"]
 resolver = "3"
@@ -112,6 +114,7 @@ telepathic-semantic = { path = "./crates/semantic" }
 telepathic-storage = { path = "./crates/storage" }
 telepathic-tracing = { path = "./crates/tracing" }
 telepathic-tree-sitter = { path = "./crates/tree-sitter" }
+telepathic-lsp = { path = "./crates/lsp" }
 
 async-trait = "0.1.89"
 ort = { version = "2.0.0-rc.12", default-features = true }
@@ -167,6 +170,7 @@ napi-derive = { version = "3.0.0", default-features = false, features = [
 ] }
 
 # C Bindings
+bindgen = { version = "0.72.1", default-features = false, features = ["runtime"] }
 cc = { version = "1.2.26" }
 
 [profile.dev]

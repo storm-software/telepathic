@@ -22,13 +22,13 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_perl) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_perl) };
 
-pub const FOLDS_SCM_QUERY: &str = include_str!("../../grammars/perl/queries/folds.scm");
-pub const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/perl/queries/highlights.scm");
-pub const INJECTIONS_SCM_QUERY: &str = include_str!("../../grammars/perl/queries/injections.scm");
-pub const MATCHUP_SCM_QUERY: &str = include_str!("../../grammars/perl/queries/matchup.scm");
-pub const TEXTOBJECTS_SCM_QUERY: &str = include_str!("../../grammars/perl/queries/textobjects.scm");
+pub(crate) const FOLDS_SCM_QUERY: &str = include_str!("../../vendored/perl/queries/folds.scm");
+pub(crate) const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/perl/queries/highlights.scm");
+pub(crate) const INJECTIONS_SCM_QUERY: &str = include_str!("../../vendored/perl/queries/injections.scm");
+pub(crate) const MATCHUP_SCM_QUERY: &str = include_str!("../../vendored/perl/queries/matchup.scm");
+pub(crate) const TEXTOBJECTS_SCM_QUERY: &str = include_str!("../../vendored/perl/queries/textobjects.scm");
 
 #[cfg(test)]
 mod tests {

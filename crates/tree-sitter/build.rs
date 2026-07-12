@@ -47,7 +47,7 @@ fn main() {
   let mut languages_files = Vec::new();
   let mut compiled_grammars: Vec<&Grammar> = Vec::new();
 
-  let grammars_path = PathBuf::from("grammars");
+  let grammars_path = PathBuf::from("vendored");
   println!("cargo:rerun-if-changed={}", grammars_path.display());
   let languages_path = src_path.join("languages");
   create_dir_all(&languages_path).expect("Must be able to create generated languages directory");
@@ -56,7 +56,7 @@ fn main() {
   for grammar_path in {
     let mut paths = grammars_path
       .read_dir()
-      .expect("Must be able to read grammars directory")
+      .expect("Must be able to read vendored grammars directory")
       .filter_map(Result::ok)
       .collect::<Vec<_>>();
     paths.sort_by_key(|entry| entry.path());
@@ -77,7 +77,7 @@ fn main() {
     let grammar_key = grammar_dir
       .file_name()
       .and_then(|name| name.to_str())
-      .expect("Grammar directory must have a valid UTF-8 name");
+      .expect("Vendored grammar directory must have a valid UTF-8 name");
     let grammar = grammars_manifest
       .get(grammar_key)
       .unwrap_or_else(|| panic!("Missing grammar manifest entry for {grammar_key}"));
@@ -121,8 +121,8 @@ fn main() {
       println!("cargo:rerun-if-changed={}", query_path.display());
     }
 
-    let ts_c_function = discover_language_symbol(&parser_path)
-      .unwrap_or_else(|| grammar.ts_function.clone());
+    let ts_c_function =
+      discover_language_symbol(&parser_path).unwrap_or_else(|| grammar.ts_function.clone());
     if ts_c_function != grammar.ts_function {
       println!(
         "cargo:warning=grammar {grammar_key}: manifest ts_function={} but parser.c defines {}",
@@ -242,10 +242,8 @@ mod tests {{
     let module_name = file_name.trim_end_matches(".rs");
 
     let grammar_key = file_name.trim_start_matches("tree_sitter_").trim_end_matches(".rs");
-    let grammar = grammars_manifest
-      .values()
-      .find(|g| g.ts_function == module_name)
-      .unwrap_or_else(|| {
+    let grammar =
+      grammars_manifest.values().find(|g| g.ts_function == module_name).unwrap_or_else(|| {
         grammars_manifest
           .get(grammar_key)
           .unwrap_or_else(|| panic!("Missing grammar manifest entry for {grammar_key}"))
@@ -520,17 +518,10 @@ const EMPTY: &[&str] = &[];
   for grammar in &sorted_grammars {
     let const_name = module_types_const_name(&grammar.name);
     let module_root = escape_rust_string(&grammar.module_root);
-    writeln!(
-      source,
-      "/// Module / translation-unit node kinds for {}.",
-      grammar.display_name
-    )
-    .expect("Writing to String cannot fail");
-    writeln!(
-      source,
-      "pub(crate) const {const_name}: &[&str] = &[\"{module_root}\"];"
-    )
-    .expect("Writing to String cannot fail");
+    writeln!(source, "/// Module / translation-unit node kinds for {}.", grammar.display_name)
+      .expect("Writing to String cannot fail");
+    writeln!(source, "pub(crate) const {const_name}: &[&str] = &[\"{module_root}\"];")
+      .expect("Writing to String cannot fail");
   }
 
   source.push_str(
@@ -544,12 +535,8 @@ pub const fn modules_for(language: Language) -> &'static [&'static str] {
 
   for grammar in &sorted_grammars {
     let const_name = module_types_const_name(&grammar.name);
-    writeln!(
-      source,
-      "        Language::{} => {const_name},",
-      grammar.pascal_name
-    )
-    .expect("Writing to String cannot fail");
+    writeln!(source, "        Language::{} => {const_name},", grammar.pascal_name)
+      .expect("Writing to String cannot fail");
   }
 
   source.push_str(
@@ -586,8 +573,7 @@ fn module_types_const_name(grammar_name: &str) -> String {
 }
 
 fn cleanup_stale_language_modules(languages_path: &Path, active_files: &[std::ffi::OsString]) {
-  let active: HashSet<&str> =
-    active_files.iter().filter_map(|name| name.to_str()).collect();
+  let active: HashSet<&str> = active_files.iter().filter_map(|name| name.to_str()).collect();
 
   let entries = read_dir(languages_path).expect("Must be able to read languages directory");
   for entry in entries.filter_map(Result::ok) {

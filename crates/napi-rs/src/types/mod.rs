@@ -1,3 +1,5 @@
+/// Module containing the binding definition type.
+pub mod binding_definition;
 /// Module containing the binding device type.
 pub mod binding_device;
 /// Module containing the binding env paths type.

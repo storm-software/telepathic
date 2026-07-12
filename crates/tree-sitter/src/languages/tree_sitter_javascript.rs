@@ -22,14 +22,14 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_javascript) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_javascript) };
 
-pub const HIGHLIGHTS_JSX_SCM_QUERY: &str = include_str!("../../grammars/javascript/queries/highlights-jsx.scm");
-pub const HIGHLIGHTS_PARAMS_SCM_QUERY: &str = include_str!("../../grammars/javascript/queries/highlights-params.scm");
-pub const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/javascript/queries/highlights.scm");
-pub const INJECTIONS_SCM_QUERY: &str = include_str!("../../grammars/javascript/queries/injections.scm");
-pub const LOCALS_SCM_QUERY: &str = include_str!("../../grammars/javascript/queries/locals.scm");
-pub const TAGS_SCM_QUERY: &str = include_str!("../../grammars/javascript/queries/tags.scm");
+pub(crate) const HIGHLIGHTS_JSX_SCM_QUERY: &str = include_str!("../../vendored/javascript/queries/highlights-jsx.scm");
+pub(crate) const HIGHLIGHTS_PARAMS_SCM_QUERY: &str = include_str!("../../vendored/javascript/queries/highlights-params.scm");
+pub(crate) const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/javascript/queries/highlights.scm");
+pub(crate) const INJECTIONS_SCM_QUERY: &str = include_str!("../../vendored/javascript/queries/injections.scm");
+pub(crate) const LOCALS_SCM_QUERY: &str = include_str!("../../vendored/javascript/queries/locals.scm");
+pub(crate) const TAGS_SCM_QUERY: &str = include_str!("../../vendored/javascript/queries/tags.scm");
 
 #[cfg(test)]
 mod tests {

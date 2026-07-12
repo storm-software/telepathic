@@ -22,12 +22,12 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_mojo) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_mojo) };
 
-pub const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/mojo/queries/highlights.scm");
-pub const INDENTS_SCM_QUERY: &str = include_str!("../../grammars/mojo/queries/indents.scm");
-pub const OUTLINE_SCM_QUERY: &str = include_str!("../../grammars/mojo/queries/outline.scm");
-pub const OVERRIDES_SCM_QUERY: &str = include_str!("../../grammars/mojo/queries/overrides.scm");
+pub(crate) const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/mojo/queries/highlights.scm");
+pub(crate) const INDENTS_SCM_QUERY: &str = include_str!("../../vendored/mojo/queries/indents.scm");
+pub(crate) const OUTLINE_SCM_QUERY: &str = include_str!("../../vendored/mojo/queries/outline.scm");
+pub(crate) const OVERRIDES_SCM_QUERY: &str = include_str!("../../vendored/mojo/queries/overrides.scm");
 
 #[cfg(test)]
 mod tests {

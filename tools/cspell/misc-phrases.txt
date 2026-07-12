@@ -6,6 +6,7 @@ libc
 kustomization
 xwin
 systemverilog
+cuda
 
 # File Extensions
 haml

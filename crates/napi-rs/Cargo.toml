@@ -39,7 +39,6 @@ napi-derive = { workspace = true }
 num_cpus = { workspace = true }
 telepathic-core = { workspace = true }
 telepathic-engine = { workspace = true }
-telepathic-models = { workspace = true }
 telepathic-tracing = { workspace = true }
 regex = { workspace = true }
 regress = { workspace = true }

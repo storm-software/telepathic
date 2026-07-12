@@ -14,8 +14,10 @@ pub mod source_code;
 
 pub use crate::context::*;
 pub use crate::error::*;
+pub use crate::inputs::*;
 pub use crate::normalized_options::*;
 pub use crate::options::*;
+pub use crate::outputs::*;
 pub use crate::repository::*;
 pub use crate::session::*;
 pub use crate::settings::*;

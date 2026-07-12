@@ -22,19 +22,19 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_beancount) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_beancount) };
 
 /// The content of the [`node-types.json`][] file for this grammar.
 ///
 /// [`node-types.json`]: https://tree-sitter.github.io/tree-sitter/using-parsers#static-node-types
-pub const NODE_TYPES: &str = include_str!("../../grammars/beancount/node-types.json");
+pub(crate) const NODE_TYPES: &str = include_str!("../../vendored/beancount/node-types.json");
 
-pub const FOLDS_SCM_QUERY: &str = include_str!("../../grammars/beancount/queries/folds.scm");
-pub const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/beancount/queries/highlights.scm");
-pub const INDENTS_SCM_QUERY: &str = include_str!("../../grammars/beancount/queries/indents.scm");
-pub const LOCALS_SCM_QUERY: &str = include_str!("../../grammars/beancount/queries/locals.scm");
-pub const TAGS_SCM_QUERY: &str = include_str!("../../grammars/beancount/queries/tags.scm");
-pub const TEXTOBJECTS_SCM_QUERY: &str = include_str!("../../grammars/beancount/queries/textobjects.scm");
+pub(crate) const FOLDS_SCM_QUERY: &str = include_str!("../../vendored/beancount/queries/folds.scm");
+pub(crate) const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/beancount/queries/highlights.scm");
+pub(crate) const INDENTS_SCM_QUERY: &str = include_str!("../../vendored/beancount/queries/indents.scm");
+pub(crate) const LOCALS_SCM_QUERY: &str = include_str!("../../vendored/beancount/queries/locals.scm");
+pub(crate) const TAGS_SCM_QUERY: &str = include_str!("../../vendored/beancount/queries/tags.scm");
+pub(crate) const TEXTOBJECTS_SCM_QUERY: &str = include_str!("../../vendored/beancount/queries/textobjects.scm");
 
 #[cfg(test)]
 mod tests {

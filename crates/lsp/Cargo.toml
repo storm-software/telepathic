@@ -1,0 +1,38 @@
+[package]
+authors       = { workspace = true }
+build         = 'build.rs'
+categories    = { workspace = true }
+description   = 'Telepathic Language Server Protocol extraction runtime.'
+documentation = 'https://docs.rs/telepathic'
+edition       = { workspace = true }
+homepage      = { workspace = true }
+keywords      = { workspace = true }
+license       = { workspace = true }
+name          = 'telepathic-lsp'
+publish       = false
+readme        = './README.md'
+repository    = { workspace = true }
+version       = '0.0.1'
+
+[lib]
+doctest = false
+
+[lints]
+workspace = true
+
+[features]
+default      = ['serde']
+experimental = []
+serde        = ['dep:serde']
+testing      = []
+
+[dependencies]
+serde            = { workspace = true, optional = true }
+telepathic-core = { workspace = true }
+thiserror        = { workspace = true }
+tracing          = { workspace = true }
+tree-sitter      = { workspace = true }
+
+[build-dependencies]
+bindgen = { workspace = true }
+cc      = { workspace = true }

@@ -22,25 +22,25 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_matlab) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_matlab) };
 
-pub const EMACS_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/matlab/queries/emacs/highlights.scm");
-pub const EMACS_TEXTOBJECTS_SCM_QUERY: &str = include_str!("../../grammars/matlab/queries/emacs/textobjects.scm");
-pub const HELIX_CONTEXT_SCM_QUERY: &str = include_str!("../../grammars/matlab/queries/helix/context.scm");
-pub const HELIX_FOLDS_SCM_QUERY: &str = include_str!("../../grammars/matlab/queries/helix/folds.scm");
-pub const HELIX_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/matlab/queries/helix/highlights.scm");
-pub const HELIX_INDENTS_SCM_QUERY: &str = include_str!("../../grammars/matlab/queries/helix/indents.scm");
-pub const HELIX_INJECTIONS_SCM_QUERY: &str = include_str!("../../grammars/matlab/queries/helix/injections.scm");
-pub const HELIX_LOCALS_SCM_QUERY: &str = include_str!("../../grammars/matlab/queries/helix/locals.scm");
-pub const HELIX_TEXTOBJECTS_SCM_QUERY: &str = include_str!("../../grammars/matlab/queries/helix/textobjects.scm");
-pub const NEOVIM_CONTEXT_SCM_QUERY: &str = include_str!("../../grammars/matlab/queries/neovim/context.scm");
-pub const NEOVIM_FOLDS_SCM_QUERY: &str = include_str!("../../grammars/matlab/queries/neovim/folds.scm");
-pub const NEOVIM_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/matlab/queries/neovim/highlights.scm");
-pub const NEOVIM_INDENTS_SCM_QUERY: &str = include_str!("../../grammars/matlab/queries/neovim/indents.scm");
-pub const NEOVIM_INJECTIONS_SCM_QUERY: &str = include_str!("../../grammars/matlab/queries/neovim/injections.scm");
-pub const NEOVIM_LOCALS_SCM_QUERY: &str = include_str!("../../grammars/matlab/queries/neovim/locals.scm");
-pub const NEOVIM_TAGS_SCM_QUERY: &str = include_str!("../../grammars/matlab/queries/neovim/tags.scm");
-pub const NEOVIM_TEXTOBJECTS_SCM_QUERY: &str = include_str!("../../grammars/matlab/queries/neovim/textobjects.scm");
+pub(crate) const EMACS_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/matlab/queries/emacs/highlights.scm");
+pub(crate) const EMACS_TEXTOBJECTS_SCM_QUERY: &str = include_str!("../../vendored/matlab/queries/emacs/textobjects.scm");
+pub(crate) const HELIX_CONTEXT_SCM_QUERY: &str = include_str!("../../vendored/matlab/queries/helix/context.scm");
+pub(crate) const HELIX_FOLDS_SCM_QUERY: &str = include_str!("../../vendored/matlab/queries/helix/folds.scm");
+pub(crate) const HELIX_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/matlab/queries/helix/highlights.scm");
+pub(crate) const HELIX_INDENTS_SCM_QUERY: &str = include_str!("../../vendored/matlab/queries/helix/indents.scm");
+pub(crate) const HELIX_INJECTIONS_SCM_QUERY: &str = include_str!("../../vendored/matlab/queries/helix/injections.scm");
+pub(crate) const HELIX_LOCALS_SCM_QUERY: &str = include_str!("../../vendored/matlab/queries/helix/locals.scm");
+pub(crate) const HELIX_TEXTOBJECTS_SCM_QUERY: &str = include_str!("../../vendored/matlab/queries/helix/textobjects.scm");
+pub(crate) const NEOVIM_CONTEXT_SCM_QUERY: &str = include_str!("../../vendored/matlab/queries/neovim/context.scm");
+pub(crate) const NEOVIM_FOLDS_SCM_QUERY: &str = include_str!("../../vendored/matlab/queries/neovim/folds.scm");
+pub(crate) const NEOVIM_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/matlab/queries/neovim/highlights.scm");
+pub(crate) const NEOVIM_INDENTS_SCM_QUERY: &str = include_str!("../../vendored/matlab/queries/neovim/indents.scm");
+pub(crate) const NEOVIM_INJECTIONS_SCM_QUERY: &str = include_str!("../../vendored/matlab/queries/neovim/injections.scm");
+pub(crate) const NEOVIM_LOCALS_SCM_QUERY: &str = include_str!("../../vendored/matlab/queries/neovim/locals.scm");
+pub(crate) const NEOVIM_TAGS_SCM_QUERY: &str = include_str!("../../vendored/matlab/queries/neovim/tags.scm");
+pub(crate) const NEOVIM_TEXTOBJECTS_SCM_QUERY: &str = include_str!("../../vendored/matlab/queries/neovim/textobjects.scm");
 
 #[cfg(test)]
 mod tests {

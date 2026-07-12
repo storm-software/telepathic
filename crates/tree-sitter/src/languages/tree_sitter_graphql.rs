@@ -22,10 +22,10 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_graphql) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_graphql) };
 
-pub const GRAPHQL_FORMATTER_SCM_QUERY: &str = include_str!("../../grammars/graphql/queries/graphql/formatter.scm");
-pub const GRAPHQL_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/graphql/queries/graphql/highlights.scm");
+pub(crate) const GRAPHQL_FORMATTER_SCM_QUERY: &str = include_str!("../../vendored/graphql/queries/graphql/formatter.scm");
+pub(crate) const GRAPHQL_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/graphql/queries/graphql/highlights.scm");
 
 #[cfg(test)]
 mod tests {

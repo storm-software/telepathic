@@ -1,3 +1,5 @@
+use serde::{Deserialize, Serialize};
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub(crate) enum ReadStatus {
   Ok,
@@ -8,7 +10,8 @@ pub(crate) enum ReadStatus {
 }
 
 /// One extracted definition.
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, PartialEq)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct Definition {
   pub name: String,
   pub qualified_name: String,
@@ -21,6 +24,9 @@ pub struct Definition {
   pub parent_class: Option<String>,
   pub decorators: Vec<String>,
   pub base_classes: Vec<String>,
+  pub param_names: Vec<String>,
+  pub param_types: Vec<String>,
+  pub return_types: Vec<String>,
   pub complexity: i32,
   pub lines: i32,
   pub is_exported: bool,
@@ -39,10 +45,12 @@ pub struct CallSite {
 /// Resolved call from LSP / registry.
 #[derive(Debug, Clone, Default)]
 pub struct ResolvedCall {
+  pub caller_qn: String,
   pub callee_name: String,
   pub qualified_name: String,
   pub strategy: String,
   pub confidence: f64,
+  pub reason: Option<String>,
 }
 
 /// Import extracted from source.
@@ -94,10 +102,11 @@ pub struct EnvAccess {
   pub enclosing_func_qn: Option<String>,
 }
 
+/// Rust `impl Trait for Type` (raw names, matching CBM `CBMImplTrait`).
 #[derive(Debug, Clone, Default)]
 pub struct ImplTrait {
-  pub trait_qn: String,
-  pub type_qn: String,
+  pub trait_name: String,
+  pub struct_name: String,
 }
 
 /// Per-file extraction result.
@@ -105,7 +114,9 @@ pub struct ImplTrait {
 pub struct SourceCode {
   pub has_error: bool,
   pub error_msg: Option<String>,
-  pub defs: Vec<Definition>,
+  pub module_qn: Option<String>,
+  pub rel_path: Option<String>,
+  pub definitions: Vec<Definition>,
   pub calls: Vec<CallSite>,
   pub resolved_calls: Vec<ResolvedCall>,
   pub imports: Vec<Import>,

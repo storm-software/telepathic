@@ -22,19 +22,19 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_just) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_just) };
 
 /// The content of the [`node-types.json`][] file for this grammar.
 ///
 /// [`node-types.json`]: https://tree-sitter.github.io/tree-sitter/using-parsers#static-node-types
-pub const NODE_TYPES: &str = include_str!("../../grammars/just/node-types.json");
+pub(crate) const NODE_TYPES: &str = include_str!("../../vendored/just/node-types.json");
 
-pub const JUST_FOLDS_SCM_QUERY: &str = include_str!("../../grammars/just/queries/just/folds.scm");
-pub const JUST_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/just/queries/just/highlights.scm");
-pub const JUST_INDENTS_SCM_QUERY: &str = include_str!("../../grammars/just/queries/just/indents.scm");
-pub const JUST_INJECTIONS_SCM_QUERY: &str = include_str!("../../grammars/just/queries/just/injections.scm");
-pub const JUST_LOCALS_SCM_QUERY: &str = include_str!("../../grammars/just/queries/just/locals.scm");
-pub const JUST_TEXTOBJECTS_SCM_QUERY: &str = include_str!("../../grammars/just/queries/just/textobjects.scm");
+pub(crate) const JUST_FOLDS_SCM_QUERY: &str = include_str!("../../vendored/just/queries/just/folds.scm");
+pub(crate) const JUST_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/just/queries/just/highlights.scm");
+pub(crate) const JUST_INDENTS_SCM_QUERY: &str = include_str!("../../vendored/just/queries/just/indents.scm");
+pub(crate) const JUST_INJECTIONS_SCM_QUERY: &str = include_str!("../../vendored/just/queries/just/injections.scm");
+pub(crate) const JUST_LOCALS_SCM_QUERY: &str = include_str!("../../vendored/just/queries/just/locals.scm");
+pub(crate) const JUST_TEXTOBJECTS_SCM_QUERY: &str = include_str!("../../vendored/just/queries/just/textobjects.scm");
 
 #[cfg(test)]
 mod tests {

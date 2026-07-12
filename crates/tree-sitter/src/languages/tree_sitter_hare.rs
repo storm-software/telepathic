@@ -22,18 +22,18 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_hare) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_hare) };
 
 /// The content of the [`node-types.json`][] file for this grammar.
 ///
 /// [`node-types.json`]: https://tree-sitter.github.io/tree-sitter/using-parsers#static-node-types
-pub const NODE_TYPES: &str = include_str!("../../grammars/hare/node-types.json");
+pub(crate) const NODE_TYPES: &str = include_str!("../../vendored/hare/node-types.json");
 
-pub const FOLDS_SCM_QUERY: &str = include_str!("../../grammars/hare/queries/folds.scm");
-pub const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/hare/queries/highlights.scm");
-pub const INDENTS_SCM_QUERY: &str = include_str!("../../grammars/hare/queries/indents.scm");
-pub const INJECTIONS_SCM_QUERY: &str = include_str!("../../grammars/hare/queries/injections.scm");
-pub const LOCALS_SCM_QUERY: &str = include_str!("../../grammars/hare/queries/locals.scm");
+pub(crate) const FOLDS_SCM_QUERY: &str = include_str!("../../vendored/hare/queries/folds.scm");
+pub(crate) const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/hare/queries/highlights.scm");
+pub(crate) const INDENTS_SCM_QUERY: &str = include_str!("../../vendored/hare/queries/indents.scm");
+pub(crate) const INJECTIONS_SCM_QUERY: &str = include_str!("../../vendored/hare/queries/injections.scm");
+pub(crate) const LOCALS_SCM_QUERY: &str = include_str!("../../vendored/hare/queries/locals.scm");
 
 #[cfg(test)]
 mod tests {

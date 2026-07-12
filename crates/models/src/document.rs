@@ -12,12 +12,20 @@ use crate::has_datapoint::HasDataPoint;
 /// is a separate class (TextDocument, PdfDocument, etc.). In Rust we use a single
 /// struct with a `document_type` field and the `base.data_type` discriminator
 /// set to the class name (e.g. "TextDocument", "PdfDocument").
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Document {
   /// DataPoint base — carries id, timestamps, metadata, data_type discriminator.
   #[serde(flatten)]
   pub base: DataPoint,
-  /// Document type category: "text", "pdf", "csv", "html", "image", "audio", "unstructured", "dlt_row".
+  /// Document type category:
+  /// - "text"
+  /// - "pdf"
+  /// - "csv"
+  /// - "image"
+  /// - "audio"
+  /// - "unstructured"
+  /// - "dlt_row"
+  /// - "source_code"
   pub document_type: String,
   pub name: String,
   pub raw_data_location: String,
@@ -41,9 +49,6 @@ pub fn doc_type_for_extension(ext: &str) -> Option<&'static str> {
 }
 
 /// Map a file extension to a document type string.
-///
-/// Matches the 39-entry `EXTENSION_TO_DOCUMENT_CLASS` mapping in the Python SDK
-/// (`cognee/tasks/documents/classify_documents.py`).
 fn extension_to_doc_type(ext: &str) -> Option<&'static str> {
   match ext.to_lowercase().as_str() {
     "pdf" => Some("pdf"),
@@ -55,15 +60,7 @@ fn extension_to_doc_type(ext: &str) -> Option<&'static str> {
     "png" | "dwg" | "xcf" | "jpg" | "jpx" | "apng" | "gif" | "webp" | "cr2" | "tif" | "bmp"
     | "jxr" | "psd" | "ico" | "heic" | "avif" => Some("image"),
     "aac" | "mid" | "mp3" | "m4a" | "ogg" | "flac" | "wav" | "amr" | "aiff" => Some("audio"),
-    // HTML — handled by the BeautifulSoup-equivalent loader. Note: Python's
-    // `EXTENSION_TO_DOCUMENT_CLASS` has no `html` entry because its
-    // BeautifulSoupLoader runs at add-time and stores extracted text as a
-    // TextDocument. Rust runs loaders at cognify-time keyed on
-    // `document_type`, so we classify html/htm to a dedicated "html"
-    // document type while keeping the `TextDocument` class discriminator
-    // (see `doc_type_to_class_name`) for cross-SDK DB parity.
-    "html" | "htm" => Some("html"),
-    _ => None,
+    _ => Some("source_code"),
   }
 }
 
@@ -75,18 +72,14 @@ fn doc_type_to_class_name(doc_type: &str) -> &'static str {
     "csv" => "CsvDocument",
     "image" => "ImageDocument",
     "audio" => "AudioDocument",
-    // HTML content becomes text; Python stores it as a TextDocument, so we
-    // match that node `data_type` for cross-SDK graph parity.
-    "html" => "TextDocument",
     "unstructured" => "UnstructuredDocument",
     "dlt_row" => "DltRowDocument",
+    "source_code" => "SourceCodeDocument",
     _ => "Document",
   }
 }
 
 /// Check whether the `external_metadata` JSON indicates a DLT source.
-///
-/// Mirrors Python `cognee/tasks/ingestion/dlt_utils.py:is_dlt_sourced`.
 fn is_dlt_sourced(external_metadata: &Option<String>) -> bool {
   external_metadata
     .as_ref()
@@ -106,9 +99,9 @@ fn metadata_value_is_dlt_sourced(value: &serde_json::Value) -> bool {
 
 /// Classify Data items into Documents based on file extension.
 ///
-/// Mirrors the Python `classify_documents` function. DLT-sourced items are
-/// classified as `DltRowDocument`; all others use the extension-to-document-type
-/// mapping. Items with unrecognised extensions are silently skipped.
+/// DLT-sourced items are classified as `DltRowDocument`; all others use the
+/// extension-to-document-type mapping. Items with unrecognized extensions are
+/// silently skipped.
 pub fn classify_documents(data_items: &[Data]) -> Vec<Document> {
   data_items
     .iter()
@@ -143,13 +136,11 @@ pub fn classify_documents(data_items: &[Data]) -> Vec<Document> {
       };
 
       // update_node_set: parse external_metadata for node_set array
-      // Mirrors Python cognee/tasks/documents/classify_documents.py:update_node_set()
       if let Some(ref meta_str) = doc.external_metadata
         && let Ok(meta_val) = serde_json::from_str::<serde_json::Value>(meta_str)
         && let Some(node_set_array) = meta_val.get("node_set").and_then(|v| v.as_array())
       {
         // Build NodeSet-like JSON values with deterministic IDs
-        // Python: NodeSet(id=generate_node_id(f"NodeSet:{name}"), name=name)
         let node_set_values: Vec<serde_json::Value> = node_set_array
           .iter()
           .filter_map(|v| {
@@ -165,7 +156,6 @@ pub fn classify_documents(data_items: &[Data]) -> Vec<Document> {
           .collect();
 
         if !node_set_values.is_empty() {
-          // source_node_set = comma-separated names (Python: ", ".join(node_set))
           let names: Vec<&str> = node_set_array.iter().filter_map(|v| v.as_str()).collect();
           doc.base.source_node_set = Some(names.join(", "));
           doc.base.belongs_to_set = Some(node_set_values);

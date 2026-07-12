@@ -2,10 +2,10 @@ use serde::{Deserialize, Serialize};
 
 use crate::settings::Settings;
 
-/// Output of settings loading.
+/// Output of a get settings operation.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetSettingsOutput {
-  /// The loaded settings.
+  /// The settings.
   pub settings: Settings,
 }
 

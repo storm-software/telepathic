@@ -22,18 +22,18 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_templ) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_templ) };
 
 /// The content of the [`node-types.json`][] file for this grammar.
 ///
 /// [`node-types.json`]: https://tree-sitter.github.io/tree-sitter/using-parsers#static-node-types
-pub const NODE_TYPES: &str = include_str!("../../grammars/templ/node-types.json");
+pub(crate) const NODE_TYPES: &str = include_str!("../../vendored/templ/node-types.json");
 
-pub const TEMPL_FOLDS_SCM_QUERY: &str = include_str!("../../grammars/templ/queries/templ/folds.scm");
-pub const TEMPL_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/templ/queries/templ/highlights.scm");
-pub const TEMPL_INDENTS_SCM_QUERY: &str = include_str!("../../grammars/templ/queries/templ/indents.scm");
-pub const TEMPL_INJECTIONS_SCM_QUERY: &str = include_str!("../../grammars/templ/queries/templ/injections.scm");
-pub const TEMPL_STRUCTURE_SCM_QUERY: &str = include_str!("../../grammars/templ/queries/templ/structure.scm");
+pub(crate) const TEMPL_FOLDS_SCM_QUERY: &str = include_str!("../../vendored/templ/queries/templ/folds.scm");
+pub(crate) const TEMPL_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/templ/queries/templ/highlights.scm");
+pub(crate) const TEMPL_INDENTS_SCM_QUERY: &str = include_str!("../../vendored/templ/queries/templ/indents.scm");
+pub(crate) const TEMPL_INJECTIONS_SCM_QUERY: &str = include_str!("../../vendored/templ/queries/templ/injections.scm");
+pub(crate) const TEMPL_STRUCTURE_SCM_QUERY: &str = include_str!("../../vendored/templ/queries/templ/structure.scm");
 
 #[cfg(test)]
 mod tests {

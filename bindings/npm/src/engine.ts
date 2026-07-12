@@ -19,23 +19,21 @@
 import { NativeBindingEngine } from "./native";
 import type { Engine } from "./types/engine";
 
-/**
- * Creates a generator from raw schema/input/output configurations and resolves all descriptors.
- *
- * @remarks
- * This function is used to create a generator from raw schema, input, and output configurations. It resolves all descriptors and returns a fully constructed generator that can be used to generate output based on the provided schema and options.
- *
- * @template TSpec - The type of the specification that the generator will produce.
- * @template TOptions - The type of the options that will be passed to the generator during generation.
- * @param config - The generator configuration containing schema, input, output, and optional meta information.
- * @param options - Optional extraction options for schema, input, and output.
- * @returns A promise that resolves to a fully constructed generator.
- */
 export async function createEngine(userConfig = {}): Promise<Engine> {
   const bindings = new NativeBindingEngine(userConfig);
   const session = await bindings.getSession();
 
   return {
-    session
+    session,
+    getSchema: () => bindings.getSchema(),
+    listRepositories: () => bindings.listRepositories(),
+    indexRepository: () => bindings.indexRepository(),
+    listProjects: input => bindings.listProjects(input),
+    writeGraph: input => bindings.writeGraph(input),
+    readGraph: input => bindings.readGraph(input),
+    queryGraph: input => bindings.queryGraph(input),
+    searchGraph: input => bindings.searchGraph(input),
+    traceGraph: input => bindings.traceGraph(input),
+    exportOkf: input => bindings.exportOkf(input)
   };
 }

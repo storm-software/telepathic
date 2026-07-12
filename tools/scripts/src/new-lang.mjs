@@ -99,7 +99,7 @@ async function main(repository, name) {
 
     const grammarPath = path.join(
       process.cwd(),
-      "crates/tree-sitter/grammars",
+      "crates/tree-sitter/vendored",
       name
     );
     const srcDir = path.join(clonePath, "src");

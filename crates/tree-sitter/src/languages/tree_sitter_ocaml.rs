@@ -22,11 +22,11 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_ocaml) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_ocaml) };
 
-pub const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/ocaml/queries/highlights.scm");
-pub const LOCALS_SCM_QUERY: &str = include_str!("../../grammars/ocaml/queries/locals.scm");
-pub const TAGS_SCM_QUERY: &str = include_str!("../../grammars/ocaml/queries/tags.scm");
+pub(crate) const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/ocaml/queries/highlights.scm");
+pub(crate) const LOCALS_SCM_QUERY: &str = include_str!("../../vendored/ocaml/queries/locals.scm");
+pub(crate) const TAGS_SCM_QUERY: &str = include_str!("../../vendored/ocaml/queries/tags.scm");
 
 #[cfg(test)]
 mod tests {

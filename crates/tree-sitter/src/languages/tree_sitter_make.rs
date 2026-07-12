@@ -22,11 +22,11 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_make) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_make) };
 
-pub const FOLDS_SCM_QUERY: &str = include_str!("../../grammars/make/queries/folds.scm");
-pub const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/make/queries/highlights.scm");
-pub const INJECTIONS_SCM_QUERY: &str = include_str!("../../grammars/make/queries/injections.scm");
+pub(crate) const FOLDS_SCM_QUERY: &str = include_str!("../../vendored/make/queries/folds.scm");
+pub(crate) const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/make/queries/highlights.scm");
+pub(crate) const INJECTIONS_SCM_QUERY: &str = include_str!("../../vendored/make/queries/injections.scm");
 
 #[cfg(test)]
 mod tests {

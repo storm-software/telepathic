@@ -1,11 +1,17 @@
 use crate::{
   types::{
     binding_error::{BindingErrors, BindingResult},
-    binding_input::{BindingRecallInput, BindingSearchInput, BindingStoreInput},
+    binding_input::{
+      BindingExportOkfInput, BindingListProjectsInput, BindingQueryGraphInput,
+      BindingReadGraphInput, BindingSearchGraphInput, BindingTraceGraphInput,
+      BindingWriteGraphInput,
+    },
     binding_options::BindingOptions,
     binding_output::{
-      BindingGetSessionOutput, BindingGetSettingsOutput, BindingRecallOutput, BindingSearchOutput,
-      BindingStoreOutput,
+      BindingExportOkfOutput, BindingGetSchemaOutput, BindingGetSessionOutput,
+      BindingGetSettingsOutput, BindingIndexRepositoryOutput, BindingListProjectsOutput,
+      BindingListRepositoriesOutput, BindingQueryGraphOutput, BindingReadGraphOutput,
+      BindingSearchGraphOutput, BindingTraceGraphOutput, BindingWriteGraphOutput,
     },
   },
   utils::to_binding_error,
@@ -65,15 +71,14 @@ impl BindingEngine {
   }
 
   #[napi]
-  pub fn store<'env>(
+  pub fn get_schema<'env>(
     &mut self,
     env: &'env Env,
-    input: BindingStoreInput,
-  ) -> napi::Result<PromiseRaw<'env, BindingResult<BindingStoreOutput>>> {
-    let result = self.inner.store(input.into());
+  ) -> napi::Result<PromiseRaw<'env, BindingResult<BindingGetSchemaOutput>>> {
+    let result = self.inner.get_schema();
     let fut = async move {
       match result {
-        Ok(output) => Ok(Either::B(BindingStoreOutput::from(output))),
+        Ok(output) => Ok(Either::B(output.into())),
         Err(err) => Ok(Either::A(BindingErrors::new(vec![to_binding_error(&err)]))),
       }
     };
@@ -82,15 +87,14 @@ impl BindingEngine {
   }
 
   #[napi]
-  pub fn recall<'env>(
+  pub fn list_repositories<'env>(
     &mut self,
     env: &'env Env,
-    input: BindingRecallInput,
-  ) -> napi::Result<PromiseRaw<'env, BindingResult<BindingRecallOutput>>> {
-    let result = self.inner.recall(input.into());
+  ) -> napi::Result<PromiseRaw<'env, BindingResult<BindingListRepositoriesOutput>>> {
+    let result = self.inner.list_repositories();
     let fut = async move {
       match result {
-        Ok(output) => Ok(Either::B(BindingRecallOutput::from(output))),
+        Ok(output) => Ok(Either::B(output.into())),
         Err(err) => Ok(Either::A(BindingErrors::new(vec![to_binding_error(&err)]))),
       }
     };
@@ -99,15 +103,133 @@ impl BindingEngine {
   }
 
   #[napi]
-  pub fn search<'env>(
+  pub fn index_repository<'env>(
     &mut self,
     env: &'env Env,
-    input: BindingSearchInput,
-  ) -> napi::Result<PromiseRaw<'env, BindingResult<BindingSearchOutput>>> {
-    let result = self.inner.search(input.into());
+  ) -> napi::Result<PromiseRaw<'env, BindingResult<BindingIndexRepositoryOutput>>> {
+    let result = self.inner.index_repository();
     let fut = async move {
       match result {
-        Ok(output) => Ok(Either::B(BindingSearchOutput::from(output))),
+        Ok(output) => Ok(Either::B(output.into())),
+        Err(err) => Ok(Either::A(BindingErrors::new(vec![to_binding_error(&err)]))),
+      }
+    };
+
+    env.spawn_future(fut)
+  }
+
+  #[napi]
+  pub fn list_projects<'env>(
+    &mut self,
+    env: &'env Env,
+    input: BindingListProjectsInput,
+  ) -> napi::Result<PromiseRaw<'env, BindingResult<BindingListProjectsOutput>>> {
+    let result = self.inner.list_projects(input.into());
+    let fut = async move {
+      match result {
+        Ok(output) => Ok(Either::B(output.into())),
+        Err(err) => Ok(Either::A(BindingErrors::new(vec![to_binding_error(&err)]))),
+      }
+    };
+
+    env.spawn_future(fut)
+  }
+
+  #[napi]
+  pub fn write_graph<'env>(
+    &mut self,
+    env: &'env Env,
+    input: BindingWriteGraphInput,
+  ) -> napi::Result<PromiseRaw<'env, BindingResult<BindingWriteGraphOutput>>> {
+    let result = self.inner.write_graph(input.into());
+    let fut = async move {
+      match result {
+        Ok(output) => Ok(Either::B(output.into())),
+        Err(err) => Ok(Either::A(BindingErrors::new(vec![to_binding_error(&err)]))),
+      }
+    };
+
+    env.spawn_future(fut)
+  }
+
+  #[napi]
+  pub fn read_graph<'env>(
+    &mut self,
+    env: &'env Env,
+    input: BindingReadGraphInput,
+  ) -> napi::Result<PromiseRaw<'env, BindingResult<BindingReadGraphOutput>>> {
+    let result = self.inner.read_graph(input.into());
+    let fut = async move {
+      match result {
+        Ok(output) => Ok(Either::B(output.into())),
+        Err(err) => Ok(Either::A(BindingErrors::new(vec![to_binding_error(&err)]))),
+      }
+    };
+
+    env.spawn_future(fut)
+  }
+
+  #[napi]
+  pub fn query_graph<'env>(
+    &mut self,
+    env: &'env Env,
+    input: BindingQueryGraphInput,
+  ) -> napi::Result<PromiseRaw<'env, BindingResult<BindingQueryGraphOutput>>> {
+    let result = self.inner.query_graph(input.into());
+    let fut = async move {
+      match result {
+        Ok(output) => Ok(Either::B(output.into())),
+        Err(err) => Ok(Either::A(BindingErrors::new(vec![to_binding_error(&err)]))),
+      }
+    };
+
+    env.spawn_future(fut)
+  }
+
+  #[napi]
+  pub fn search_graph<'env>(
+    &mut self,
+    env: &'env Env,
+    input: BindingSearchGraphInput,
+  ) -> napi::Result<PromiseRaw<'env, BindingResult<BindingSearchGraphOutput>>> {
+    let result = self.inner.search_graph(input.into());
+    let fut = async move {
+      match result {
+        Ok(output) => Ok(Either::B(output.into())),
+        Err(err) => Ok(Either::A(BindingErrors::new(vec![to_binding_error(&err)]))),
+      }
+    };
+
+    env.spawn_future(fut)
+  }
+
+  #[napi]
+  pub fn trace_graph<'env>(
+    &mut self,
+    env: &'env Env,
+    input: BindingTraceGraphInput,
+  ) -> napi::Result<PromiseRaw<'env, BindingResult<BindingTraceGraphOutput>>> {
+    let result = self.inner.trace_graph(input.into());
+    let fut = async move {
+      match result {
+        Ok(output) => Ok(Either::B(output.into())),
+        Err(err) => Ok(Either::A(BindingErrors::new(vec![to_binding_error(&err)]))),
+      }
+    };
+
+    env.spawn_future(fut)
+  }
+
+  #[napi]
+  pub fn export_okf<'env>(
+    &mut self,
+    env: &'env Env,
+    input: BindingExportOkfInput,
+  ) -> napi::Result<PromiseRaw<'env, BindingResult<BindingExportOkfOutput>>> {
+    let result = self.inner.export_okf(input.into());
+    let fut = async move {
+      match result {
+        Ok(output) => Ok(Either::B(output.into())),
         Err(err) => Ok(Either::A(BindingErrors::new(vec![to_binding_error(&err)]))),
       }
     };

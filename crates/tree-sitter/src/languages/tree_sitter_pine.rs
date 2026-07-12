@@ -22,17 +22,17 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_pine) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_pine) };
 
 /// The content of the [`node-types.json`][] file for this grammar.
 ///
 /// [`node-types.json`]: https://tree-sitter.github.io/tree-sitter/using-parsers#static-node-types
-pub const NODE_TYPES: &str = include_str!("../../grammars/pine/node-types.json");
+pub(crate) const NODE_TYPES: &str = include_str!("../../vendored/pine/node-types.json");
 
-pub const FOLDS_SCM_QUERY: &str = include_str!("../../grammars/pine/queries/folds.scm");
-pub const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/pine/queries/highlights.scm");
-pub const LOCALS_SCM_QUERY: &str = include_str!("../../grammars/pine/queries/locals.scm");
-pub const TAGS_SCM_QUERY: &str = include_str!("../../grammars/pine/queries/tags.scm");
+pub(crate) const FOLDS_SCM_QUERY: &str = include_str!("../../vendored/pine/queries/folds.scm");
+pub(crate) const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/pine/queries/highlights.scm");
+pub(crate) const LOCALS_SCM_QUERY: &str = include_str!("../../vendored/pine/queries/locals.scm");
+pub(crate) const TAGS_SCM_QUERY: &str = include_str!("../../vendored/pine/queries/tags.scm");
 
 #[cfg(test)]
 mod tests {

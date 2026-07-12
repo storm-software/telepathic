@@ -22,15 +22,15 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_properties) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_properties) };
 
 /// The content of the [`node-types.json`][] file for this grammar.
 ///
 /// [`node-types.json`]: https://tree-sitter.github.io/tree-sitter/using-parsers#static-node-types
-pub const NODE_TYPES: &str = include_str!("../../grammars/properties/node-types.json");
+pub(crate) const NODE_TYPES: &str = include_str!("../../vendored/properties/node-types.json");
 
-pub const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/properties/queries/highlights.scm");
-pub const TAGS_SCM_QUERY: &str = include_str!("../../grammars/properties/queries/tags.scm");
+pub(crate) const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/properties/queries/highlights.scm");
+pub(crate) const TAGS_SCM_QUERY: &str = include_str!("../../vendored/properties/queries/tags.scm");
 
 #[cfg(test)]
 mod tests {

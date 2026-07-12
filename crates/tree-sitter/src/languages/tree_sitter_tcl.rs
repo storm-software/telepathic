@@ -22,16 +22,16 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_tcl) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_tcl) };
 
 /// The content of the [`node-types.json`][] file for this grammar.
 ///
 /// [`node-types.json`]: https://tree-sitter.github.io/tree-sitter/using-parsers#static-node-types
-pub const NODE_TYPES: &str = include_str!("../../grammars/tcl/node-types.json");
+pub(crate) const NODE_TYPES: &str = include_str!("../../vendored/tcl/node-types.json");
 
-pub const TCL_FOLDS_SCM_QUERY: &str = include_str!("../../grammars/tcl/queries/tcl/folds.scm");
-pub const TCL_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/tcl/queries/tcl/highlights.scm");
-pub const TCL_INDENTS_SCM_QUERY: &str = include_str!("../../grammars/tcl/queries/tcl/indents.scm");
+pub(crate) const TCL_FOLDS_SCM_QUERY: &str = include_str!("../../vendored/tcl/queries/tcl/folds.scm");
+pub(crate) const TCL_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/tcl/queries/tcl/highlights.scm");
+pub(crate) const TCL_INDENTS_SCM_QUERY: &str = include_str!("../../vendored/tcl/queries/tcl/indents.scm");
 
 #[cfg(test)]
 mod tests {

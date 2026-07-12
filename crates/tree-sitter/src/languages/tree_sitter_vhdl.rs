@@ -22,19 +22,19 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_vhdl) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_vhdl) };
 
 /// The content of the [`node-types.json`][] file for this grammar.
 ///
 /// [`node-types.json`]: https://tree-sitter.github.io/tree-sitter/using-parsers#static-node-types
-pub const NODE_TYPES: &str = include_str!("../../grammars/vhdl/node-types.json");
+pub(crate) const NODE_TYPES: &str = include_str!("../../vendored/vhdl/node-types.json");
 
-pub const HELIX_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/vhdl/queries/Helix/highlights.scm");
-pub const NEOVIM_CONTEXT_SCM_QUERY: &str = include_str!("../../grammars/vhdl/queries/Neovim/context.scm");
-pub const NEOVIM_FOLDS_SCM_QUERY: &str = include_str!("../../grammars/vhdl/queries/Neovim/folds.scm");
-pub const NEOVIM_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/vhdl/queries/Neovim/highlights.scm");
-pub const NEOVIM_INJECTIONS_SCM_QUERY: &str = include_str!("../../grammars/vhdl/queries/Neovim/injections.scm");
-pub const NEOVIM_TEXTOBJECTS_SCM_QUERY: &str = include_str!("../../grammars/vhdl/queries/Neovim/textobjects.scm");
+pub(crate) const HELIX_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/vhdl/queries/Helix/highlights.scm");
+pub(crate) const NEOVIM_CONTEXT_SCM_QUERY: &str = include_str!("../../vendored/vhdl/queries/Neovim/context.scm");
+pub(crate) const NEOVIM_FOLDS_SCM_QUERY: &str = include_str!("../../vendored/vhdl/queries/Neovim/folds.scm");
+pub(crate) const NEOVIM_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/vhdl/queries/Neovim/highlights.scm");
+pub(crate) const NEOVIM_INJECTIONS_SCM_QUERY: &str = include_str!("../../vendored/vhdl/queries/Neovim/injections.scm");
+pub(crate) const NEOVIM_TEXTOBJECTS_SCM_QUERY: &str = include_str!("../../vendored/vhdl/queries/Neovim/textobjects.scm");
 
 #[cfg(test)]
 mod tests {

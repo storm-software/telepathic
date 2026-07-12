@@ -22,11 +22,11 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_ruby) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_ruby) };
 
-pub const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/ruby/queries/highlights.scm");
-pub const LOCALS_SCM_QUERY: &str = include_str!("../../grammars/ruby/queries/locals.scm");
-pub const TAGS_SCM_QUERY: &str = include_str!("../../grammars/ruby/queries/tags.scm");
+pub(crate) const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/ruby/queries/highlights.scm");
+pub(crate) const LOCALS_SCM_QUERY: &str = include_str!("../../vendored/ruby/queries/locals.scm");
+pub(crate) const TAGS_SCM_QUERY: &str = include_str!("../../vendored/ruby/queries/tags.scm");
 
 #[cfg(test)]
 mod tests {

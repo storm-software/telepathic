@@ -22,18 +22,18 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_cfscript) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_cfscript) };
 
-pub const BRACKETS_ZED_SCM_QUERY: &str = include_str!("../../grammars/cfscript/queries/brackets-zed.scm");
-pub const FOLDS_SCM_QUERY: &str = include_str!("../../grammars/cfscript/queries/folds.scm");
-pub const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/cfscript/queries/highlights.scm");
-pub const INDENTS_ZED_SCM_QUERY: &str = include_str!("../../grammars/cfscript/queries/indents-zed.scm");
-pub const INDENTS_SCM_QUERY: &str = include_str!("../../grammars/cfscript/queries/indents.scm");
-pub const INJECTIONS_SCM_QUERY: &str = include_str!("../../grammars/cfscript/queries/injections.scm");
-pub const OUTLINE_SCM_QUERY: &str = include_str!("../../grammars/cfscript/queries/outline.scm");
-pub const OVERRIDES_SCM_QUERY: &str = include_str!("../../grammars/cfscript/queries/overrides.scm");
-pub const TAGS_SCM_QUERY: &str = include_str!("../../grammars/cfscript/queries/tags.scm");
-pub const TEXTOBJECTS_SCM_QUERY: &str = include_str!("../../grammars/cfscript/queries/textobjects.scm");
+pub(crate) const BRACKETS_ZED_SCM_QUERY: &str = include_str!("../../vendored/cfscript/queries/brackets-zed.scm");
+pub(crate) const FOLDS_SCM_QUERY: &str = include_str!("../../vendored/cfscript/queries/folds.scm");
+pub(crate) const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/cfscript/queries/highlights.scm");
+pub(crate) const INDENTS_ZED_SCM_QUERY: &str = include_str!("../../vendored/cfscript/queries/indents-zed.scm");
+pub(crate) const INDENTS_SCM_QUERY: &str = include_str!("../../vendored/cfscript/queries/indents.scm");
+pub(crate) const INJECTIONS_SCM_QUERY: &str = include_str!("../../vendored/cfscript/queries/injections.scm");
+pub(crate) const OUTLINE_SCM_QUERY: &str = include_str!("../../vendored/cfscript/queries/outline.scm");
+pub(crate) const OVERRIDES_SCM_QUERY: &str = include_str!("../../vendored/cfscript/queries/overrides.scm");
+pub(crate) const TAGS_SCM_QUERY: &str = include_str!("../../vendored/cfscript/queries/tags.scm");
+pub(crate) const TEXTOBJECTS_SCM_QUERY: &str = include_str!("../../vendored/cfscript/queries/textobjects.scm");
 
 #[cfg(test)]
 mod tests {

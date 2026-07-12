@@ -3,7 +3,7 @@ use std::path::Path;
 const FQN_MAX_NAME_LEN: usize = 200;
 
 /// Compute qualified name: `project.dir.parts.name`.
-pub fn compute_fqn(project: &str, rel_path: &str, name: Option<&str>) -> String {
+pub(crate) fn compute_fqn(project: &str, rel_path: &str, name: Option<&str>) -> String {
   let project = if project.is_empty() { "" } else { project };
   let mut segments = vec![project.to_string()];
 
@@ -21,13 +21,13 @@ pub fn compute_fqn(project: &str, rel_path: &str, name: Option<&str>) -> String 
 }
 
 /// Module QN: `project.dir.parts` (no symbol name).
-pub fn module_fqn(project: &str, rel_path: &str) -> String {
+pub(crate) fn module_fqn(project: &str, rel_path: &str) -> String {
   compute_fqn(project, rel_path, None)
 }
 
 /// Language-aware module QN. When `module_is_dir` is true the module is the
 /// containing directory (Java/Go package semantics).
-pub fn module_dir_fqn(project: &str, rel_path: &str, module_is_dir: bool) -> String {
+pub(crate) fn module_dir_fqn(project: &str, rel_path: &str, module_is_dir: bool) -> String {
   if !module_is_dir {
     return module_fqn(project, rel_path);
   }
@@ -38,7 +38,7 @@ pub fn module_dir_fqn(project: &str, rel_path: &str, module_is_dir: bool) -> Str
 }
 
 /// Folder QN: `project.dir.parts`.
-pub fn folder_fqn(project: &str, rel_dir: &str) -> String {
+pub(crate) fn folder_fqn(project: &str, rel_dir: &str) -> String {
   let project = if project.is_empty() { "" } else { project };
   let mut segments = vec![project.to_string()];
   let dir = normalize_slashes(rel_dir);
@@ -49,7 +49,7 @@ pub fn folder_fqn(project: &str, rel_dir: &str) -> String {
 }
 
 /// Resolve a relative import specifier against the importing file path.
-pub fn resolve_relative_import(source_rel: &str, module_path: &str) -> Option<String> {
+pub(crate) fn resolve_relative_import(source_rel: &str, module_path: &str) -> Option<String> {
   let kind = classify_relative_import(module_path)?;
   let mut buf = seed_source_dir(source_rel);
 
@@ -60,7 +60,7 @@ pub fn resolve_relative_import(source_rel: &str, module_path: &str) -> Option<St
 }
 
 /// Derive a sanitized project name from an absolute path.
-pub fn project_name_from_path(abs_path: &str) -> String {
+pub(crate) fn project_name_from_path(abs_path: &str) -> String {
   if abs_path.is_empty() || path_is_root_syntax(abs_path) {
     return "root".to_string();
   }
@@ -81,7 +81,7 @@ pub fn project_name_from_path(abs_path: &str) -> String {
 }
 
 /// Validate a project name for DB filename safety.
-pub fn validate_project_name(name: &str) -> bool {
+pub(crate) fn validate_project_name(name: &str) -> bool {
   if name.is_empty() || name == ".." || name.contains("..") {
     return false;
   }
@@ -251,7 +251,7 @@ fn bound_name_len(mut name: String) -> String {
 }
 
 /// Normalize a path for FQN derivation using `Path` semantics where helpful.
-pub fn project_name_from_path_buf(path: &Path) -> String {
+pub(crate) fn project_name_from_path_buf(path: &Path) -> String {
   project_name_from_path(&path.to_string_lossy())
 }
 

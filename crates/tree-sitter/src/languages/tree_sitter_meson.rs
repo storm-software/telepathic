@@ -22,10 +22,10 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_meson) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_meson) };
 
-pub const FOLDS_SCM_QUERY: &str = include_str!("../../grammars/meson/queries/folds.scm");
-pub const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/meson/queries/highlights.scm");
+pub(crate) const FOLDS_SCM_QUERY: &str = include_str!("../../vendored/meson/queries/folds.scm");
+pub(crate) const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/meson/queries/highlights.scm");
 
 #[cfg(test)]
 mod tests {

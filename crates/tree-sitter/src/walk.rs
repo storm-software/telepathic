@@ -65,7 +65,10 @@ pub(crate) fn extract_from_tree(
   let is_test = is_test_file(rel_path, language);
   let spec = lang_spec(language);
 
-  result.defs.push(Definition {
+  result.module_qn = Some(module_qn.clone());
+  result.rel_path = Some(rel_path.to_string());
+
+  result.definitions.push(Definition {
     name: rel_path.to_string(),
     qualified_name: module_qn.clone(),
     label: "Module".to_string(),
@@ -225,7 +228,7 @@ fn extract_definition(
     let is_entry = matches!(name.as_str(), "main" | "Main" | "_start");
     let is_test_fn = is_test || name.starts_with("test_") || name.starts_with("Test");
 
-    result.defs.push(Definition {
+    result.definitions.push(Definition {
       name,
       qualified_name: qn,
       label: label.to_string(),
@@ -259,7 +262,7 @@ fn extract_definition(
     let start_line = node.start_position().row as u32 + 1;
     let end_line = node.end_position().row as u32 + 1;
 
-    result.defs.push(Definition {
+    result.definitions.push(Definition {
       name,
       qualified_name: qn,
       label: label.to_string(),
@@ -470,8 +473,8 @@ fn extract_impl_trait(
   node: Node<'_>,
   source: &[u8],
   language: Language,
-  project: &str,
-  rel_path: &str,
+  _project: &str,
+  _rel_path: &str,
 ) {
   if language != Language::Rust || node.kind() != "impl_item" {
     return;
@@ -489,8 +492,8 @@ fn extract_impl_trait(
     return;
   };
   result.impl_traits.push(ImplTrait {
-    trait_qn: compute_fqn(project, rel_path, Some(&trait_name)),
-    type_qn: compute_fqn(project, rel_path, Some(&type_name)),
+    trait_name,
+    struct_name: type_name,
   });
 }
 
@@ -607,7 +610,7 @@ fn class_qn(
 
 fn count_complexity(node: Node<'_>, spec: &LangSpec) -> i32 {
   let mut score = 1i32;
-  let mut cursor = node.walk();
+  let cursor = node.walk();
   let mut stack = vec![node];
   while let Some(n) = stack.pop() {
     if kind_in(n.kind(), spec.branches) {

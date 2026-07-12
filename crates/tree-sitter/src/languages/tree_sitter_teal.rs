@@ -22,16 +22,16 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_teal) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_teal) };
 
 /// The content of the [`node-types.json`][] file for this grammar.
 ///
 /// [`node-types.json`]: https://tree-sitter.github.io/tree-sitter/using-parsers#static-node-types
-pub const NODE_TYPES: &str = include_str!("../../grammars/teal/node-types.json");
+pub(crate) const NODE_TYPES: &str = include_str!("../../vendored/teal/node-types.json");
 
-pub const FOLDS_SCM_QUERY: &str = include_str!("../../grammars/teal/queries/folds.scm");
-pub const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/teal/queries/highlights.scm");
-pub const LOCALS_SCM_QUERY: &str = include_str!("../../grammars/teal/queries/locals.scm");
+pub(crate) const FOLDS_SCM_QUERY: &str = include_str!("../../vendored/teal/queries/folds.scm");
+pub(crate) const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/teal/queries/highlights.scm");
+pub(crate) const LOCALS_SCM_QUERY: &str = include_str!("../../vendored/teal/queries/locals.scm");
 
 #[cfg(test)]
 mod tests {

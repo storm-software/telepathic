@@ -22,13 +22,13 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_fsharp) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_fsharp) };
 
-pub const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/fsharp/queries/highlights.scm");
-pub const INDENTS_SCM_QUERY: &str = include_str!("../../grammars/fsharp/queries/indents.scm");
-pub const INJECTIONS_SCM_QUERY: &str = include_str!("../../grammars/fsharp/queries/injections.scm");
-pub const LOCALS_SCM_QUERY: &str = include_str!("../../grammars/fsharp/queries/locals.scm");
-pub const TAGS_SCM_QUERY: &str = include_str!("../../grammars/fsharp/queries/tags.scm");
+pub(crate) const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/fsharp/queries/highlights.scm");
+pub(crate) const INDENTS_SCM_QUERY: &str = include_str!("../../vendored/fsharp/queries/indents.scm");
+pub(crate) const INJECTIONS_SCM_QUERY: &str = include_str!("../../vendored/fsharp/queries/injections.scm");
+pub(crate) const LOCALS_SCM_QUERY: &str = include_str!("../../vendored/fsharp/queries/locals.scm");
+pub(crate) const TAGS_SCM_QUERY: &str = include_str!("../../vendored/fsharp/queries/tags.scm");
 
 #[cfg(test)]
 mod tests {

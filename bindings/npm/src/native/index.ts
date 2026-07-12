@@ -16,7 +16,26 @@
 
  ------------------------------------------------------------------- */
 
-import type { BindingSession } from "../bindings.cjs";
+import type {
+  BindingExportOkfInput,
+  BindingExportOkfOutput,
+  BindingGetSchemaOutput,
+  BindingIndexRepositoryOutput,
+  BindingListProjectsInput,
+  BindingListProjectsOutput,
+  BindingListRepositoriesOutput,
+  BindingQueryGraphInput,
+  BindingQueryGraphOutput,
+  BindingReadGraphInput,
+  BindingReadGraphOutput,
+  BindingSearchGraphInput,
+  BindingSearchGraphOutput,
+  BindingSession,
+  BindingTraceGraphInput,
+  BindingTraceGraphOutput,
+  BindingWriteGraphInput,
+  BindingWriteGraphOutput
+} from "../bindings.cjs";
 import {
   BindingEngine,
   shutdownAsyncRuntime,
@@ -27,6 +46,25 @@ import { isBindingFailureResult } from "./utils";
 // @ts-expect-error TS2540: the polyfill of `asyncDispose`.
 Symbol.asyncDispose ??= Symbol("Symbol.asyncDispose");
 
+type BindingOperation<T> = Promise<
+  T | { errors: Array<{ field0: { message: string } }>; isBindingErrors: boolean }
+>;
+
+function unwrapBindingResult<T>(
+  result: Awaited<BindingOperation<T>>,
+  operation: string
+): T {
+  if (isBindingFailureResult(result)) {
+    throw new Error(
+      `Power Plant - ${operation} failed with errors: ${result.errors
+        .map(error => error.field0.message)
+        .join("\n")}`
+    );
+  }
+
+  return result;
+}
+
 export class NativeBindingEngine {
   #isClosed = false;
 
@@ -36,11 +74,6 @@ export class NativeBindingEngine {
 
   protected static asyncRuntimeShutdown = false;
 
-  /**
-   * Create a new instance of the Power Plant native storage engine, which is responsible for managing the generation process, including storing the execution metadata and coordinating with the underlying storage engine. The constructor initializes the engine with the provided context, sets up the storage engine with the appropriate configuration and plugin API, and prepares it for use in the generation process.
-   *
-   * @param context - The context containing configuration and utilities for the engine.
-   */
   public constructor(config: any) {
     this.#binding = new BindingEngine({
       logLevel: config.settings?.logLevel,
@@ -48,136 +81,109 @@ export class NativeBindingEngine {
     });
   }
 
-  /**
-   * Indicates whether the engine has been closed and its resources have been released. Once the engine is closed, it should not be used for further operations, and any attempts to do so may result in errors. This property can be used to check the state of the engine before performing actions that require it to be open.
-   *
-   * @returns `true` if the engine is closed; otherwise, `false`.
-   */
   public get isClosed(): boolean {
     return this.#isClosed;
   }
 
-  /**
-   * Retrieve the current session information from the engine, which includes details about the execution environment, configuration, and any relevant metadata. This method interacts with the underlying binding engine to obtain the session data and returns it in a structured format. It is useful for understanding the context in which the engine is operating and for debugging purposes.
-   *
-   * @returns A promise that resolves to the current session information.
-   * @throws An error if the get session operation fails due to binding errors or other issues.
-   */
-  public async getSession(): Promise<BindingSession> {
+  private async prepareBinding(): Promise<void> {
     await this.#stopWorkers?.();
     if (NativeBindingEngine.asyncRuntimeShutdown) {
       startAsyncRuntime();
     }
-
-    const result: Awaited<ReturnType<BindingEngine["getSession"]>> =
-      await this.#binding.getSession();
-    if (isBindingFailureResult(result)) {
-      throw new Error(
-        `Power Plant - Get Session failed with errors: ${result.errors
-          .map(e => e.field0.message)
-          .join("\n")}`
-      );
-    }
-
-    // return {
-    //   ...result.session,
-    //   startedAt: new Date(result.session.startedAt)
-    // };
-
-    return result.session;
   }
 
-  // /**
-  //  * Collect the project's source code and metadata, and store it in the backend storage for later use.
-  //  *
-  //  * @remarks
-  //  * In this context, backend storage does not necessarily mean a database or external service. It can be a file system, a cloud storage, or any other storage that is accessible to the backend.
-  //  *
-  //  * @param execution - The execution to store.
-  //  * @returns The output of the store operation, including the success status and any warnings.
-  //  * @throws An error if the store operation fails due to binding errors or other issues.
-  //  */
-  // public async store<TSpec, TOptions extends object>(
-  //   execution: ExtractedExecution<TSpec, TOptions>
-  // ): Promise<void> {
-  //   await this.#stopWorkers?.();
-  //   if (NativeBindingEngine.asyncRuntimeShutdown) {
-  //     startAsyncRuntime();
-  //   }
+  public async getSession(): Promise<BindingSession> {
+    await this.prepareBinding();
 
-  //   const result: Awaited<ReturnType<BindingEngine["store"]>> =
-  //     await this.#binding.store({
-  //       execution: {
-  //         ...execution,
-  //         documents: Object.entries(execution.documents).map(
-  //           ([path, document]) => ({
-  //             ...document,
-  //             path
-  //           })
-  //         ) as any[],
-  //         meta: {
-  //           ...execution.meta,
-  //           id: execution.meta.executionId,
-  //           executedAt: execution.meta.executedAt.getTime()
-  //         }
-  //       }
-  //     });
-  //   if (isBindingFailureResult(result)) {
-  //     throw new Error(
-  //       `Power Plant - Scan failed with errors: ${(
-  //         result as { errors: BindingError[] }
-  //       ).errors
-  //         .map(e => e.field0.message)
-  //         .join("\n")}`
-  //     );
-  //   }
-  // }
+    const result = await this.#binding.getSession();
+    const output = unwrapBindingResult(result, "Get Session");
+    return output.session;
+  }
 
-  // /**
-  //  * Recall a previously stored execution from backend storage.
-  //  *
-  //  * @param executionId - The id of the execution to recall.
-  //  * @returns The recalled execution.
-  //  * @throws An error if the recall operation fails due to binding errors or other issues.
-  //  */
-  // public async recall<TSpec, TOptions extends object>(
-  //   executionId: string
-  // ): Promise<Execution<TSpec, TOptions>> {
-  //   await this.#stopWorkers?.();
-  //   if (NativeBindingEngine.asyncRuntimeShutdown) {
-  //     startAsyncRuntime();
-  //   }
+  public async getSchema(): Promise<BindingGetSchemaOutput> {
+    await this.prepareBinding();
 
-  //   const result: Awaited<ReturnType<BindingEngine["recall"]>> =
-  //     await this.#binding.recall({ executionId });
-  //   if (isBindingFailureResult(result)) {
-  //     throw new Error(
-  //       `Power Plant - Recall failed with errors: ${result.errors
-  //         .map(e => e.field0.message)
-  //         .join("\n")}`
-  //     );
-  //   }
+    const result = await this.#binding.getSchema();
+    return unwrapBindingResult(result, "Get Schema");
+  }
 
-  //   return {
-  //     documents: result.execution.documents.reduce(
-  //       (ret, document: any) => {
-  //         ret[document.path] = document;
-  //         return ret;
-  //       },
-  //       {} as Record<string, ExecutionDocument<TSpec, TOptions>>
-  //     ),
-  //     meta: {
-  //       ...result.execution.meta,
-  //       executionId: result.execution.meta.id,
-  //       executedAt: new Date(result.execution.meta.executedAt),
-  //       executedBy: result.execution.meta.executedBy
-  //     } as unknown as Execution<TSpec, TOptions>["meta"]
-  //   };
-  // }
+  public async listRepositories(): Promise<BindingListRepositoriesOutput> {
+    await this.prepareBinding();
 
-  /**
-   * Close the build and free resources.
-   */
+    const result = await this.#binding.listRepositories();
+    return unwrapBindingResult(result, "List Repositories");
+  }
+
+  public async indexRepository(): Promise<BindingIndexRepositoryOutput> {
+    await this.prepareBinding();
+
+    const result = await this.#binding.indexRepository();
+    return unwrapBindingResult(result, "Index Repository");
+  }
+
+  public async listProjects(
+    input: BindingListProjectsInput
+  ): Promise<BindingListProjectsOutput> {
+    await this.prepareBinding();
+
+    const result = await this.#binding.listProjects(input);
+    return unwrapBindingResult(result, "List Projects");
+  }
+
+  public async writeGraph(
+    input: BindingWriteGraphInput
+  ): Promise<BindingWriteGraphOutput> {
+    await this.prepareBinding();
+
+    const result = await this.#binding.writeGraph(input);
+    return unwrapBindingResult(result, "Write Graph");
+  }
+
+  public async readGraph(
+    input: BindingReadGraphInput
+  ): Promise<BindingReadGraphOutput> {
+    await this.prepareBinding();
+
+    const result = await this.#binding.readGraph(input);
+    return unwrapBindingResult(result, "Read Graph");
+  }
+
+  public async queryGraph(
+    input: BindingQueryGraphInput
+  ): Promise<BindingQueryGraphOutput> {
+    await this.prepareBinding();
+
+    const result = await this.#binding.queryGraph(input);
+    return unwrapBindingResult(result, "Query Graph");
+  }
+
+  public async searchGraph(
+    input: BindingSearchGraphInput
+  ): Promise<BindingSearchGraphOutput> {
+    await this.prepareBinding();
+
+    const result = await this.#binding.searchGraph(input);
+    return unwrapBindingResult(result, "Search Graph");
+  }
+
+  public async traceGraph(
+    input: BindingTraceGraphInput
+  ): Promise<BindingTraceGraphOutput> {
+    await this.prepareBinding();
+
+    const result = await this.#binding.traceGraph(input);
+    return unwrapBindingResult(result, "Trace Graph");
+  }
+
+  public async exportOkf(
+    input: BindingExportOkfInput
+  ): Promise<BindingExportOkfOutput> {
+    await this.prepareBinding();
+
+    const result = await this.#binding.exportOkf(input);
+    return unwrapBindingResult(result, "Export OKF");
+  }
+
   public async close(): Promise<void> {
     await this.#stopWorkers?.();
     await this.#binding.close();
@@ -186,13 +192,9 @@ export class NativeBindingEngine {
 
     NativeBindingEngine.asyncRuntimeShutdown = true;
     this.#stopWorkers = undefined;
+    this.#isClosed = true;
   }
 
-  /**
-   * Asynchronously dispose of the engine instance, ensuring that all resources are properly released. This method is intended to be used with the `using` statement for automatic resource management. When called, it will invoke the `close` method to perform the necessary cleanup operations.
-   *
-   * @returns A promise that resolves when the disposal process is complete.
-   */
   public async [Symbol.asyncDispose](): Promise<void> {
     await this.close();
   }

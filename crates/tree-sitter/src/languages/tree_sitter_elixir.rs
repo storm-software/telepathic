@@ -22,11 +22,11 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_elixir) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_elixir) };
 
-pub const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/elixir/queries/highlights.scm");
-pub const INJECTIONS_SCM_QUERY: &str = include_str!("../../grammars/elixir/queries/injections.scm");
-pub const TAGS_SCM_QUERY: &str = include_str!("../../grammars/elixir/queries/tags.scm");
+pub(crate) const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/elixir/queries/highlights.scm");
+pub(crate) const INJECTIONS_SCM_QUERY: &str = include_str!("../../vendored/elixir/queries/injections.scm");
+pub(crate) const TAGS_SCM_QUERY: &str = include_str!("../../vendored/elixir/queries/tags.scm");
 
 #[cfg(test)]
 mod tests {

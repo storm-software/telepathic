@@ -1,3 +1,3 @@
-pub mod language;
+pub(crate) mod language;
 
 pub use language::*;

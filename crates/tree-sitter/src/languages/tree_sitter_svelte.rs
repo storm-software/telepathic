@@ -22,13 +22,13 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_svelte) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_svelte) };
 
-pub const FOLDS_SCM_QUERY: &str = include_str!("../../grammars/svelte/queries/folds.scm");
-pub const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/svelte/queries/highlights.scm");
-pub const INDENTS_SCM_QUERY: &str = include_str!("../../grammars/svelte/queries/indents.scm");
-pub const INJECTIONS_SCM_QUERY: &str = include_str!("../../grammars/svelte/queries/injections.scm");
-pub const LOCALS_SCM_QUERY: &str = include_str!("../../grammars/svelte/queries/locals.scm");
+pub(crate) const FOLDS_SCM_QUERY: &str = include_str!("../../vendored/svelte/queries/folds.scm");
+pub(crate) const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/svelte/queries/highlights.scm");
+pub(crate) const INDENTS_SCM_QUERY: &str = include_str!("../../vendored/svelte/queries/indents.scm");
+pub(crate) const INJECTIONS_SCM_QUERY: &str = include_str!("../../vendored/svelte/queries/injections.scm");
+pub(crate) const LOCALS_SCM_QUERY: &str = include_str!("../../vendored/svelte/queries/locals.scm");
 
 #[cfg(test)]
 mod tests {

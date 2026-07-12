@@ -22,15 +22,15 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_asm) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_asm) };
 
 /// The content of the [`node-types.json`][] file for this grammar.
 ///
 /// [`node-types.json`]: https://tree-sitter.github.io/tree-sitter/using-parsers#static-node-types
-pub const NODE_TYPES: &str = include_str!("../../grammars/assembly/node-types.json");
+pub(crate) const NODE_TYPES: &str = include_str!("../../vendored/assembly/node-types.json");
 
-pub const ASM_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/assembly/queries/asm/highlights.scm");
-pub const ASM_INJECTIONS_SCM_QUERY: &str = include_str!("../../grammars/assembly/queries/asm/injections.scm");
+pub(crate) const ASM_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/assembly/queries/asm/highlights.scm");
+pub(crate) const ASM_INJECTIONS_SCM_QUERY: &str = include_str!("../../vendored/assembly/queries/asm/injections.scm");
 
 #[cfg(test)]
 mod tests {

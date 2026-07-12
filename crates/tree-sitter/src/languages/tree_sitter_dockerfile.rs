@@ -22,9 +22,9 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_dockerfile) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_dockerfile) };
 
-pub const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/dockerfile/queries/highlights.scm");
+pub(crate) const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/dockerfile/queries/highlights.scm");
 
 #[cfg(test)]
 mod tests {

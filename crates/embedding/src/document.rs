@@ -28,10 +28,7 @@ pub struct CodeDocument {
 
 impl CodeDocument {
   /// Signature-enriched header from a [`Definition`] (no body).
-  pub fn from_definition(
-    def: &Definition,
-    metadata: BTreeMap<String, String>,
-  ) -> Self {
+  pub fn from_definition(def: &Definition, metadata: BTreeMap<String, String>) -> Self {
     let mut doc = Self {
       id: def.qualified_name.clone(),
       qualified_name: def.qualified_name.clone(),
@@ -147,7 +144,7 @@ pub fn documents_from_source_lang(
   language: Option<Language>,
 ) -> Vec<CodeDocument> {
   let mut out = Vec::new();
-  for def in &source.defs {
+  for def in &source.definitions {
     let mut meta = metadata_from_definition(def);
     if let Some(lang) = language {
       meta.insert("language".into(), lang.to_string());
@@ -172,11 +169,7 @@ pub fn format_query(query: &str, natural_language: bool) -> String {
   if q.is_empty() {
     return String::new();
   }
-  if natural_language {
-    format!("{CODE_QUERY_PREFIX}{q}")
-  } else {
-    q.to_owned()
-  }
+  if natural_language { format!("{CODE_QUERY_PREFIX}{q}") } else { q.to_owned() }
 }
 
 #[cfg(test)]

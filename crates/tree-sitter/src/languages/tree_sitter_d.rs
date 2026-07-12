@@ -22,25 +22,25 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_d) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_d) };
 
 /// The content of the [`node-types.json`][] file for this grammar.
 ///
 /// [`node-types.json`]: https://tree-sitter.github.io/tree-sitter/using-parsers#static-node-types
-pub const NODE_TYPES: &str = include_str!("../../grammars/d/node-types.json");
+pub(crate) const NODE_TYPES: &str = include_str!("../../vendored/d/node-types.json");
 
-pub const HELIX_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/d/queries/helix-highlights.scm");
-pub const HELIX_INDENTS_SCM_QUERY: &str = include_str!("../../grammars/d/queries/helix-indents.scm");
-pub const HELIX_INJECTIONS_SCM_QUERY: &str = include_str!("../../grammars/d/queries/helix-injections.scm");
-pub const HELIX_TEXTOBJECTS_SCM_QUERY: &str = include_str!("../../grammars/d/queries/helix-textobjects.scm");
-pub const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/d/queries/highlights.scm");
-pub const INDENTS_SCM_QUERY: &str = include_str!("../../grammars/d/queries/indents.scm");
-pub const INJECTIONS_SCM_QUERY: &str = include_str!("../../grammars/d/queries/injections.scm");
-pub const NOVA_FOLDS_SCM_QUERY: &str = include_str!("../../grammars/d/queries/nova-folds.scm");
-pub const NOVA_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/d/queries/nova-highlights.scm");
-pub const NOVA_SYMBOLS_SCM_QUERY: &str = include_str!("../../grammars/d/queries/nova-symbols.scm");
-pub const TAGS_SCM_QUERY: &str = include_str!("../../grammars/d/queries/tags.scm");
-pub const TEXTOBJECTS_SCM_QUERY: &str = include_str!("../../grammars/d/queries/textobjects.scm");
+pub(crate) const HELIX_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/d/queries/helix-highlights.scm");
+pub(crate) const HELIX_INDENTS_SCM_QUERY: &str = include_str!("../../vendored/d/queries/helix-indents.scm");
+pub(crate) const HELIX_INJECTIONS_SCM_QUERY: &str = include_str!("../../vendored/d/queries/helix-injections.scm");
+pub(crate) const HELIX_TEXTOBJECTS_SCM_QUERY: &str = include_str!("../../vendored/d/queries/helix-textobjects.scm");
+pub(crate) const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/d/queries/highlights.scm");
+pub(crate) const INDENTS_SCM_QUERY: &str = include_str!("../../vendored/d/queries/indents.scm");
+pub(crate) const INJECTIONS_SCM_QUERY: &str = include_str!("../../vendored/d/queries/injections.scm");
+pub(crate) const NOVA_FOLDS_SCM_QUERY: &str = include_str!("../../vendored/d/queries/nova-folds.scm");
+pub(crate) const NOVA_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/d/queries/nova-highlights.scm");
+pub(crate) const NOVA_SYMBOLS_SCM_QUERY: &str = include_str!("../../vendored/d/queries/nova-symbols.scm");
+pub(crate) const TAGS_SCM_QUERY: &str = include_str!("../../vendored/d/queries/tags.scm");
+pub(crate) const TEXTOBJECTS_SCM_QUERY: &str = include_str!("../../vendored/d/queries/textobjects.scm");
 
 #[cfg(test)]
 mod tests {

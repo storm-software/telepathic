@@ -22,18 +22,18 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_cairo) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_cairo) };
 
 /// The content of the [`node-types.json`][] file for this grammar.
 ///
 /// [`node-types.json`]: https://tree-sitter.github.io/tree-sitter/using-parsers#static-node-types
-pub const NODE_TYPES: &str = include_str!("../../grammars/cairo/node-types.json");
+pub(crate) const NODE_TYPES: &str = include_str!("../../vendored/cairo/node-types.json");
 
-pub const FOLDS_SCM_QUERY: &str = include_str!("../../grammars/cairo/queries/folds.scm");
-pub const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/cairo/queries/highlights.scm");
-pub const INDENTS_SCM_QUERY: &str = include_str!("../../grammars/cairo/queries/indents.scm");
-pub const INJECTIONS_SCM_QUERY: &str = include_str!("../../grammars/cairo/queries/injections.scm");
-pub const LOCALS_SCM_QUERY: &str = include_str!("../../grammars/cairo/queries/locals.scm");
+pub(crate) const FOLDS_SCM_QUERY: &str = include_str!("../../vendored/cairo/queries/folds.scm");
+pub(crate) const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/cairo/queries/highlights.scm");
+pub(crate) const INDENTS_SCM_QUERY: &str = include_str!("../../vendored/cairo/queries/indents.scm");
+pub(crate) const INJECTIONS_SCM_QUERY: &str = include_str!("../../vendored/cairo/queries/injections.scm");
+pub(crate) const LOCALS_SCM_QUERY: &str = include_str!("../../vendored/cairo/queries/locals.scm");
 
 #[cfg(test)]
 mod tests {

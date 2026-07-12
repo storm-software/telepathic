@@ -7,7 +7,6 @@ pub mod document;
 pub mod document_chunk;
 pub mod embedding;
 pub mod entity;
-pub mod execution;
 pub mod has_datapoint;
 pub mod meta;
 
@@ -17,7 +16,6 @@ pub use document::*;
 pub use document_chunk::*;
 pub use embedding::*;
 pub use entity::*;
-pub use execution::*;
 pub use has_datapoint::*;
 pub use meta::*;
 

@@ -26,9 +26,7 @@ workspace = true
 camino              = { workspace = true }
 derive_more         = { workspace = true }
 telepathic-core    = { workspace = true }
-telepathic-models  = { workspace = true }
 telepathic-tree-sitter = { workspace = true }
-telepathic-storage = { workspace = true }
 serde               = { workspace = true, features = ['derive'], optional = true }
 serde_json          = { workspace = true }
 thiserror           = { workspace = true }
@@ -37,12 +35,8 @@ tracing             = { workspace = true }
 [features]
 default      = ['serde']
 experimental = []
-ladybug      = ['telepathic-storage/ladybug']
 serde        = ['dep:serde']
 testing      = []
 
 [dev-dependencies]
-chrono              = { workspace = true, features = ['serde'] }
-telepathic-models  = { workspace = true }
-telepathic-storage = { workspace = true, features = ['testing'] }
-serde_json          = { workspace = true }
+serde_json = { workspace = true }

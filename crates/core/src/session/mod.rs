@@ -1,4 +1,5 @@
 use chrono::{DateTime, Utc};
+use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 pub mod device;
@@ -8,7 +9,7 @@ pub use device::*;
 pub use user::*;
 
 /// Represents a session in the Telepathic system, containing user and device information.
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Session {
   /// Unique identifier for the session.
   pub session_id: Uuid,

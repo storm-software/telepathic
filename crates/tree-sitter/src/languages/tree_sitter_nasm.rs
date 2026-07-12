@@ -22,16 +22,16 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_nasm) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_nasm) };
 
 /// The content of the [`node-types.json`][] file for this grammar.
 ///
 /// [`node-types.json`]: https://tree-sitter.github.io/tree-sitter/using-parsers#static-node-types
-pub const NODE_TYPES: &str = include_str!("../../grammars/nasm/node-types.json");
+pub(crate) const NODE_TYPES: &str = include_str!("../../vendored/nasm/node-types.json");
 
-pub const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/nasm/queries/highlights.scm");
-pub const INJECTIONS_SCM_QUERY: &str = include_str!("../../grammars/nasm/queries/injections.scm");
-pub const TEXTOBJECTS_SCM_QUERY: &str = include_str!("../../grammars/nasm/queries/textobjects.scm");
+pub(crate) const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/nasm/queries/highlights.scm");
+pub(crate) const INJECTIONS_SCM_QUERY: &str = include_str!("../../vendored/nasm/queries/injections.scm");
+pub(crate) const TEXTOBJECTS_SCM_QUERY: &str = include_str!("../../vendored/nasm/queries/textobjects.scm");
 
 #[cfg(test)]
 mod tests {

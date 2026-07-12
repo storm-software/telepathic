@@ -22,17 +22,17 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_hyprlang) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_hyprlang) };
 
 /// The content of the [`node-types.json`][] file for this grammar.
 ///
 /// [`node-types.json`]: https://tree-sitter.github.io/tree-sitter/using-parsers#static-node-types
-pub const NODE_TYPES: &str = include_str!("../../grammars/hyprlang/node-types.json");
+pub(crate) const NODE_TYPES: &str = include_str!("../../vendored/hyprlang/node-types.json");
 
-pub const HYPRLANG_FOLDS_SCM_QUERY: &str = include_str!("../../grammars/hyprlang/queries/hyprlang/folds.scm");
-pub const HYPRLANG_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/hyprlang/queries/hyprlang/highlights.scm");
-pub const HYPRLANG_INDENTS_SCM_QUERY: &str = include_str!("../../grammars/hyprlang/queries/hyprlang/indents.scm");
-pub const HYPRLANG_INJECTIONS_SCM_QUERY: &str = include_str!("../../grammars/hyprlang/queries/hyprlang/injections.scm");
+pub(crate) const HYPRLANG_FOLDS_SCM_QUERY: &str = include_str!("../../vendored/hyprlang/queries/hyprlang/folds.scm");
+pub(crate) const HYPRLANG_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/hyprlang/queries/hyprlang/highlights.scm");
+pub(crate) const HYPRLANG_INDENTS_SCM_QUERY: &str = include_str!("../../vendored/hyprlang/queries/hyprlang/indents.scm");
+pub(crate) const HYPRLANG_INJECTIONS_SCM_QUERY: &str = include_str!("../../vendored/hyprlang/queries/hyprlang/injections.scm");
 
 #[cfg(test)]
 mod tests {

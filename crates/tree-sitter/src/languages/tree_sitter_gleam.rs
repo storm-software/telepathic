@@ -22,17 +22,17 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_gleam) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_gleam) };
 
 /// The content of the [`node-types.json`][] file for this grammar.
 ///
 /// [`node-types.json`]: https://tree-sitter.github.io/tree-sitter/using-parsers#static-node-types
-pub const NODE_TYPES: &str = include_str!("../../grammars/gleam/node-types.json");
+pub(crate) const NODE_TYPES: &str = include_str!("../../vendored/gleam/node-types.json");
 
-pub const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/gleam/queries/highlights.scm");
-pub const INJECTIONS_SCM_QUERY: &str = include_str!("../../grammars/gleam/queries/injections.scm");
-pub const LOCALS_SCM_QUERY: &str = include_str!("../../grammars/gleam/queries/locals.scm");
-pub const TAGS_SCM_QUERY: &str = include_str!("../../grammars/gleam/queries/tags.scm");
+pub(crate) const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/gleam/queries/highlights.scm");
+pub(crate) const INJECTIONS_SCM_QUERY: &str = include_str!("../../vendored/gleam/queries/injections.scm");
+pub(crate) const LOCALS_SCM_QUERY: &str = include_str!("../../vendored/gleam/queries/locals.scm");
+pub(crate) const TAGS_SCM_QUERY: &str = include_str!("../../vendored/gleam/queries/tags.scm");
 
 #[cfg(test)]
 mod tests {

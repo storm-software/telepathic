@@ -22,10 +22,10 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_go) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_go) };
 
-pub const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/go/queries/highlights.scm");
-pub const TAGS_SCM_QUERY: &str = include_str!("../../grammars/go/queries/tags.scm");
+pub(crate) const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/go/queries/highlights.scm");
+pub(crate) const TAGS_SCM_QUERY: &str = include_str!("../../vendored/go/queries/tags.scm");
 
 #[cfg(test)]
 mod tests {

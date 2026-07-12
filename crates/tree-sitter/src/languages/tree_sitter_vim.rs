@@ -22,11 +22,11 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_vim) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_vim) };
 
-pub const VIM_FOLDS_SCM_QUERY: &str = include_str!("../../grammars/vim/queries/vim/folds.scm");
-pub const VIM_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/vim/queries/vim/highlights.scm");
-pub const VIM_INJECTIONS_SCM_QUERY: &str = include_str!("../../grammars/vim/queries/vim/injections.scm");
+pub(crate) const VIM_FOLDS_SCM_QUERY: &str = include_str!("../../vendored/vim/queries/vim/folds.scm");
+pub(crate) const VIM_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/vim/queries/vim/highlights.scm");
+pub(crate) const VIM_INJECTIONS_SCM_QUERY: &str = include_str!("../../vendored/vim/queries/vim/injections.scm");
 
 #[cfg(test)]
 mod tests {

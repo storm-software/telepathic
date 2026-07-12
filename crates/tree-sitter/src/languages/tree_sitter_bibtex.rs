@@ -22,16 +22,16 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_bibtex) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_bibtex) };
 
 /// The content of the [`node-types.json`][] file for this grammar.
 ///
 /// [`node-types.json`]: https://tree-sitter.github.io/tree-sitter/using-parsers#static-node-types
-pub const NODE_TYPES: &str = include_str!("../../grammars/bibtex/node-types.json");
+pub(crate) const NODE_TYPES: &str = include_str!("../../vendored/bibtex/node-types.json");
 
-pub const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/bibtex/queries/highlights.scm");
-pub const LOCALS_SCM_QUERY: &str = include_str!("../../grammars/bibtex/queries/locals.scm");
-pub const TAGS_SCM_QUERY: &str = include_str!("../../grammars/bibtex/queries/tags.scm");
+pub(crate) const HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/bibtex/queries/highlights.scm");
+pub(crate) const LOCALS_SCM_QUERY: &str = include_str!("../../vendored/bibtex/queries/locals.scm");
+pub(crate) const TAGS_SCM_QUERY: &str = include_str!("../../vendored/bibtex/queries/tags.scm");
 
 #[cfg(test)]
 mod tests {

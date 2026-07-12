@@ -22,10 +22,10 @@ unsafe extern "C" {
 }
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_xml) };
+pub(crate) const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_xml) };
 
-pub const DTD_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/xml/queries/dtd/highlights.scm");
-pub const XML_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../grammars/xml/queries/xml/highlights.scm");
+pub(crate) const DTD_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/xml/queries/dtd/highlights.scm");
+pub(crate) const XML_HIGHLIGHTS_SCM_QUERY: &str = include_str!("../../vendored/xml/queries/xml/highlights.scm");
 
 #[cfg(test)]
 mod tests {
