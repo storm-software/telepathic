@@ -65,6 +65,6 @@ unsafe fn dispatch(
     LspLanguage::CSharp => unsafe { ffi::lsp_run_cs(arena, result, src, len, root) },
     LspLanguage::Java => unsafe { ffi::lsp_run_java(arena, result, src, len, root) },
     LspLanguage::Kotlin => unsafe { ffi::lsp_run_kotlin(arena, result, src, len, root) },
-    LspLanguage::Rust => unsafe { lsp_run_rust(arena, result, src, len, root) },
+    LspLanguage::Rust => unsafe { ffi::lsp_run_rust(arena, result, src, len, root) },
   }
 }

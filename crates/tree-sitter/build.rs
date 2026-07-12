@@ -147,7 +147,7 @@ fn main() {
       .expect("Writing to String cannot fail");
       writeln!(
         node_types_section,
-        "pub const NODE_TYPES: &str = include_str!(\"../../{include_path}\");"
+        "pub(crate) const NODE_TYPES: &str = include_str!(\"../../{include_path}\");"
       )
       .expect("Writing to String cannot fail");
     }
@@ -162,7 +162,7 @@ fn main() {
 
       writeln!(
         query_constants,
-        "pub const {const_name}: &str = include_str!(\"../../{include_path}\");"
+        "pub(crate) const {const_name}: &str = include_str!(\"../../{include_path}\");"
       )
       .expect("Writing to String cannot fail");
     }
@@ -194,7 +194,7 @@ unsafe extern "C" {{
 }}
 
 /// The tree-sitter [`LanguageFn`] for this grammar.
-pub const LANGUAGE: LanguageFn = unsafe {{ LanguageFn::from_raw({ts_c_fn}) }};
+pub(crate) const LANGUAGE: LanguageFn = unsafe {{ LanguageFn::from_raw({ts_c_fn}) }};
 "#,
       display = grammar.display_name,
       module = grammar.ts_function,
@@ -255,7 +255,8 @@ mod tests {{
       grammar.display_name
     )
     .expect("Writing to String cannot fail");
-    writeln!(language_module, "pub mod {module_name};").expect("Writing to String cannot fail");
+    writeln!(language_module, "pub(crate) mod {module_name};")
+      .expect("Writing to String cannot fail");
   }
 
   let languages_module_path = languages_path.join("mod.rs");
@@ -477,6 +478,7 @@ impl Language {
 }
 
 impl std::fmt::Display for Language {
+    #[allow(clippy::inherent_to_string)]
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_str(self.display_name())
     }

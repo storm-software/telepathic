@@ -14,6 +14,7 @@ fn main() {
   println!("cargo:rerun-if-changed={}", manifest_dir.join("helpers.c").display());
   println!("cargo:rerun-if-changed={}", manifest_dir.join("cbm.h").display());
   println!("cargo:rerun-if-changed={}", manifest_dir.join("arena.h").display());
+  println!("cargo:rerun-if-changed={}", manifest_dir.join("dispatch.c").display());
   println!("cargo:rerun-if-changed={}", manifest_dir.join("helpers.h").display());
   println!("cargo:rerun-if-changed={}", manifest_dir.join("wrapper.h").display());
 
@@ -146,7 +147,7 @@ fn compile_lsp_runtime(manifest_dir: &Path, vendored: &Path, ts_include: &Path) 
   #[cfg(target_env = "msvc")]
   build.flag("-utf-8");
 
-  let shim_files = ["arena.c", "helpers.c"];
+  let shim_files = ["arena.c", "helpers.c", "dispatch.c"];
   for name in shim_files {
     let path = manifest_dir.join(name);
     build.file(&path);

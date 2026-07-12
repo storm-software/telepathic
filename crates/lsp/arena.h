@@ -27,4 +27,12 @@ char *lsp_arena_sprintf(CBMArena *a, const char *fmt, ...)
   ;
 void lsp_arena_destroy(CBMArena *a);
 
+/* Vendored LSP sources use the legacy cbm_arena_* names. */
+#define cbm_arena_init lsp_arena_init
+#define cbm_arena_alloc lsp_arena_alloc
+#define cbm_arena_strdup lsp_arena_strdup
+#define cbm_arena_strndup lsp_arena_strndup
+#define cbm_arena_sprintf lsp_arena_sprintf
+#define cbm_arena_destroy lsp_arena_destroy
+
 #endif /* CBM_ARENA_H */

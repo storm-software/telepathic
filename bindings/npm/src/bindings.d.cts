@@ -299,6 +299,12 @@ export interface BindingTraceGraphOutput {
   results: Array<string>;
 }
 
+export interface BindingUser {
+  name: string;
+  displayName: string;
+  languagePreferences: Array<string>;
+}
+
 export interface BindingWriteGraphInput {
   /** The node to write. */
   node: BindingDefinition;
@@ -311,12 +317,6 @@ export interface BindingWriteGraphOutput {
   success: boolean;
   /** Any errors encountered during the write graph operation. */
   errors: Array<string>;
-}
-
-export interface BindingUser {
-  name: string;
-  displayName: string;
-  languagePreferences: Array<string>;
 }
 
 export declare function createTokioRuntime(
