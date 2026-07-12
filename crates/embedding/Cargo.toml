@@ -1,0 +1,52 @@
+[package]
+authors       = { workspace = true }
+categories    = { workspace = true }
+description   = 'Neural code embeddings (ONNX CodeRankEmbed + Voyage) with HNSW search and semantic fuse.'
+documentation = 'https://docs.rs/telepathic'
+edition       = { workspace = true }
+homepage      = { workspace = true }
+keywords      = { workspace = true }
+license       = { workspace = true }
+name          = 'telepathic-embedding'
+publish       = true
+readme        = './README.md'
+repository    = { workspace = true }
+version       = '0.0.1'
+
+[lib]
+doctest = false
+
+[lints]
+workspace = true
+
+[package.metadata.docs.rs]
+features     = ['onnx-dynamic', 'voyage']
+rustdoc-args = ['--cfg', 'docsrs']
+
+[features]
+default      = ['onnx']
+onnx         = ['dep:ort', 'dep:tokenizers', 'dep:reqwest', 'dep:tokio']
+# Load ONNX Runtime via dlopen (`ORT_DYLIB_PATH`) instead of static link.
+onnx-dynamic = ['onnx', 'ort/load-dynamic']
+voyage       = ['dep:reqwest', 'dep:tokio', 'dep:serde_json']
+
+[dependencies]
+async-trait           = { workspace = true }
+rustc-hash            = { workspace = true }
+serde                 = { workspace = true, features = ['derive'] }
+telepathic-core       = { workspace = true }
+telepathic-semantic   = { workspace = true }
+telepathic-tree-sitter = { workspace = true }
+thiserror             = { workspace = true }
+tracing               = { workspace = true }
+xxhash-rust           = { workspace = true, features = ['xxh3'] }
+
+ort        = { workspace = true, optional = true }
+reqwest    = { workspace = true, optional = true }
+serde_json = { workspace = true, optional = true }
+tokenizers = { workspace = true, optional = true }
+tokio      = { workspace = true, optional = true }
+
+[dev-dependencies]
+tempfile = '3.20.0'
+tokio    = { workspace = true, features = ['macros', 'rt-multi-thread'] }

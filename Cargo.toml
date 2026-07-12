@@ -105,12 +105,19 @@ rustdoc-args = ["--cfg", "docsrs"]
 # Telepathic
 telepathic-napi-rs = { path = "./crates/napi-rs" }
 telepathic-core = { path = "./crates/core" }
+telepathic-embedding = { path = "./crates/embedding" }
 telepathic-engine = { path = "./crates/engine" }
 telepathic-models = { path = "./crates/models" }
 telepathic-semantic = { path = "./crates/semantic" }
 telepathic-storage = { path = "./crates/storage" }
 telepathic-tracing = { path = "./crates/tracing" }
 telepathic-tree-sitter = { path = "./crates/tree-sitter" }
+
+async-trait = "0.1.89"
+ort = { version = "2.0.0-rc.12", default-features = true }
+reqwest = { version = "0.12.24", default-features = false, features = ["json", "rustls-tls"] }
+tokenizers = { version = "0.21.4", default-features = false, features = ["onig"] }
+tokio = { version = "1.47.1", features = ["fs", "io-util", "macros", "rt", "rt-multi-thread", "sync"] }
 
 lbug = "0.14.1"
 anyhow = "1.0.98"
