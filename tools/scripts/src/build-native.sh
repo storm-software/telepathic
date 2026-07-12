@@ -22,23 +22,50 @@ set -eo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 
-target="${NATIVE_TARGET:-}"
+normalize_target() {
+  local value="$1"
+  while [[ "$value" == --target=* ]]; do
+    value="${value#--target=}"
+  done
+  if [[ "$value" == --target ]]; then
+    value=""
+  fi
+  printf '%s' "$value"
+}
+
+target="$(normalize_target "${NATIVE_TARGET:-}")"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --target)
-      target="$2"
+      if [[ $# -lt 2 || -z "$2" ]]; then
+        printf '\033[31m--target requires a value\033[0m\n' >&2
+        exit 1
+      fi
+      target="$(normalize_target "$2")"
       shift 2
       ;;
     --target=*)
-      target="${1#*=}"
+      target="$(normalize_target "${1#--target=}")"
       shift
       ;;
+    -*)
+      printf '\033[31mUnknown option: %s\033[0m\n' "$1" >&2
+      exit 1
+      ;;
     *)
+      if [[ -z "$target" ]]; then
+        target="$(normalize_target "$1")"
+      fi
       shift
       ;;
   esac
 done
+
+if [[ -z "$target" ]]; then
+  printf '\033[31mNo build target specified. Pass a target triple or set NATIVE_TARGET.\033[0m\n' >&2
+  exit 1
+fi
 
 command="pnpm nx run bindings:build-$target"
 
@@ -50,7 +77,7 @@ if ! pnpm bootstrap; then
   exit 1
 fi
 
-printf '\033[1;37m 🏗️  Building the Power Plant native %s artifacts - running command: \n%s\n\033[0m\n' "$target" "$command"
+printf '\033[1;37m 🏗️  Building the Telepathic native %s artifacts - running command: \n%s\n\033[0m\n' "$target" "$command"
 
 set +e
 if command -v timeout > /dev/null 2>&1; then
@@ -65,8 +92,8 @@ fi
 set -e
 
 if [[ $exit_code -ne 0 ]]; then
-  printf '\033[31mAn error occurred while building the Power Plant native %s artifacts\033[0m\n' "$target" >&2
+  printf '\033[31mAn error occurred while building the Telepathic native %s artifacts\033[0m\n' "$target" >&2
   exit 1
 fi
 
-printf '\033[32m ✔ Successfully built the Power Plant native %s artifacts!\033[0m\n\n' "$target"
+printf '\033[32m ✔ Successfully built the Telepathic native %s artifacts!\033[0m\n\n' "$target"

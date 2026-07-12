@@ -37,7 +37,7 @@
   languages.c.enable = true;
 
   scripts = {
-    build-native.exec = "pnpm build-native --target=$1";
+    build-native.exec = "${config.git.root}/tools/scripts/src/build-native.sh \"$@\"";
     codegen-lang.exec = "pnpm codegen-lang";
     new-lang.exec = "pnpm new-lang $1 $2";
   };

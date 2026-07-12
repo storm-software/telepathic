@@ -1,6 +1,5 @@
-# power-plant-semantic
+# telepathic-semantic
 
-Rust port of CBM semantic embeddings (`semantic.c` / `semantic.h`).
 
 ## External integrations
 
@@ -14,7 +13,7 @@ Rust port of CBM semantic embeddings (`semantic.c` / `semantic.h`).
 ### Nomic pretrained setup
 
 ```bash
-export CBM_NOMIC_DATA_DIR=/path/to/vendored/nomic
+export TELEPATHIC_NOMIC_DATA_DIR=/path/to/vendored/nomic
 # directory must contain code_tokens.txt and code_vectors.bin
 ```
 
@@ -25,7 +24,9 @@ let pretrained = NomicPretrained::from_dir("vendored/nomic")?;
 corpus.finalize(&pretrained);
 ```
 
-Or set `CBM_NOMIC_DATA_DIR` and use `default_pretrained()`.
+Or set `TELEPATHIC_NOMIC_DATA_DIR` and use `default_pretrained()`.
+
+The static int8 table (`code_vectors.bin`, 40K×768) is a distilled token lookup for Random Indexing seeds — **not** the full neural CodeRankEmbed / nomic-embed-code forward pass. Full neural inference lives in `telepathic-embedding`.
 
 ### AST MinHash
 
