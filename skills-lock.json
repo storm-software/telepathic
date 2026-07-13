@@ -61,6 +61,12 @@
       "skillPath": "skills/productivity/grill-me/SKILL.md",
       "computedHash": "f321507f77702a54af1db66549ec1685fc625390d06c57d7949cdcda8eb1b5c7"
     },
+    "nix-best-practices": {
+      "source": "0xbigboss/claude-code",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/nix-best-practices/SKILL.md",
+      "computedHash": "f6d14bf40d4b505dd50cb389711eae74bc1459740adb27f4641cd75c21042311"
+    },
     "rust-async-patterns": {
       "source": "wshobson/agents",
       "sourceType": "github",

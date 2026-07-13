@@ -36,6 +36,21 @@
 
   languages.c.enable = true;
 
+  tasks = {
+    "telepathic:setup:tmp" = {
+      exec = ''
+        mkdir -p "${config.git.root}/tmp"
+      '';
+      before = [
+        "storm:setup:install"
+      ];
+      after = [
+        "devenv:files"
+        "devenv:files:cleanup"
+      ];
+    };
+  };
+
   scripts = {
     build-native.exec = "${config.git.root}/tools/scripts/src/build-native.sh \"$@\"";
     codegen-lang.exec = "pnpm codegen-lang";
