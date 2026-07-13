@@ -28,11 +28,7 @@
     "node": ">=24.16.0",
     "pnpm": ">=11.9.0"
   },
-  "keywords": [
-    "telepathic",
-    "storm-software",
-    "monorepo"
-  ],
+  "keywords": ["telepathic", "storm-software", "monorepo"],
   "scripts": {
     "adr": "pnpm log4brains adr new",
     "adr-preview": "pnpm log4brains preview",
@@ -41,6 +37,7 @@
     "build-dev": "pnpm exec zx tools/scripts/src/build.mjs --dev",
     "clean": "pnpm exec zx tools/scripts/src/clean.mjs",
     "commit": "pnpm exec storm-git commit",
+    "delete-stale-tags": "pnpm exec zx tools/scripts/src/delete-stale-tags.mjs --delete --remote",
     "dep-graph": "nx dep-graph",
     "e2e": "nx e2e",
     "format": "pnpm exec zx tools/scripts/src/format.mjs",

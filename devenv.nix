@@ -68,6 +68,7 @@
           SCCACHE_ENDPOINT = "https://rustc-cache.storm-cdn.com/telepathic";
           SCCACHE_BUCKET = "rustc-cache";
           SCCACHE_REGION = "auto";
+          SCCACHE_S3_NO_CREDENTIALS = "1";
           RUST_BACKTRACE = "1";
           RUSTFLAGS = "-C codegen-backend=cranelift";
           CARGO_PROFILE_DEV_CODEGEN_BACKEND = "cranelift cargo +nightly build -Zcodegen-backend";
@@ -105,6 +106,7 @@
           SCCACHE_ENDPOINT = "https://rustc-cache.storm-cdn.com/telepathic";
           SCCACHE_BUCKET = "rustc-cache";
           SCCACHE_REGION = "auto";
+          SCCACHE_S3_NO_CREDENTIALS = "1";
         };
         languages.rust = {
           enable = true;
