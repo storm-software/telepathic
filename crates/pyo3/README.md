@@ -57,43 +57,24 @@ The Power Plant monorepo is a collection of packages that are designed to work t
 
 <!-- END header -->
 
-# Telepathic - NodeJS Bindings
+# Telepathic - Python Bindings
 
-The **Telepathic - NodeJS Bindings** crate binds the Telepathic runtime to the [Node.js](https://nodejs.org/) runtime using [NAPI](https://napi.dev/).
+The **Telepathic - Python Bindings** crate binds the Telepathic runtime to the [Python](https://www.python.org/) runtime using [PyO3](https://pyo3.rs/).
 
 ## Installing
 
-Using [pnpm](http://pnpm.io):
-
+Using [Cargo](https://doc.rust-lang.org/cargo/getting-started/installation.html):
 ```bash
-pnpm add -D @telepathic/bindings-x86_64-unknown-linux-gnu
+cargo add telepathic-pyo3
 ```
-
-<details>
-  <summary>Using npm</summary>
-
-```bash
-npm install -D @telepathic/bindings-x86_64-unknown-linux-gnu
-```
-
-</details>
-
-<details>
-  <summary>Using yarn</summary>
-
-```bash
-yarn add -D @telepathic/bindings-x86_64-unknown-linux-gnu
-```
-
-</details>
 
 ## Building
 
-Run `nx build native-napi-rs` to build the library.
+Run `nx build native-pyo3` to build the library.
 
 ## Running unit tests
 
-Run `nx test native-napi-rs` to execute the unit tests via [Vitest](https://vitest.dev/).
+Run `nx test native-pyo3` to execute the unit tests via [Vitest](https://vitest.dev/).
 
 <!-- START footer -->
 <!-- prettier-ignore-start -->
