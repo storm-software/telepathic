@@ -67,6 +67,7 @@
           SCCACHE_ERROR_LOG = "${config.git.root}/tmp/sccache.log";
           SCCACHE_ENDPOINT = "https://rustc-cache.storm-cdn.com/telepathic";
           SCCACHE_BUCKET = "rustc-cache";
+          SCCACHE_REGION = "auto";
           RUST_BACKTRACE = "1";
           RUSTFLAGS = "-C codegen-backend=cranelift";
           CARGO_PROFILE_DEV_CODEGEN_BACKEND = "cranelift cargo +nightly build -Zcodegen-backend";
@@ -103,6 +104,7 @@
           SCCACHE_ERROR_LOG = "${config.git.root}/tmp/sccache.log";
           SCCACHE_ENDPOINT = "https://rustc-cache.storm-cdn.com/telepathic";
           SCCACHE_BUCKET = "rustc-cache";
+          SCCACHE_REGION = "auto";
         };
         languages.rust = {
           enable = true;
