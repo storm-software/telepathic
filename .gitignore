@@ -95,6 +95,8 @@ bld/
 [Oo]bj/
 [Ll]og/
 !packages/[Ll]og
+!crates/core/src/log/
+!crates/core/src/log/**
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
