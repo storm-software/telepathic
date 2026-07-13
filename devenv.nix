@@ -32,10 +32,10 @@
     # bindgen loads libclang at build time; point it at nix libclang, not host /usr/lib.
     LIBCLANG_PATH = "${pkgs.libclang.lib}/lib";
     RUSTC_WRAPPER = "${pkgs.sccache}/bin/sccache";
-    SCCACHE_ENDPOINT = "https://rustc-cache.storm-cdn.com/telepathic";
-    SCCACHE_BUCKET = "rustc-cache";
+    SCCACHE_ENDPOINT = "https://d011605e7391539ac2e021ab4399e116.r2.cloudflarestorage.com";
+    SCCACHE_BUCKET = "telepathic-rustc-cache";
     SCCACHE_REGION = "auto";
-    SCCACHE_S3_NO_CREDENTIALS = "1";
+    SCCACHE_ERROR_LOG = "${config.git.root}/tmp/sccache.log";
   };
 
   languages.c.enable = true;
@@ -46,7 +46,8 @@
         mkdir -p "${config.git.root}/tmp"
       '';
       before = [
-        "storm:setup:install"
+        "devenv:enterShell"
+        "devenv:enterTest"
       ];
       after = [
         "devenv:files"
@@ -68,7 +69,6 @@
       ];
       module = {
         env = {
-          SCCACHE_ERROR_LOG = "${config.git.root}/tmp/sccache.log";
           RUST_BACKTRACE = "1";
           RUSTFLAGS = "-C codegen-backend=cranelift";
           CARGO_PROFILE_DEV_CODEGEN_BACKEND = "cranelift cargo +nightly build -Zcodegen-backend";
@@ -101,9 +101,6 @@
         "production"
       ];
       module = {
-        env = {
-          SCCACHE_ERROR_LOG = "${config.git.root}/tmp/sccache.log";
-        };
         languages.rust = {
           enable = true;
           channel = "nightly";
