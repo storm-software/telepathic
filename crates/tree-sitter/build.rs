@@ -110,6 +110,10 @@ fn main() {
     }
     if has_scanner {
       c_config.file(&scanner_path);
+      // tree-sitter-just's scanner.c hard-errors when NDEBUG is set (release builds).
+      if grammar_key == "just" {
+        c_config.flag("-UNDEBUG");
+      }
       println!("cargo:rerun-if-changed={}", scanner_path.display());
     }
 
