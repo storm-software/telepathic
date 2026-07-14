@@ -2,6 +2,7 @@
   pkgs,
   inputs,
   config,
+  lib,
   ...
 }:
 {
@@ -41,7 +42,7 @@
   languages.c.enable = true;
 
   # manylinux pulls glibc into the shell; that only builds on Linux.
-  languages.python.manylinux.enable = pkgs.stdenv.isLinux;
+  languages.python.manylinux.enable = lib.mkDefault pkgs.stdenv.isLinux;
 
   tasks = {
     "telepathic:setup:tmp" = {
