@@ -149,7 +149,7 @@ jobs:
         if: matrix.target != 'wasm32-wasip1-threads'
         with:
           name: bindings-${{ matrix.target }}
-          path: packages/base/bindings/artifacts/*.node
+          path: bindings/npm/artifacts/*.node
           if-no-files-found: error
 
       - name: Upload artifact - WASM
@@ -157,7 +157,7 @@ jobs:
         if: matrix.target == 'wasm32-wasip1-threads'
         with:
           name: bindings-${{ matrix.target }}
-          path: packages/base/bindings/artifacts/*.wasm
+          path: bindings/npm/artifacts/*.wasm
           if-no-files-found: error
 
   release:
@@ -194,7 +194,7 @@ jobs:
       - name: Download binding artifacts
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
-          path: packages/base/bindings/artifacts
+          path: bindings/npm/artifacts
           pattern: bindings-*
           merge-multiple: true
 
