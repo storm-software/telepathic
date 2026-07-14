@@ -41,8 +41,8 @@
 
   languages.c.enable = true;
 
-  # manylinux pulls glibc into the shell; that only builds on Linux.
-  languages.python.manylinux.enable = lib.mkDefault pkgs.stdenv.isLinux;
+  # storm-ops python module enables manylinux; it pulls glibc (Linux-only).
+  languages.python.manylinux.enable = lib.mkForce pkgs.stdenv.isLinux;
 
   tasks = {
     "telepathic:setup:tmp" = {
