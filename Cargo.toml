@@ -1,7 +1,7 @@
 cargo-features = ["codegen-backend"]
 
 [workspace]
-members = ["crates/*"]
+members = ["crates/napi-rs", "crates/pyo3", "crates/core", "crates/embedding", "crates/engine", "crates/models", "crates/semantic", "crates/storage", "crates/tracing", "crates/tree-sitter", "crates/lsp", "apps/desktop/src-tauri"]
 resolver = "3"
 
 [workspace.package]

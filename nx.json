@@ -20,7 +20,10 @@
       }
     },
     "@storm-software/workspace-tools/plugins/typescript",
-    "@storm-software/workspace-tools/plugins/rust",
+    {
+      "plugin": "@storm-software/workspace-tools/plugins/rust",
+      "exclude": ["apps/desktop/**"]
+    },
     "@powerlines/nx/plugin"
   ],
   "sync": {

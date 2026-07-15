@@ -1,0 +1,35 @@
+{
+  "name": "@telepathic/desktop",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "description": "Telepathic desktop application",
+  "repository": {
+    "type": "github",
+    "url": "https://github.com/storm-software/telepathic.git",
+    "directory": "apps/desktop"
+  },
+  "license": "Apache-2.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build --bundles deb,rpm"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "catalog:",
+    "@tauri-apps/plugin-opener": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vitejs/plugin-react": "catalog:",
+    "typescript": "^6.0.3",
+    "vite": "catalog:"
+  }
+}

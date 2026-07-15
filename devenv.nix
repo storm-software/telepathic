@@ -27,11 +27,31 @@
   packages = with pkgs; [
     sccache
     libclang
+    # Tauri desktop (Linux)
+    pkg-config
+    openssl
+    webkitgtk_4_1
+    gtk3
+    librsvg
+    gdk-pixbuf
+    cairo
+    pango
+    linuxdeploy
   ];
 
   env = {
     # bindgen loads libclang at build time; point it at nix libclang, not host /usr/lib.
     LIBCLANG_PATH = "${pkgs.libclang.lib}/lib";
+    # linuxdeploy (AppImage) resolves GTK/WebKit via ldd; Nix libs are not on default search path.
+    LD_LIBRARY_PATH = lib.makeLibraryPath [
+      pkgs.webkitgtk_4_1
+      pkgs.gtk3
+      pkgs.glib
+      pkgs.librsvg
+      pkgs.gdk-pixbuf
+      pkgs.cairo
+      pkgs.pango
+    ];
     RUSTC_WRAPPER = "${pkgs.sccache}/bin/sccache";
     SCCACHE_ENDPOINT = "https://d011605e7391539ac2e021ab4399e116.r2.cloudflarestorage.com";
     SCCACHE_BUCKET = "telepathic-rustc-cache";
@@ -40,9 +60,6 @@
   };
 
   languages.c.enable = true;
-
-  # storm-ops python module enables manylinux; it pulls glibc (Linux-only).
-  languages.python.manylinux.enable = lib.mkForce pkgs.stdenv.isLinux;
 
   tasks = {
     "telepathic:setup:tmp" = {
@@ -64,6 +81,8 @@
     build-native.exec = "${config.git.root}/tools/scripts/src/build-native.sh \"$@\"";
     codegen-lang.exec = "pnpm codegen-lang";
     new-lang.exec = "pnpm new-lang $1 $2";
+    desktop-dev.exec = "pnpm --filter @telepathic/desktop tauri:dev";
+    desktop-build.exec = "pnpm --filter @telepathic/desktop tauri:build";
   };
 
   profiles = {
@@ -129,6 +148,7 @@
           gcc
           gnumake
           cmake
+          linuxdeploy
         ];
       };
     };
@@ -169,8 +189,13 @@
         "release"
       ];
       module = {
-        languages.rust = {
-          lld.enable = true;
+        languages = {
+          rust = {
+            lld.enable = true;
+          };
+          python = {
+            manylinux.enable = lib.mkForce false;
+          };
         };
       };
     };
@@ -261,6 +286,16 @@
       ];
       module = {
         languages.rust.targets = [ "wasm32-wasip1-threads" ];
+        env = {
+          # cc-wrapper injects host hardening flags (e.g. -fzero-call-used-regs=used-gpr)
+          # that wasm clang rejects when building native deps like tree-sitter.
+          NIX_HARDENING_ENABLE = "";
+          CC_wasm32_wasip1_threads = "${pkgs.llvmPackages.clang-unwrapped}/bin/clang";
+          CXX_wasm32_wasip1_threads = "${pkgs.llvmPackages.clang-unwrapped}/bin/clang++";
+        };
+        packages = with pkgs; [
+          llvmPackages.clang-unwrapped
+        ];
       };
     };
 

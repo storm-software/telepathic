@@ -79,10 +79,12 @@ fi
 
 printf '\033[1;37m 🏗️  Building the Telepathic native %s artifacts - running command: \n%s\n\033[0m\n' "$target" "$command"
 
+build_timeout="${NATIVE_BUILD_TIMEOUT:-45m}"
+
 set +e
 if command -v timeout > /dev/null 2>&1; then
   # shellcheck disable=SC2086
-  timeout 15m $command
+  timeout "$build_timeout" $command
   exit_code=$?
 else
   # shellcheck disable=SC2086
@@ -90,6 +92,11 @@ else
   exit_code=$?
 fi
 set -e
+
+if [[ $exit_code -eq 124 ]]; then
+  printf '\033[31mBuild timed out after %s while building the Telepathic native %s artifacts\033[0m\n' "$build_timeout" "$target" >&2
+  exit 1
+fi
 
 if [[ $exit_code -ne 0 ]]; then
   printf '\033[31mAn error occurred while building the Telepathic native %s artifacts\033[0m\n' "$target" >&2

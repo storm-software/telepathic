@@ -84,6 +84,12 @@
       "sourceType": "github",
       "skillPath": "skills/rust/rust-ffi/SKILL.md",
       "computedHash": "55fadeaff081bf9ccdc7a266cd85850fadf17508c2733a3519f52c40a1071735"
+    },
+    "tauri-v2": {
+      "source": "nodnarbnitram/claude-code-extensions",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/tauri-v2/SKILL.md",
+      "computedHash": "377c61c46cf48c35b942042bc8abb9a039049a47f37d7f12b4f491d012777490"
     }
   }
 }
