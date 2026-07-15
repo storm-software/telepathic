@@ -107,15 +107,13 @@ impl BindingEngine {
     &mut self,
     env: &'env Env,
   ) -> napi::Result<PromiseRaw<'env, BindingResult<BindingIndexRepositoryOutput>>> {
-    let result = self.inner.index_repository();
-    let fut = async move {
-      match result {
+    let fut = self.inner.index_repository();
+    env.spawn_future(async move {
+      match fut.await {
         Ok(output) => Ok(Either::B(output.into())),
         Err(err) => Ok(Either::A(BindingErrors::new(vec![to_binding_error(&err)]))),
       }
-    };
-
-    env.spawn_future(fut)
+    })
   }
 
   #[napi]

@@ -1,5 +1,7 @@
-use derive_more::Debug;
 use std::future::{Future, ready};
+use std::sync::{Arc, Mutex};
+
+use derive_more::Debug;
 use telepathic_core::{
   Options,
   context::Context,
@@ -13,13 +15,17 @@ use telepathic_core::{
     SearchGraphOutput, TraceGraphOutput, WriteGraphOutput,
   },
 };
+use telepathic_embedding::CodeSearcher;
 
-use crate::{EngineError, EngineResult};
+use crate::{EngineError, EngineResult, index};
 
 #[derive(Debug, Clone)]
 pub struct Engine {
   pub(super) context: Context,
   pub(super) is_closed: bool,
+  /// Neural (+ HNSW) index from the latest `index_repository` run.
+  #[debug(skip)]
+  pub(super) searcher: Arc<Mutex<Option<CodeSearcher>>>,
 }
 
 impl Engine {
@@ -27,11 +33,16 @@ impl Engine {
   pub fn new(options: Options) -> EngineResult<Self> {
     let context = Context::new(options);
 
-    Ok(Self { context, is_closed: false })
+    Ok(Self { context, is_closed: false, searcher: Arc::new(Mutex::new(None)) })
   }
 
   pub fn is_closed(&self) -> bool {
     self.is_closed
+  }
+
+  /// Borrow the in-memory code searcher, if indexing produced one.
+  pub fn searcher(&self) -> &Arc<Mutex<Option<CodeSearcher>>> {
+    &self.searcher
   }
 
   #[tracing::instrument(skip_all, level = "trace")]
@@ -58,11 +69,40 @@ impl Engine {
     Ok(ListRepositoriesOutput { repositories: vec![] })
   }
 
-  #[tracing::instrument(skip_all, level = "trace")]
-  pub fn index_repository(&mut self) -> EngineResult<IndexRepositoryOutput> {
-    self.create_error_if_closed()?;
+  /// Discover, extract (+ LSP), and embed the repository into in-memory state.
+  ///
+  /// Returns a `'static` future (same pattern as [`Self::close`]) so napi can
+  /// `spawn_future` without holding `&mut self` across await.
+  #[must_use = "Future must be awaited to run indexing"]
+  #[tracing::instrument(skip(self), level = "trace")]
+  pub fn index_repository(
+    &mut self,
+  ) -> impl Future<Output = EngineResult<IndexRepositoryOutput>> + Send + 'static {
+    let is_closed = self.is_closed;
+    let root = self.context.repository.root_path.clone();
+    let project = self.context.repository.name.clone();
+    let indexed_sources = Arc::clone(&self.context.indexed_sources);
+    let searcher = Arc::clone(&self.searcher);
 
-    Ok(IndexRepositoryOutput { success: true, errors: vec![] })
+    // Replace semantics: clear before the async work starts.
+    if let Ok(mut guard) = indexed_sources.lock() {
+      guard.clear();
+    }
+    if let Ok(mut guard) = searcher.lock() {
+      *guard = None;
+    }
+
+    async move {
+      if is_closed {
+        return Err(EngineError::EngineClosed);
+      }
+
+      let outcome = index::index_repository(root, project).await?;
+      let success = outcome.walk_started;
+      let errors = outcome.errors.clone();
+      index::store_outcome(&indexed_sources, &searcher, outcome);
+      Ok(IndexRepositoryOutput { success, errors })
+    }
   }
 
   #[tracing::instrument(skip(self, input), level = "trace")]
@@ -144,9 +184,10 @@ impl Engine {
 )]
 mod tests {
   use super::*;
+  use std::sync::{Arc, Mutex};
   use telepathic_core::{
-    Definition, NormalizedOptions, Repository, session::Session,
-    settings::{EnvPaths, LogLevel, Mode, Settings},
+    Definition, LogLevel, NormalizedOptions, Repository, session::Session,
+    settings::{EnvPaths, Mode, Settings},
   };
 
   fn test_engine() -> Engine {
@@ -164,13 +205,55 @@ mod tests {
       ),
       session: Session::default(),
       repository: Repository::default(),
+      indexed_sources: Arc::new(Mutex::new(Vec::new())),
     };
 
-    Engine { context, is_closed: false }
+    Engine { context, is_closed: false, searcher: Arc::new(Mutex::new(None)) }
   }
 
-  #[test]
-  fn graph_operations_return_expected_defaults() {
+  #[tokio::test]
+  async fn index_repository_indexes_temp_project() {
+    unsafe {
+      std::env::set_var("MOCK_EMBEDDING", "1");
+      std::env::set_var("EMBEDDING_PROVIDER", "mock");
+    }
+
+    let dir = tempfile::tempdir().unwrap();
+    let src = dir.path().join("main.rs");
+    std::fs::write(&src, "fn hello() {}\n").unwrap();
+
+    let options = Options::default();
+    let normalized_options = NormalizedOptions::from(options.clone());
+    let root = camino::Utf8PathBuf::from_path_buf(dir.path().to_path_buf()).unwrap();
+    let context = Context {
+      user_options: options,
+      options: normalized_options,
+      settings: Settings::new(
+        Mode::default(),
+        LogLevel::default(),
+        EnvPaths::default(),
+        false,
+        "tester".into(),
+      ),
+      session: Session::default(),
+      repository: Repository {
+        root_path: root,
+        name: "fixture".into(),
+      },
+      indexed_sources: Arc::new(Mutex::new(Vec::new())),
+    };
+    let mut engine =
+      Engine { context, is_closed: false, searcher: Arc::new(Mutex::new(None)) };
+
+    let index_output = engine.index_repository().await.unwrap();
+    assert!(index_output.success);
+
+    let sources = engine.context.indexed_sources.lock().unwrap();
+    assert!(!sources.is_empty(), "expected at least one extracted file");
+  }
+
+  #[tokio::test]
+  async fn graph_operations_return_expected_defaults() {
     let mut engine = test_engine();
 
     let write_output = engine
@@ -223,9 +306,6 @@ mod tests {
 
     let repositories_output = engine.list_repositories().unwrap();
     assert!(repositories_output.repositories.is_empty());
-
-    let index_output = engine.index_repository().unwrap();
-    assert!(index_output.success);
 
     let schema_output = engine.get_schema().unwrap();
     assert!(schema_output.schema.is_empty());

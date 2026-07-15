@@ -1,4 +1,8 @@
-use crate::{NormalizedOptions, Options, Repository, session::Session, settings::Settings};
+use std::sync::{Arc, Mutex};
+
+use crate::{
+  NormalizedOptions, Options, Repository, SourceCode, session::Session, settings::Settings,
+};
 
 /// Context for the current Telepathic process, including options and workspace configuration.
 #[derive(Debug, Clone)]
@@ -13,6 +17,8 @@ pub struct Context {
   pub session: Session,
   /// The current workspace.
   pub repository: Repository,
+  /// In-memory extraction results from the latest `index_repository` run.
+  pub indexed_sources: Arc<Mutex<Vec<SourceCode>>>,
 }
 
 impl Context {
@@ -28,6 +34,7 @@ impl Context {
       settings,
       session: Session::default(),
       repository,
+      indexed_sources: Arc::new(Mutex::new(Vec::new())),
     }
   }
 }

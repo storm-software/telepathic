@@ -23,20 +23,30 @@ doctest = false
 workspace = true
 
 [dependencies]
-camino              = { workspace = true }
-derive_more         = { workspace = true }
-telepathic-core    = { workspace = true }
+camino                 = { workspace = true }
+derive_more            = { workspace = true }
+ignore                 = { workspace = true }
+rayon                  = { workspace = true }
+serde                  = { workspace = true, features = ['derive'], optional = true }
+serde_json             = { workspace = true }
+telepathic-core        = { workspace = true }
+telepathic-embedding   = { path = '../embedding', default-features = false }
+telepathic-lsp         = { workspace = true }
 telepathic-tree-sitter = { workspace = true }
-serde               = { workspace = true, features = ['derive'], optional = true }
-serde_json          = { workspace = true }
-thiserror           = { workspace = true }
-tracing             = { workspace = true }
+thiserror              = { workspace = true }
+tokio                  = { workspace = true }
+tracing                = { workspace = true }
 
 [features]
 default      = ['serde']
 experimental = []
 serde        = ['dep:serde']
 testing      = []
+# Enable local ONNX / Voyage backends for `EmbeddingConfig::from_env()`.
+embed-onnx   = ['telepathic-embedding/onnx']
+embed-voyage = ['telepathic-embedding/voyage']
 
 [dev-dependencies]
 serde_json = { workspace = true }
+tempfile   = '3.20.0'
+tokio      = { workspace = true, features = ['macros', 'rt-multi-thread'] }

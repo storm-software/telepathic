@@ -2611,6 +2611,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "ignore"
+version = "0.4.29"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d4ffa3a0547a138e59ddd6fa3b7c672ed47e6ad6a3cd177984ff1116aa5ba742"
+dependencies = [
+ "crossbeam-deque",
+ "globset",
+ "log",
+ "memchr",
+ "regex-automata",
+ "same-file",
+ "walkdir",
+ "winapi-util",
+]
+
+[[package]]
 name = "indexmap"
 version = "1.9.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -5961,11 +5977,17 @@ version = "0.0.1"
 dependencies = [
  "camino",
  "derive_more",
+ "ignore",
+ "rayon",
  "serde",
  "serde_json",
  "telepathic-core",
+ "telepathic-embedding",
+ "telepathic-lsp",
  "telepathic-tree-sitter",
+ "tempfile",
  "thiserror 2.0.18",
+ "tokio",
  "tracing",
 ]
 

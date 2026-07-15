@@ -23,7 +23,7 @@ mod walk;
 pub use error::TreeSitterError;
 pub use lang_spec::{LangSpec, class_label_for_kind, kind_in, lang_spec, manifest_lang_spec};
 pub use lang_spec_gen::modules_for;
-pub use parser::{LanguageParser, configure_parser, parse_on_thread, parser_for};
+pub use parser::{LanguageParser, configure_parser, extract_on_thread, parse_on_thread, parser_for};
 pub use types::Language;
 
 pub(crate) use fqn::{compute_fqn, module_dir_fqn};

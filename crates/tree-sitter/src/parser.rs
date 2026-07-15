@@ -99,15 +99,30 @@ impl LanguageParser {
     project: &str,
     rel_path: &str,
   ) -> Result<SourceCode, TreeSitterError> {
+    Ok(Self::extract_with_tree(parser, language, source, project, rel_path)?.0)
+  }
+
+  /// Extract symbols and return the parse tree (for LSP resolve).
+  pub fn extract_with_tree(
+    parser: &mut LanguageParser,
+    language: Language,
+    source: impl AsRef<[u8]>,
+    project: &str,
+    rel_path: &str,
+  ) -> Result<(SourceCode, Option<Tree>), TreeSitterError> {
     let source = source.as_ref();
     let Some(tree) = parser.parse(language, source, None)? else {
-      return Ok(SourceCode {
-        has_error: true,
-        error_msg: Some("parse failed".into()),
-        ..SourceCode::default()
-      });
+      return Ok((
+        SourceCode {
+          has_error: true,
+          error_msg: Some("parse failed".into()),
+          ..SourceCode::default()
+        },
+        None,
+      ));
     };
-    Ok(extract_from_tree(&tree, source, language, project, rel_path))
+    let extracted = extract_from_tree(&tree, source, language, project, rel_path);
+    Ok((extracted, Some(tree)))
   }
 
   /// Load `language` if it is not already the active grammar.
@@ -161,6 +176,19 @@ pub fn parse_on_thread(
   THREAD_PARSER.with(|cell| {
     let mut parser = cell.borrow_mut();
     parser.parse(language, source, old_tree)
+  })
+}
+
+/// Extract on a thread-local [`LanguageParser`], returning the tree for LSP.
+pub fn extract_on_thread(
+  language: Language,
+  source: impl AsRef<[u8]>,
+  project: &str,
+  rel_path: &str,
+) -> Result<(SourceCode, Option<Tree>), TreeSitterError> {
+  THREAD_PARSER.with(|cell| {
+    let mut parser = cell.borrow_mut();
+    LanguageParser::extract_with_tree(&mut parser, language, source, project, rel_path)
   })
 }
 

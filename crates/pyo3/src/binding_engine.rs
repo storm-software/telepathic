@@ -74,9 +74,9 @@ impl BindingEngine {
   }
 
   pub async fn index_repository(&mut self) -> PyResult<Py<PyAny>> {
-    binding_result_to_py(
-      map_engine_result(self.inner.index_repository().map(BindingIndexRepositoryOutput::from)),
-    )
+    binding_result_to_py(map_engine_result(
+      self.inner.index_repository().await.map(BindingIndexRepositoryOutput::from),
+    ))
   }
 
   pub async fn list_projects(&mut self, input: BindingListProjectsInput) -> PyResult<Py<PyAny>> {

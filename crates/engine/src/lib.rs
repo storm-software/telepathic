@@ -3,6 +3,7 @@
 
 pub mod engine;
 pub mod error;
+pub(crate) mod index;
 
 pub use engine::*;
 pub use error::*;
