@@ -14,7 +14,8 @@ mod score;
 mod tokenize;
 mod vector;
 
-#[cfg(feature = "ast-minhash")]
+// normalize-code-similarity (libsql → socket2) is unavailable on wasm targets.
+#[cfg(all(feature = "ast-minhash", not(target_family = "wasm")))]
 mod ast_minhash;
 
 #[cfg(feature = "nomic-pretrained")]
@@ -34,11 +35,11 @@ pub use score::{combined_score, proximity};
 pub use tokenize::tokenize;
 pub use vector::{SemVector, cosine, normalize, random_index, vec_add_scaled};
 
-#[cfg(feature = "ast-minhash")]
+#[cfg(all(feature = "ast-minhash", not(target_family = "wasm")))]
 pub use ast_minhash::{
   AstMinHash, MIN_AST_TOKENS, ast_minhash_jaccard, ast_minhash_to_cbm, compute_ast_minhash,
 };
-#[cfg(feature = "ast-minhash")]
+#[cfg(all(feature = "ast-minhash", not(target_family = "wasm")))]
 pub use normalize_code_similarity::{
   LSH_BANDS, LSH_ROWS, SHINGLE_K, compute_function_hash, find_function_node, lsh_band_hash,
 };

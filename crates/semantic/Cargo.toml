@@ -20,18 +20,24 @@ doctest = false
 workspace = true
 
 [features]
-ast-minhash      = ['dep:normalize-code-similarity', 'dep:tree-sitter']
+# On wasm, normalize-code-similarity is omitted (pulls libsql → socket2, which
+# does not support wasm32-wasip1-threads). Feature still enables tree-sitter;
+# ast_minhash module is cfg-gated off wasm in lib.rs.
+ast-minhash      = ['dep:tree-sitter']
 default          = ['ast-minhash']
 nomic-pretrained = []
 
 [dependencies]
-normalize-code-similarity = { workspace = true, optional = true }
-rustc-hash                = { workspace = true }
-tree-sitter               = { workspace = true, optional = true }
-xxhash-rust               = { workspace = true, features = ['xxh3'] }
+rustc-hash  = { workspace = true }
+tree-sitter = { workspace = true, optional = true }
+xxhash-rust = { workspace = true, features = ['xxh3'] }
 
 [target.'cfg(not(target_family = "wasm"))'.dependencies]
-rayon = { workspace = true }
+# Always present on native (default feature enables ast-minhash). Not optional:
+# listing it under `dep:` in features breaks wasm builds where this target dep
+# is absent.
+normalize-code-similarity = { workspace = true }
+rayon                     = { workspace = true }
 
 [dev-dependencies]
 tempfile = '3.20.0'

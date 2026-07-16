@@ -143,11 +143,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1784091390,
-        "narHash": "sha256-aILAwrBQPhKldL98N8lmsbfst3OPtbMM4vT2VXn40/Y=",
+        "lastModified": 1784178955,
+        "narHash": "sha256-YtXHVFBzzqSidcEhPhfTcF2yzzu0p0yA7x07LOR+LaY=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "a7887636a3959168bd1ba7ef24a8a70b168dcb56",
+        "rev": "1785b85aeccca381caf8777133410f577b8f2f59",
         "type": "github"
       },
       "original": {
@@ -180,11 +180,11 @@
     "storm-ops": {
       "flake": false,
       "locked": {
-        "lastModified": 1784176248,
-        "narHash": "sha256-fZsTTazF8yiHGCeUkUlvI32nOTBFRCbSKvbTLKMkR7Y=",
+        "lastModified": 1784180285,
+        "narHash": "sha256-lsnnZERfAt6iitVExl5nTbLQZw7bizRoVGSegxdo7ik=",
         "owner": "storm-software",
         "repo": "storm-ops",
-        "rev": "692b011b71e4404421b0439a427e033248d1da68",
+        "rev": "7735deb945f520b42918d9cae9f8b5023c540a3e",
         "type": "github"
       },
       "original": {

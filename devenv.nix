@@ -193,14 +193,18 @@
         # tools (e.g. libsql-sqlite3-parser's rlemon). Point host ld at libc.a.
         # Use NIX_LDFLAGS (not LDFLAGS) so cargo-xwin/clang-cl target builds stay clean.
         #
-        # Dynamic glibc MUST come first: rustc links host build scripts with clang
-        # (lld.enable), which does not get gcc's -B libc path. NIX_LDFLAGS with only
-        # glibc.static made -lc resolve to libc.a → __tls_get_addr / DSO missing.
+        # Dynamic glibc MUST come first: static-only -L made -lc resolve to libc.a →
+        # __tls_get_addr / DSO missing.
+        #
+        # Host build scripts must use gcc, not clang: lld.enable makes rustc link
+        # host bins with clang, which still hits __tls_get_addr even with dynamic
+        # glibc first. cargo-xwin owns Windows target linking.
         env = lib.optionalAttrs pkgs.stdenv.isLinux {
           NIX_LDFLAGS = "-L${pkgs.glibc}/lib -L${pkgs.glibc.static}/lib";
+          CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER = "${pkgs.stdenv.cc}/bin/cc";
         };
         languages.rust = {
-          lld.enable = true;
+          lld.enable = false;
         };
       };
     };
@@ -286,6 +290,9 @@
     # TARGET_CC; without pinning the host linker, build scripts can end up on
     # host glibc. bindgen then dlopens nix libclang → nix libdl (no RUNPATH)
     # binds to already-loaded host libc → GLIBC_ABI_DT_X86_64_PLT missing.
+    #
+    # Do NOT put pkgs.glibc in LD_LIBRARY_PATH: that segfaults host git/node
+    # during devenv enterShell (storm:setup:git, pnpm bootstrap).
     release-linux-android = {
       extends = [
         "release-unix"
@@ -294,10 +301,9 @@
         env = lib.optionalAttrs pkgs.stdenv.isLinux {
           CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER = "${pkgs.stdenv.cc}/bin/cc";
           CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER = "${pkgs.stdenv.cc}/bin/cc";
-          # libclang's libdl has no RUNPATH; put nix libc first for dlopen.
-          # Overrides desktop GTK LD_LIBRARY_PATH (not needed for Android builds).
+          # libclang + llvm libs for bindgen dlopen. Overrides desktop GTK
+          # LD_LIBRARY_PATH (not needed for Android builds). No glibc here.
           LD_LIBRARY_PATH = lib.makeLibraryPath [
-            pkgs.glibc
             pkgs.libclang.lib
             pkgs.llvmPackages.llvm.lib
             pkgs.stdenv.cc.cc.lib

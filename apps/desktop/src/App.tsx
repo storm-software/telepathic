@@ -1,7 +1,25 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
+/* -------------------------------------------------------------------
+
+                   🗲 Storm Software - Telepathic
+
+ This code was released as part of the Telepathic project. Telepathic
+ is maintained by Storm Software under the Apache-2.0 license, and is
+ free for commercial and private use. For more information, please visit
+ our licensing page at https://stormsoftware.com/licenses/projects/telepathic.
+
+ Website:                  https://stormsoftware.com
+ Repository:               https://github.com/storm-software/telepathic
+ Documentation:            https://docs.telepathic.sh
+ Contact:                  https://stormsoftware.com/contact
+
+ SPDX-License-Identifier:  Apache-2.0
+
+ ------------------------------------------------------------------- */
+
 import { invoke } from "@tauri-apps/api/core";
+import { useState } from "react";
 import "./App.css";
+import reactLogo from "./assets/react.svg";
 
 function App() {
   const [greetMsg, setGreetMsg] = useState("");
@@ -31,14 +49,13 @@ function App() {
 
       <form
         className="row"
-        onSubmit={(e) => {
+        onSubmit={e => {
           e.preventDefault();
-          greet();
-        }}
-      >
+          void greet();
+        }}>
         <input
           id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
+          onChange={e => setName(e.currentTarget.value)}
           placeholder="Enter a name..."
         />
         <button type="submit">Greet</button>
