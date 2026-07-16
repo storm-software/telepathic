@@ -182,9 +182,20 @@
         "release"
       ];
       module = {
-        packages = with pkgs; [
-          cargo-xwin
-        ];
+        packages =
+          with pkgs;
+          [
+            cargo-xwin
+            gcc
+          ]
+          ++ lib.optionals pkgs.stdenv.isLinux [ glibc.static ];
+        # Windows rustflags set +crt-static → Cargo exports CARGO_CFG_TARGET_FEATURE
+        # with crt-static. cc-rs then passes -static when build scripts compile host
+        # tools (e.g. libsql-sqlite3-parser's rlemon). Point host ld at libc.a.
+        # Use NIX_LDFLAGS (not LDFLAGS) so cargo-xwin/clang-cl target builds stay clean.
+        env = lib.optionalAttrs pkgs.stdenv.isLinux {
+          NIX_LDFLAGS = "-L${pkgs.glibc.static}/lib";
+        };
         languages.rust = {
           lld.enable = true;
         };
