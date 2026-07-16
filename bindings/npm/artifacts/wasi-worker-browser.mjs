@@ -1,36 +1,3 @@
-import {
-  instantiateNapiModuleSync,
-  MessageHandler,
-  WASI
-} from "@napi-rs/wasm-runtime";
-
-const handler = new MessageHandler({
-  onLoad({ wasmModule, wasmMemory }) {
-    const wasi = new WASI({
-      print: function () {
-        // eslint-disable-next-line no-console
-        console.log.apply(console, arguments);
-      },
-      printErr: function () {
-        // eslint-disable-next-line no-console
-        console.error.apply(console, arguments);
-      }
-    });
-    return instantiateNapiModuleSync(wasmModule, {
-      childThread: true,
-      wasi,
-      overwriteImports(importObject) {
-        importObject.env = {
-          ...importObject.env,
-          ...importObject.napi,
-          ...importObject.emnapi,
-          memory: wasmMemory
-        };
-      }
-    });
-  }
-});
-
-globalThis.onmessage = function (e) {
-  handler.handle(e);
-};
+version https://git-lfs.github.com/spec/v1
+oid sha256:a70340eef213aae49c274c6a731781f1761cebc6b3ffa931559453b86374d244
+size 852
