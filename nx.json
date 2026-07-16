@@ -26,6 +26,25 @@
     },
     "@powerlines/nx/plugin"
   ],
+  "targetDefaults": {
+    "@storm-software/workspace-tools:cargo-build": {
+      "options": {
+        "outputPath": "{workspaceRoot}/dist/target"
+      },
+      "outputs": ["{workspaceRoot}/dist/target"]
+    },
+    "@storm-software/workspace-tools:cargo-check": {
+      "options": {
+        "outputPath": "{workspaceRoot}/dist/target"
+      },
+      "outputs": ["{workspaceRoot}/dist/target"]
+    },
+    "@storm-software/workspace-tools:cargo-doc": {
+      "options": {
+        "outputPath": "{workspaceRoot}/dist/target"
+      }
+    }
+  },
   "sync": {
     "applyChanges": true,
     "globalGenerators": ["@nx/js:typescript-sync"]

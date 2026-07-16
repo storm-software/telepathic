@@ -72,6 +72,12 @@ command="pnpm nx run bindings-npm:build-$target"
 printf '\033[1;37m ⚙️  Bootstrapping the monorepo before building native %s artifacts...\033[0m\n' "$target"
 
 cd "$REPO_ROOT"
+
+# Share one Cargo target dir with `pnpm build` / `.cargo/config.toml` so
+# telepathic-tree-sitter (and other crates) are not recompiled per target.
+export CARGO_TARGET_DIR="${CARGO_TARGET_DIR:-$REPO_ROOT/dist/target}"
+export CARGO_BUILD_TARGET_DIR="${CARGO_BUILD_TARGET_DIR:-$CARGO_TARGET_DIR}"
+
 if ! pnpm bootstrap; then
   printf '\033[31mAn error occurred while bootstrapping the monorepo\033[0m\n' >&2
   exit 1

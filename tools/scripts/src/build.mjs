@@ -17,7 +17,36 @@
 
  ------------------------------------------------------------------- */
 
-import { $, argv, chalk, echo } from "zx";
+import { $, argv, chalk, echo, path } from "zx";
+
+/**
+ * Force one shared Cargo target dir for the whole monorepo build.
+ *
+ * The Storm rust Nx plugin defaults each crate to
+ * `dist/{projectRoot}/target`. That makes `native-tree-sitter` (and every
+ * other dep) recompile once per crate — currently ~10–16GB × N target dirs.
+ *
+ * `.cargo/config.toml` already sets `target-dir = "dist/target"`. Pin the
+ * env vars too so Nx/napi/tauri child processes cannot fork off per-crate dirs.
+ */
+function pinSharedCargoTargetDir() {
+  const targetDir = path.resolve("dist/target");
+  process.env.CARGO_TARGET_DIR = targetDir;
+  process.env.CARGO_BUILD_TARGET_DIR = targetDir;
+  return targetDir;
+}
+
+async function runLogged(command, timeout, failureMessage) {
+  const proc = command.timeout(timeout);
+  proc.stdout.on("data", data => {
+    echo`${data}`;
+  });
+  const result = await proc;
+  if (result.exitCode !== 0) {
+    throw new Error(`${failureMessage}: \n\n${result.message}\n`);
+  }
+  return result;
+}
 
 try {
   let configuration = argv.configuration;
@@ -31,37 +60,45 @@ try {
     }
   }
 
+  const cargoTargetDir = pinSharedCargoTargetDir();
+  const cargoRelease = configuration === "production";
+
   echo`${chalk.whiteBright(
     ` 🏗️  Building the monorepo in ${configuration} mode...`
   )}`;
+  echo`${chalk.dim(`    Cargo target dir: ${cargoTargetDir}`)}`;
 
-  let proc = $`pnpm bootstrap`.timeout(`${1 * 60}s`);
-  proc.stdout.on("data", data => {
-    echo`${data}`;
-  });
-  let result = await proc;
-  if (result.exitCode !== 0) {
-    throw new Error(
-      `An error occurred while bootstrapping the monorepo: \n\n${
-        result.message
-      }\n`
-    );
+  await runLogged(
+    $`pnpm bootstrap`,
+    `${1 * 60}s`,
+    "An error occurred while bootstrapping the monorepo"
+  );
+
+  // One workspace Cargo invocation builds every member (including
+  // telepathic-tree-sitter) into the shared target dir. Later Nx/napi/tauri
+  // builds reuse those artifacts instead of recompiling grammars N times.
+  const cargoArgs = ["build", "--workspace"];
+  if (cargoRelease) {
+    cargoArgs.push("--release");
   }
 
-  proc = $`pnpm nx run-many --target=build --exclude=monorepo --configuration=${
-    configuration
-  } --outputStyle=dynamic-legacy --parallel=5`.timeout(`${80 * 60}s`);
-  proc.stdout.on("data", data => {
-    echo`${data}`;
-  });
-  result = await proc;
-  if (result.exitCode !== 0) {
-    throw new Error(
-      `An error occurred while building the monorepo in ${
-        configuration
-      } mode: \n\n${result.message}\n`
-    );
-  }
+  echo`${chalk.whiteBright(
+    ` 🦀  Cargo workspace build (${cargoRelease ? "release" : "dev"})...`
+  )}`;
+  await runLogged(
+    $`cargo ${cargoArgs}`,
+    `${80 * 60}s`,
+    "An error occurred while building the Cargo workspace"
+  );
+
+  // Exclude native-* crates from run-many: Cargo already built them. If the
+  // Storm rust plugin re-infers per-crate `build` targets, running those would
+  // only re-invoke cargo (and historically forked target dirs).
+  await runLogged(
+    $`pnpm nx run-many --target=build --exclude=monorepo,native-* --configuration=${configuration} --outputStyle=dynamic-legacy --parallel=5`,
+    `${80 * 60}s`,
+    `An error occurred while building the monorepo in ${configuration} mode`
+  );
 
   echo`${chalk.green(
     ` ✔ Successfully built the monorepo in ${configuration} mode!`
