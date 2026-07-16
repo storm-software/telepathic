@@ -19,19 +19,19 @@ catalog:
   "@powerlines/tsdoc": ^0.2.139
   "@powerlines/plugin-napi-rs": ^0.2.196
   "@powerlines/plugin-tsdown": ^0.1.544
-  "@storm-software/config": ^1.138.38
-  "@storm-software/config-tools": ^1.190.101
-  "@storm-software/cspell": ^0.46.169
-  "@storm-software/eslint": ^0.170.135
-  "@storm-software/eslint-plugin-tsdoc": ^0.0.64
-  "@storm-software/git-tools": ^2.131.109
-  "@storm-software/linting-tools": ^1.134.31
-  "@storm-software/markdownlint": ^0.30.257
-  "@storm-software/prettier": ^0.59.154
-  "@storm-software/pnpm-tools": ^0.7.112
-  "@storm-software/tsconfig": ^0.48.168
-  "@storm-software/untyped": ^0.24.243
-  "@storm-software/workspace-tools": ^1.296.81
+  "@storm-software/config": ^1.138.41
+  "@storm-software/config-tools": ^1.190.104
+  "@storm-software/cspell": ^0.46.172
+  "@storm-software/eslint": ^0.170.138
+  "@storm-software/eslint-plugin-tsdoc": ^0.0.67
+  "@storm-software/git-tools": ^2.131.112
+  "@storm-software/linting-tools": ^1.134.34
+  "@storm-software/markdownlint": ^0.30.260
+  "@storm-software/prettier": ^0.59.157
+  "@storm-software/pnpm-tools": ^0.7.115
+  "@storm-software/tsconfig": ^0.48.171
+  "@storm-software/untyped": ^0.24.246
+  "@storm-software/workspace-tools": ^1.296.84
   "@napi-rs/cli": ^3.7.3
   "@napi-rs/wasm-runtime": ^1.1.6
   "@tauri-apps/api": ^2.11.1

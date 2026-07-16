@@ -3,6 +3,13 @@
 CARGO_WORKSPACE_DIR = { value = "", relative = true }
 WORKSPACE_DIR       = { value = "", relative = true }
 
+# Nightly: keep [target.*] rustflags (e.g. Windows +crt-static) off host
+# build scripts / proc-macros when cross-compiling.
+# host-config defaults target-applies-to-host to false (no separate top-level key).
+[unstable]
+host-config            = true
+target-applies-to-host = true
+
 [build]
 rustdocflags = [
     "--cfg",

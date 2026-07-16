@@ -5,6 +5,27 @@
   lib,
   ...
 }:
+let
+  # Prebuilt wasi-sdk sysroot for compiling C deps (tree-sitter) to wasm32-wasip1-threads.
+  # nixpkgs.wasilibc is WASI-only and does not build cleanly as a host package.
+  wasi-sdk-sysroot = pkgs.stdenv.mkDerivation {
+    pname = "wasi-sdk-sysroot";
+    version = "27.0";
+    src = pkgs.fetchurl {
+      url = "https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-27/wasi-sdk-27.0-x86_64-linux.tar.gz";
+      hash = "sha256-t9TZRMiFA+TyHYSvB6wpPjRAsbYhC/1/544K/ZLCO8I=";
+    };
+    sourceRoot = "wasi-sdk-27.0-x86_64-linux";
+    dontConfigure = true;
+    dontBuild = true;
+    # Sysroot is wasm bitcode/headers only; skip host ELF fixup.
+    dontFixup = true;
+    installPhase = ''
+      mkdir -p $out
+      cp -a share/wasi-sysroot $out/sysroot
+    '';
+  };
+in
 {
   name = "storm-software/telepathic";
 
@@ -188,20 +209,26 @@
             gcc
           ]
           ++ lib.optionals pkgs.stdenv.isLinux [ glibc.static ];
-        # Windows rustflags set +crt-static → Cargo exports CARGO_CFG_TARGET_FEATURE
-        # with crt-static. cc-rs then passes -static when build scripts compile host
-        # tools (e.g. libsql-sqlite3-parser's rlemon). Point host ld at libc.a.
-        # Use NIX_LDFLAGS (not LDFLAGS) so cargo-xwin/clang-cl target builds stay clean.
-        #
-        # Dynamic glibc MUST come first: static-only -L made -lc resolve to libc.a →
-        # __tls_get_addr / DSO missing.
-        #
         # Host build scripts must use gcc, not clang: lld.enable makes rustc link
-        # host bins with clang, which still hits __tls_get_addr even with dynamic
-        # glibc first. cargo-xwin owns Windows target linking.
+        # host bins with clang → __tls_get_addr / DSO missing. cargo-xwin owns
+        # Windows target linking.
+        #
+        # Do NOT set NIX_LDFLAGS to glibc/glibc.static: Nix cc wrapper bakes those
+        # -L paths into host RPATH and host build-script bins SIGSEGV (proc-macro2,
+        # quote, serde_core).
+        #
+        # Windows +crt-static still leaks into CARGO_CFG_TARGET_FEATURE for build
+        # scripts; cc-rs may pass -static when compiling host tools (rlemon).
+        # LIBRARY_PATH (link-time only, dynamic first) covers libc.a without
+        # poisoning host RPATH. Clear desktop GTK LD_LIBRARY_PATH (not needed).
+        #
+        # .cargo/config.toml sets target-applies-to-host = false so +crt-static
+        # rustflags stay off host artifacts.
         env = lib.optionalAttrs pkgs.stdenv.isLinux {
-          NIX_LDFLAGS = "-L${pkgs.glibc}/lib -L${pkgs.glibc.static}/lib";
           CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER = "${pkgs.stdenv.cc}/bin/cc";
+          LIBRARY_PATH = "${pkgs.glibc}/lib:${pkgs.glibc.static}/lib";
+          # Override desktop GTK LD_LIBRARY_PATH from top-level env.
+          LD_LIBRARY_PATH = lib.mkForce "";
         };
         languages.rust = {
           lld.enable = false;
@@ -340,11 +367,14 @@
           # cc-wrapper injects host hardening flags (e.g. -fzero-call-used-regs=used-gpr)
           # that wasm clang rejects when building native deps like tree-sitter.
           NIX_HARDENING_ENABLE = "";
+          # cc-rs needs WASI_SYSROOT for C deps (tree-sitter); bare clang has no stdio.h.
+          WASI_SYSROOT = "${wasi-sdk-sysroot}/sysroot";
           CC_wasm32_wasip1_threads = "${pkgs.llvmPackages.clang-unwrapped}/bin/clang";
           CXX_wasm32_wasip1_threads = "${pkgs.llvmPackages.clang-unwrapped}/bin/clang++";
         };
         packages = with pkgs; [
           llvmPackages.clang-unwrapped
+          wasi-sdk-sysroot
         ];
       };
     };

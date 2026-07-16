@@ -25,11 +25,11 @@
         "rust-analyzer-src": "rust-analyzer-src"
       },
       "locked": {
-        "lastModified": 1784103743,
-        "narHash": "sha256-VKuUth9izvRjZzy4XcVV3s+sG0bdE+ywPkE5o2ctlNE=",
+        "lastModified": 1784190100,
+        "narHash": "sha256-cE4wAMa3MDhnx+mH5Y72tM/VTSh5cS5S2q0w56XurJU=",
         "owner": "nix-community",
         "repo": "fenix",
-        "rev": "8df3642541009d2a5f15520462a8dec719c5fddb",
+        "rev": "010b0647f8ebce9cd9e185773a7f9e422af1154a",
         "type": "github"
       },
       "original": {
@@ -122,11 +122,11 @@
     "rust-analyzer-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1784053862,
-        "narHash": "sha256-6Si6qyNywJf2YWJ7KI5fdg4Hmv5NrSBHVOhyiCowtRw=",
+        "lastModified": 1784155628,
+        "narHash": "sha256-yLgQQpQJpNkqoNvYc93pr7HjpW2uOP6Y1sm/vQakEc4=",
         "owner": "rust-lang",
         "repo": "rust-analyzer",
-        "rev": "3061c4d11509546ed2250f0dda6d66aa60b0a18d",
+        "rev": "7a5ecc88dbdfa13bac99fa4e0f38adcfdca1bb0a",
         "type": "github"
       },
       "original": {
@@ -180,11 +180,11 @@
     "storm-ops": {
       "flake": false,
       "locked": {
-        "lastModified": 1784180285,
-        "narHash": "sha256-lsnnZERfAt6iitVExl5nTbLQZw7bizRoVGSegxdo7ik=",
+        "lastModified": 1784202208,
+        "narHash": "sha256-46hp8JEPMySnAOFOgKg3eCf8AUMFjUAI6J2Zbr2zawc=",
         "owner": "storm-software",
         "repo": "storm-ops",
-        "rev": "7735deb945f520b42918d9cae9f8b5023c540a3e",
+        "rev": "e9118ed4d0235c8643e71d0d8370987a2945f8d1",
         "type": "github"
       },
       "original": {
