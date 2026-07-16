@@ -24,40 +24,47 @@
   ];
   dotenv.disableHint = true;
 
-  packages = with pkgs; [
-    sccache
-    libclang
-    # Tauri desktop (Linux)
-    pkg-config
-    openssl
-    webkitgtk_4_1
-    gtk3
-    librsvg
-    gdk-pixbuf
-    cairo
-    pango
-    linuxdeploy
-  ];
-
-  env = {
-    # bindgen loads libclang at build time; point it at nix libclang, not host /usr/lib.
-    LIBCLANG_PATH = "${pkgs.libclang.lib}/lib";
-    # linuxdeploy (AppImage) resolves GTK/WebKit via ldd; Nix libs are not on default search path.
-    LD_LIBRARY_PATH = lib.makeLibraryPath [
-      pkgs.webkitgtk_4_1
-      pkgs.gtk3
-      pkgs.glib
-      pkgs.librsvg
-      pkgs.gdk-pixbuf
-      pkgs.cairo
-      pkgs.pango
+  packages =
+    with pkgs;
+    [
+      sccache
+      libclang
+      pkg-config
+      openssl
+    ]
+    ++ lib.optionals pkgs.stdenv.isLinux [
+      # Tauri desktop (Linux) — webkitgtk is broken/unsupported on Darwin
+      webkitgtk_4_1
+      gtk3
+      librsvg
+      gdk-pixbuf
+      cairo
+      pango
+      linuxdeploy
     ];
-    RUSTC_WRAPPER = "${pkgs.sccache}/bin/sccache";
-    SCCACHE_ENDPOINT = "https://d011605e7391539ac2e021ab4399e116.r2.cloudflarestorage.com";
-    SCCACHE_BUCKET = "telepathic-rustc-cache";
-    SCCACHE_REGION = "auto";
-    SCCACHE_ERROR_LOG = "${config.git.root}/tmp/sccache.log";
-  };
+
+  env =
+    {
+      # bindgen loads libclang at build time; point it at nix libclang, not host /usr/lib.
+      LIBCLANG_PATH = "${pkgs.libclang.lib}/lib";
+      RUSTC_WRAPPER = "${pkgs.sccache}/bin/sccache";
+      SCCACHE_ENDPOINT = "https://d011605e7391539ac2e021ab4399e116.r2.cloudflarestorage.com";
+      SCCACHE_BUCKET = "telepathic-rustc-cache";
+      SCCACHE_REGION = "auto";
+      SCCACHE_ERROR_LOG = "${config.git.root}/tmp/sccache.log";
+    }
+    // lib.optionalAttrs pkgs.stdenv.isLinux {
+      # linuxdeploy (AppImage) resolves GTK/WebKit via ldd; Nix libs are not on default search path.
+      LD_LIBRARY_PATH = lib.makeLibraryPath [
+        pkgs.webkitgtk_4_1
+        pkgs.gtk3
+        pkgs.glib
+        pkgs.librsvg
+        pkgs.gdk-pixbuf
+        pkgs.cairo
+        pkgs.pango
+      ];
+    };
 
   languages.c.enable = true;
 
@@ -203,7 +210,6 @@
     release-darwin-x86_64 = {
       extends = [
         "release-darwin"
-        "release-unix"
       ];
       module = {
         env = {
