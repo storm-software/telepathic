@@ -43,28 +43,27 @@
       linuxdeploy
     ];
 
-  env =
-    {
-      # bindgen loads libclang at build time; point it at nix libclang, not host /usr/lib.
-      LIBCLANG_PATH = "${pkgs.libclang.lib}/lib";
-      RUSTC_WRAPPER = "${pkgs.sccache}/bin/sccache";
-      SCCACHE_ENDPOINT = "https://d011605e7391539ac2e021ab4399e116.r2.cloudflarestorage.com";
-      SCCACHE_BUCKET = "telepathic-rustc-cache";
-      SCCACHE_REGION = "auto";
-      SCCACHE_ERROR_LOG = "${config.git.root}/tmp/sccache.log";
-    }
-    // lib.optionalAttrs pkgs.stdenv.isLinux {
-      # linuxdeploy (AppImage) resolves GTK/WebKit via ldd; Nix libs are not on default search path.
-      LD_LIBRARY_PATH = lib.makeLibraryPath [
-        pkgs.webkitgtk_4_1
-        pkgs.gtk3
-        pkgs.glib
-        pkgs.librsvg
-        pkgs.gdk-pixbuf
-        pkgs.cairo
-        pkgs.pango
-      ];
-    };
+  env = {
+    # bindgen loads libclang at build time; point it at nix libclang, not host /usr/lib.
+    LIBCLANG_PATH = "${pkgs.libclang.lib}/lib";
+    RUSTC_WRAPPER = "${pkgs.sccache}/bin/sccache";
+    SCCACHE_ENDPOINT = "https://d011605e7391539ac2e021ab4399e116.r2.cloudflarestorage.com";
+    SCCACHE_BUCKET = "telepathic-rustc-cache";
+    SCCACHE_REGION = "auto";
+    SCCACHE_ERROR_LOG = "${config.git.root}/tmp/sccache.log";
+  }
+  // lib.optionalAttrs pkgs.stdenv.isLinux {
+    # linuxdeploy (AppImage) resolves GTK/WebKit via ldd; Nix libs are not on default search path.
+    LD_LIBRARY_PATH = lib.makeLibraryPath [
+      pkgs.webkitgtk_4_1
+      pkgs.gtk3
+      pkgs.glib
+      pkgs.librsvg
+      pkgs.gdk-pixbuf
+      pkgs.cairo
+      pkgs.pango
+    ];
+  };
 
   languages.c.enable = true;
 
@@ -193,8 +192,12 @@
         # with crt-static. cc-rs then passes -static when build scripts compile host
         # tools (e.g. libsql-sqlite3-parser's rlemon). Point host ld at libc.a.
         # Use NIX_LDFLAGS (not LDFLAGS) so cargo-xwin/clang-cl target builds stay clean.
+        #
+        # Dynamic glibc MUST come first: rustc links host build scripts with clang
+        # (lld.enable), which does not get gcc's -B libc path. NIX_LDFLAGS with only
+        # glibc.static made -lc resolve to libc.a → __tls_get_addr / DSO missing.
         env = lib.optionalAttrs pkgs.stdenv.isLinux {
-          NIX_LDFLAGS = "-L${pkgs.glibc.static}/lib";
+          NIX_LDFLAGS = "-L${pkgs.glibc}/lib -L${pkgs.glibc.static}/lib";
         };
         languages.rust = {
           lld.enable = true;
@@ -279,9 +282,33 @@
       };
     };
 
-    release-linux-android-aarch64 = {
+    # Shared Android cross profile. napi-rs prepends NDK clang to PATH and sets
+    # TARGET_CC; without pinning the host linker, build scripts can end up on
+    # host glibc. bindgen then dlopens nix libclang → nix libdl (no RUNPATH)
+    # binds to already-loaded host libc → GLIBC_ABI_DT_X86_64_PLT missing.
+    release-linux-android = {
       extends = [
         "release-unix"
+      ];
+      module = {
+        env = lib.optionalAttrs pkgs.stdenv.isLinux {
+          CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER = "${pkgs.stdenv.cc}/bin/cc";
+          CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER = "${pkgs.stdenv.cc}/bin/cc";
+          # libclang's libdl has no RUNPATH; put nix libc first for dlopen.
+          # Overrides desktop GTK LD_LIBRARY_PATH (not needed for Android builds).
+          LD_LIBRARY_PATH = lib.makeLibraryPath [
+            pkgs.glibc
+            pkgs.libclang.lib
+            pkgs.llvmPackages.llvm.lib
+            pkgs.stdenv.cc.cc.lib
+          ];
+        };
+      };
+    };
+
+    release-linux-android-aarch64 = {
+      extends = [
+        "release-linux-android"
       ];
       module = {
         languages.rust.targets = [ "aarch64-linux-android" ];
@@ -290,7 +317,7 @@
 
     release-linux-android-armv7 = {
       extends = [
-        "release-unix"
+        "release-linux-android"
       ];
       module = {
         languages.rust.targets = [ "armv7-linux-androideabi" ];
