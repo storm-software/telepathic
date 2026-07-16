@@ -11,7 +11,9 @@ export declare class BindingEngine {
   getSession(): Promise<BindingResult<BindingGetSessionOutput>>;
   getSchema(): Promise<BindingResult<BindingGetSchemaOutput>>;
   listRepositories(): Promise<BindingResult<BindingListRepositoriesOutput>>;
-  indexRepository(): Promise<BindingResult<BindingIndexRepositoryOutput>>;
+  indexRepository(
+    input: BindingIndexRepositoryInput
+  ): Promise<BindingResult<BindingIndexRepositoryOutput>>;
   listProjects(
     input: BindingListProjectsInput
   ): Promise<BindingResult<BindingListProjectsOutput>>;
@@ -132,6 +134,13 @@ export interface BindingGetSessionOutput {
 export interface BindingGetSettingsOutput {
   /** The loaded settings. */
   settings: BindingSettings;
+}
+
+export interface BindingIndexRepositoryInput {
+  /** The root path of the repository to index. If not provided, the current working directory will be used. */
+  rootPath?: string;
+  /** Whether to force the repository's files to be indexed even if they have not changed since the last indexing. If not provided, the repository will be indexed only if it has changed since the last indexing. */
+  force?: boolean;
 }
 
 export interface BindingIndexRepositoryOutput {

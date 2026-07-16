@@ -48,7 +48,6 @@ fn main() {
   let mut compiled_grammars: Vec<&Grammar> = Vec::new();
 
   let grammars_path = PathBuf::from("vendored");
-  println!("cargo:rerun-if-changed={}", grammars_path.display());
   let languages_path = src_path.join("languages");
   create_dir_all(&languages_path).expect("Must be able to create generated languages directory");
 
