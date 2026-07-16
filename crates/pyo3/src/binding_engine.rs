@@ -4,7 +4,8 @@ use pyo3::IntoPyObjectExt;
 use crate::{
   types::{
     binding_input::{
-      BindingExportOkfInput, BindingListProjectsInput, BindingQueryGraphInput,
+      BindingExportOkfInput, BindingIndexRepositoryInput, BindingListProjectsInput,
+      BindingQueryGraphInput,
       BindingReadGraphInput, BindingSearchGraphInput, BindingTraceGraphInput,
       BindingWriteGraphInput,
     },
@@ -73,9 +74,16 @@ impl BindingEngine {
     )
   }
 
-  pub async fn index_repository(&mut self) -> PyResult<Py<PyAny>> {
+  pub async fn index_repository(
+    &mut self,
+    input: BindingIndexRepositoryInput,
+  ) -> PyResult<Py<PyAny>> {
     binding_result_to_py(map_engine_result(
-      self.inner.index_repository().await.map(BindingIndexRepositoryOutput::from),
+      self
+        .inner
+        .index_repository(input.into())
+        .await
+        .map(BindingIndexRepositoryOutput::from),
     ))
   }
 

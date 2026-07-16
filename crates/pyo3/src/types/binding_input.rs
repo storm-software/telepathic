@@ -2,8 +2,8 @@ use std::collections::HashMap;
 
 use pyo3::prelude::*;
 use telepathic_core::inputs::{
-  ExportOKFInput, ListProjectsInput, QueryGraphInput, ReadGraphInput, SearchGraphInput,
-  TraceGraphInput, Value as QueryGraphValue, WriteGraphInput,
+  ExportOKFInput, IndexRepositoryInput, ListProjectsInput, QueryGraphInput, ReadGraphInput,
+  SearchGraphInput, TraceGraphInput, Value as QueryGraphValue, WriteGraphInput,
 };
 
 use crate::types::binding_definition::BindingDefinition;
@@ -56,6 +56,13 @@ pub struct BindingTraceGraphInput {
 #[pyo3(from_item_all)]
 pub struct BindingExportOkfInput {
   pub output_path: String,
+}
+
+#[derive(Debug, FromPyObject)]
+#[pyo3(from_item_all)]
+pub struct BindingIndexRepositoryInput {
+  pub root_path: Option<String>,
+  pub force: Option<bool>,
 }
 
 #[derive(Debug, FromPyObject)]
@@ -145,6 +152,12 @@ impl From<BindingTraceGraphInput> for TraceGraphInput {
 impl From<BindingExportOkfInput> for ExportOKFInput {
   fn from(value: BindingExportOkfInput) -> Self {
     Self { output_path: value.output_path.into() }
+  }
+}
+
+impl From<BindingIndexRepositoryInput> for IndexRepositoryInput {
+  fn from(value: BindingIndexRepositoryInput) -> Self {
+    Self { root_path: value.root_path, force: value.force }
   }
 }
 

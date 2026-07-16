@@ -3,8 +3,8 @@ use std::collections::HashMap;
 use crate::types::binding_definition::BindingDefinition;
 use napi_derive::napi;
 use telepathic_core::inputs::{
-  ExportOKFInput, ListProjectsInput, QueryGraphInput, ReadGraphInput, SearchGraphInput,
-  TraceGraphInput, Value as QueryGraphValue, WriteGraphInput,
+  ExportOKFInput, IndexRepositoryInput, ListProjectsInput, QueryGraphInput, ReadGraphInput,
+  SearchGraphInput, TraceGraphInput, Value as QueryGraphValue, WriteGraphInput,
 };
 
 #[derive(Clone, PartialEq)]
@@ -73,6 +73,15 @@ pub struct BindingTraceGraphInput {
 pub struct BindingExportOkfInput {
   /// The path to the output location the OKF files will be written to.
   pub output_path: String,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+#[napi(object)]
+pub struct BindingIndexRepositoryInput {
+  /// The root path of the repository to index. If not provided, the current working directory will be used.
+  pub root_path: Option<String>,
+  /// Whether to force the repository's files to be indexed even if they have not changed since the last indexing. If not provided, the repository will be indexed only if it has changed since the last indexing.
+  pub force: Option<bool>,
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -150,6 +159,12 @@ impl From<BindingTraceGraphInput> for TraceGraphInput {
 impl From<BindingExportOkfInput> for ExportOKFInput {
   fn from(value: BindingExportOkfInput) -> Self {
     Self { output_path: value.output_path.into() }
+  }
+}
+
+impl From<BindingIndexRepositoryInput> for IndexRepositoryInput {
+  fn from(value: BindingIndexRepositoryInput) -> Self {
+    Self { root_path: value.root_path, force: value.force }
   }
 }
 

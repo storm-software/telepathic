@@ -7,6 +7,9 @@ kustomization
 xwin
 systemverilog
 cuda
+dmabuf
+ldflags
+rlemon
 
 # File Extensions
 haml

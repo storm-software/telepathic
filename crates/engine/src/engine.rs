@@ -3,11 +3,11 @@ use std::sync::{Arc, Mutex};
 
 use derive_more::Debug;
 use telepathic_core::{
-  Options,
+  Options, Repository,
   context::Context,
   inputs::{
-    ExportOKFInput, ListProjectsInput, QueryGraphInput, ReadGraphInput, SearchGraphInput,
-    TraceGraphInput, WriteGraphInput,
+    ExportOKFInput, IndexRepositoryInput, ListProjectsInput, QueryGraphInput, ReadGraphInput,
+    SearchGraphInput, TraceGraphInput, WriteGraphInput,
   },
   outputs::{
     ExportOKFOutput, GetSchemaOutput, GetSessionOutput, GetSettingsOutput, IndexRepositoryOutput,
@@ -74,27 +74,46 @@ impl Engine {
   /// Returns a `'static` future (same pattern as [`Self::close`]) so napi can
   /// `spawn_future` without holding `&mut self` across await.
   #[must_use = "Future must be awaited to run indexing"]
-  #[tracing::instrument(skip(self), level = "trace")]
+  #[tracing::instrument(skip(self, input), level = "trace")]
   pub fn index_repository(
     &mut self,
+    input: IndexRepositoryInput,
   ) -> impl Future<Output = EngineResult<IndexRepositoryOutput>> + Send + 'static {
+    let IndexRepositoryInput { root_path, force } = input;
     let is_closed = self.is_closed;
-    let root = self.context.repository.root_path.clone();
-    let project = self.context.repository.name.clone();
+    let force = force.unwrap_or(false);
+    let (root, project) = match root_path {
+      Some(path) => {
+        let repo = Repository::from(camino::Utf8PathBuf::from(path));
+        (repo.root_path, repo.name)
+      }
+      None => {
+        (self.context.repository.root_path.clone(), self.context.repository.name.clone())
+      }
+    };
     let indexed_sources = Arc::clone(&self.context.indexed_sources);
     let searcher = Arc::clone(&self.searcher);
 
-    // Replace semantics: clear before the async work starts.
-    if let Ok(mut guard) = indexed_sources.lock() {
-      guard.clear();
-    }
-    if let Ok(mut guard) = searcher.lock() {
-      *guard = None;
+    let skip = !force
+      && indexed_sources.lock().map(|guard| !guard.is_empty()).unwrap_or(false);
+
+    if !skip {
+      // Replace semantics: clear before the async work starts.
+      if let Ok(mut guard) = indexed_sources.lock() {
+        guard.clear();
+      }
+      if let Ok(mut guard) = searcher.lock() {
+        *guard = None;
+      }
     }
 
     async move {
       if is_closed {
         return Err(EngineError::EngineClosed);
+      }
+
+      if skip {
+        return Ok(IndexRepositoryOutput { success: true, errors: vec![] });
       }
 
       let outcome = index::index_repository(root, project).await?;
@@ -245,7 +264,10 @@ mod tests {
     let mut engine =
       Engine { context, is_closed: false, searcher: Arc::new(Mutex::new(None)) };
 
-    let index_output = engine.index_repository().await.unwrap();
+    let index_output = engine
+      .index_repository(IndexRepositoryInput { root_path: None, force: None })
+      .await
+      .unwrap();
     assert!(index_output.success);
 
     let sources = engine.context.indexed_sources.lock().unwrap();

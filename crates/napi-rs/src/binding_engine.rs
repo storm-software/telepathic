@@ -2,7 +2,8 @@ use crate::{
   types::{
     binding_error::{BindingErrors, BindingResult},
     binding_input::{
-      BindingExportOkfInput, BindingListProjectsInput, BindingQueryGraphInput,
+      BindingExportOkfInput, BindingIndexRepositoryInput, BindingListProjectsInput,
+      BindingQueryGraphInput,
       BindingReadGraphInput, BindingSearchGraphInput, BindingTraceGraphInput,
       BindingWriteGraphInput,
     },
@@ -106,8 +107,9 @@ impl BindingEngine {
   pub fn index_repository<'env>(
     &mut self,
     env: &'env Env,
+    input: BindingIndexRepositoryInput,
   ) -> napi::Result<PromiseRaw<'env, BindingResult<BindingIndexRepositoryOutput>>> {
-    let fut = self.inner.index_repository();
+    let fut = self.inner.index_repository(input.into());
     env.spawn_future(async move {
       match fut.await {
         Ok(output) => Ok(Either::B(output.into())),
