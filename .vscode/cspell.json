@@ -11,7 +11,12 @@
       "name": "rust-phrases",
       "path": "../tools/cspell/rust-phrases.txt",
       "addWords": true
+    },
+    {
+      "name": "python-phrases",
+      "path": "../tools/cspell/python-phrases.txt",
+      "addWords": true
     }
   ],
-  "dictionaries": ["misc-phrases", "rust-phrases"]
+  "dictionaries": ["misc-phrases", "rust-phrases", "python-phrases"]
 }

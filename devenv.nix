@@ -205,6 +205,7 @@ in
         packages = with pkgs; [
           cargo-xwin
           gcc
+          libllvm
         ];
         # Host build scripts must use gcc, not clang. devenv languages.rust sets
         # CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER=clang (even with
