@@ -7,7 +7,7 @@
       "path": "./tools/config"
     },
     {
-      "path": "./bindings/npm"
+      "path": "./bindings/nodejs-sdk"
     }
   ],
   "files": []

@@ -17,8 +17,7 @@ powerlines.d.ts
 node_modules
 .pnpm-store
 
-bindings/npm/artifacts/*.node
-bindings/npm/artifacts/*.wasm
+bindings/nodejs-sdk/artifacts/*
 
 # IDEs and editors
 /.idea

@@ -1,8 +1,0 @@
-{
-  "name": "native-napi-rs",
-  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "projectType": "library",
-  "sourceRoot": "crates/napi-rs/src",
-  "targets": {},
-  "tags": []
-}

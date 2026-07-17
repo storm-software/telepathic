@@ -4,6 +4,12 @@
 #include "cbm.h"
 
 #include <stddef.h>
+#include <string.h>
+
+/* MSVC has strtok_s with the same signature as POSIX strtok_r. */
+#if defined(_MSC_VER) && !defined(strtok_r)
+#define strtok_r strtok_s
+#endif
 
 void *lsp_memmem(const void *haystack, size_t haystack_len, const void *needle,
                  size_t needle_len);

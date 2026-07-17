@@ -1,0 +1,38 @@
+{
+  "name": "@telepathic/sdk-darwin-x64",
+  "version": "0.0.1",
+  "cpu": [
+    "x64"
+  ],
+  "main": "telepathic-nodejs-sdk.darwin-x64.node",
+  "files": [
+    "telepathic-nodejs-sdk.darwin-x64.node"
+  ],
+  "description": "🔮 Let your models read your mind",
+  "keywords": [
+    "telepathic",
+    "storm-software"
+  ],
+  "author": {
+    "name": "Storm Software",
+    "email": "contact@stormsoftware.com",
+    "url": "https://stormsoftware.com"
+  },
+  "homepage": "https://telepathic.sh",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "github",
+    "url": "https://github.com/storm-software/telepathic.git",
+    "directory": "bindings/nodejs-sdk"
+  },
+  "bugs": {
+    "url": "https://stormsoftware.com/support",
+    "email": "support@stormsoftware.com"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "os": [
+    "darwin"
+  ]
+}

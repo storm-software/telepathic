@@ -1,0 +1,8 @@
+{
+  "name": "native-nodejs-sdk",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "crates/nodejs-sdk/src",
+  "targets": {},
+  "tags": []
+}

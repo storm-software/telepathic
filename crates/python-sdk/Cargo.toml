@@ -1,0 +1,63 @@
+[package]
+authors       = { workspace = true }
+categories    = { workspace = true }
+description   = 'Python bindings for the Telepathic Software Development Kit.'
+documentation = 'https://docs.rs/telepathic'
+edition       = { workspace = true }
+homepage      = { workspace = true }
+keywords      = { workspace = true }
+license       = { workspace = true }
+name          = 'telepathic-python-sdk'
+publish       = false
+readme        = './README.md'
+repository    = { workspace = true }
+version       = '0.0.1'
+
+[lib]
+crate-type = ['cdylib']
+doctest    = false
+name       = 'telepathic_python_sdk'
+
+[lints]
+workspace = true
+
+[features]
+default_global_allocator = []
+
+[dependencies]
+anyhow = { workspace = true }
+async-channel = { workspace = true }
+chrono = { workspace = true, features = ['serde'] }
+derive_more = { workspace = true }
+fast-glob = { workspace = true }
+futures = { workspace = true }
+memchr = { workspace = true }
+num_cpus = { workspace = true }
+pyo3 = { workspace = true }
+pyo3-async-runtimes = { workspace = true }
+regex = { workspace = true }
+regress = { workspace = true }
+serde_json = { workspace = true }
+telepathic-core = { workspace = true }
+telepathic-engine = { workspace = true }
+telepathic-tracing = { workspace = true }
+tokio = { workspace = true }
+
+[target.'cfg(windows)'.dependencies]
+cow-utils = { workspace = true }
+
+[target.'cfg(all(not(target_os = "linux"), not(target_os = "freebsd")))'.dependencies]
+mimalloc-safe = { workspace = true, features = ['skip_collect_on_exit'] }
+
+[target.'cfg(all(any(target_os = "linux", target_os = "freebsd"), not(target_arch = "aarch64")))'.dependencies]
+mimalloc-safe = { workspace = true, features = [
+  'skip_collect_on_exit',
+  'local_dynamic_tls',
+] }
+
+[target.'cfg(all(target_os = "linux", target_arch = "aarch64"))'.dependencies]
+mimalloc-safe = { workspace = true, features = [
+  'skip_collect_on_exit',
+  'no_opt_arch',
+  'local_dynamic_tls',
+] }

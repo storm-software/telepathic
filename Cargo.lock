@@ -6015,7 +6015,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "telepathic-napi-rs"
+name = "telepathic-nodejs-sdk"
 version = "0.0.1"
 dependencies = [
  "anyhow",
@@ -6043,7 +6043,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "telepathic-pyo3"
+name = "telepathic-python-sdk"
 version = "0.0.1"
 dependencies = [
  "anyhow",
