@@ -24,7 +24,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 
 #define PHP_EVAL_MAX_DEPTH 32
 #define PHP_USE_INITIAL_CAP 16
