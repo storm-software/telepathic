@@ -62,14 +62,14 @@ The **🔮 Telepathic** monorepo contains various packages and applications that
 Using [pnpm](http://pnpm.io):
 
 ```bash
-pnpm add -D @telepathic/bindings
+pnpm add -D @telepathic/sdk
 ```
 
 <details>
   <summary>Using npm</summary>
 
 ```bash
-npm install -D @telepathic/bindings
+npm install -D @telepathic/sdk
 ```
 
 </details>
@@ -78,18 +78,18 @@ npm install -D @telepathic/bindings
   <summary>Using yarn</summary>
 
 ```bash
-yarn add -D @telepathic/bindings
+yarn add -D @telepathic/sdk
 ```
 
 </details>
 
 ## Building
 
-Run `nx build bindings-npm` to build the library.
+Run `nx build bindings-nodejs-sdk` to build the library.
 
 ## Running unit tests
 
-Run `nx test bindings-npm` to execute the unit tests via [Vitest](https://vitest.dev/).
+Run `nx test bindings-nodejs-sdk` to execute the unit tests via [Vitest](https://vitest.dev/).
 
 <!-- START footer -->
 <!-- prettier-ignore-start -->

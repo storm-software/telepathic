@@ -67,7 +67,7 @@ if [[ -z "$target" ]]; then
   exit 1
 fi
 
-command="pnpm nx run bindings-npm:build-$target"
+command="pnpm nx run bindings-nodejs-sdk:build-$target"
 
 printf '\033[1;37m ⚙️  Bootstrapping the monorepo before building native %s artifacts...\033[0m\n' "$target"
 

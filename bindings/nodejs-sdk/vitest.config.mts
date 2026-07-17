@@ -7,7 +7,7 @@ export default defineConfig(() => ({
   cacheDir: "../../node_modules/.vite/bindings/nodejs-sdk",
   plugins: [nxViteTsPaths(), nxCopyAssetsPlugin(["*.md"])],
   test: {
-    name: "bindings-npm",
+    name: "bindings-nodejs-sdk",
     watch: false,
     globals: true,
     environment: "node",
