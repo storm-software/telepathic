@@ -202,36 +202,39 @@ in
         "release"
       ];
       module = {
-        packages =
-          with pkgs;
-          [
-            cargo-xwin
-            gcc
-          ]
-          ++ lib.optionals pkgs.stdenv.isLinux [ glibc.static ];
-        # Host build scripts must use gcc, not clang: lld.enable makes rustc link
-        # host bins with clang → __tls_get_addr / DSO missing. cargo-xwin owns
-        # Windows target linking.
+        packages = with pkgs; [
+          cargo-xwin
+          gcc
+        ];
+        # Host build scripts must use gcc, not clang. devenv languages.rust sets
+        # CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER=clang (even with
+        # lld.enable=false). Host units compile for the host triple, so that env
+        # always applies — target-applies-to-host=false only blocks the *cross*
+        # target's flags, not host-triple linker env.
         #
-        # Do NOT set NIX_LDFLAGS to glibc/glibc.static: Nix cc wrapper bakes those
-        # -L paths into host RPATH and host build-script bins SIGSEGV (proc-macro2,
-        # quote, serde_core).
-        #
-        # Do NOT set CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER here:
-        # target-applies-to-host=false → that env applies only when linux-gnu is
-        # --target, not to host units. Host rustflags live in .cargo/config [host].
-        #
-        # Windows +crt-static still leaks into CARGO_CFG_TARGET_FEATURE for build
-        # scripts; cc-rs may pass -static when compiling host tools (rlemon).
-        # LIBRARY_PATH (link-time only, dynamic first) covers libc.a without
-        # poisoning host RPATH.
+        # Never add glibc.static to packages: Nix injects -L…/glibc-static into
+        # NIX_LDFLAGS / NIX_LDFLAGS_FOR_BUILD → host bins mix static libc IFUNCs
+        # with dynamic libgcc_s → SIGSEGV in __libc_start_main_impl (proc-macro2,
+        # quote, serde_core). If cc-rs needs libc.a (Windows +crt-static still in
+        # CARGO_CFG_TARGET_FEATURE), put it on LIBRARY_PATH only.
         #
         # Clear desktop GTK LD_LIBRARY_PATH (conflicting Nix .so → host SIGSEGV).
+        # Clear wild/lld RUSTFLAGS inherited from other profiles.
         # sccache off happens in build-native.sh (unset RUSTC_WRAPPER): empty
         # RUSTC_WRAPPER="" makes cargo try to exec "" as the wrapper.
         env = lib.optionalAttrs pkgs.stdenv.isLinux {
           LIBRARY_PATH = "${pkgs.glibc}/lib:${pkgs.glibc.static}/lib";
           LD_LIBRARY_PATH = lib.mkForce "";
+          # stdenv.cc is clang in this devenv; host rustc must use gcc.
+          CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER = "${pkgs.gcc}/bin/gcc";
+          CC = lib.mkForce "${pkgs.gcc}/bin/gcc";
+          CXX = lib.mkForce "${pkgs.gcc}/bin/g++";
+          RUSTFLAGS = lib.mkForce "";
+          RUSTDOCFLAGS = lib.mkForce "";
+          # Drop package-injected link flags from the cc-wrapper. build-native.sh
+          # also unsets these as belt+suspenders.
+          NIX_LDFLAGS = lib.mkForce "";
+          NIX_LDFLAGS_FOR_BUILD = lib.mkForce "";
         };
         languages.rust = {
           lld.enable = false;

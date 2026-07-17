@@ -14,24 +14,24 @@ catalog:
   "@nx/workspace": 23.0.2
   "@emnapi/core": 1.11.2
   "@emnapi/runtime": 1.11.2
-  "@powerlines/nx": ^0.13.182
-  "@powerlines/tsconfig": ^0.4.191
-  "@powerlines/tsdoc": ^0.2.139
-  "@powerlines/plugin-napi-rs": ^0.2.196
-  "@powerlines/plugin-tsdown": ^0.1.544
-  "@storm-software/config": ^1.138.43
-  "@storm-software/config-tools": ^1.190.106
-  "@storm-software/cspell": ^0.46.174
-  "@storm-software/eslint": ^0.170.140
-  "@storm-software/eslint-plugin-tsdoc": ^0.0.69
-  "@storm-software/git-tools": ^2.131.114
-  "@storm-software/linting-tools": ^1.134.36
-  "@storm-software/markdownlint": ^0.30.262
-  "@storm-software/prettier": ^0.59.159
-  "@storm-software/pnpm-tools": ^0.7.117
-  "@storm-software/tsconfig": ^0.48.173
-  "@storm-software/untyped": ^0.24.248
-  "@storm-software/workspace-tools": ^1.296.86
+  "@powerlines/nx": ^0.13.183
+  "@powerlines/tsconfig": ^0.4.192
+  "@powerlines/tsdoc": ^0.2.140
+  "@powerlines/plugin-napi-rs": ^0.2.197
+  "@powerlines/plugin-tsdown": ^0.1.545
+  "@storm-software/config": ^1.138.44
+  "@storm-software/config-tools": ^1.190.107
+  "@storm-software/cspell": ^0.46.175
+  "@storm-software/eslint": ^0.170.141
+  "@storm-software/eslint-plugin-tsdoc": ^0.0.70
+  "@storm-software/git-tools": ^2.131.115
+  "@storm-software/linting-tools": ^1.134.37
+  "@storm-software/markdownlint": ^0.30.263
+  "@storm-software/prettier": ^0.59.160
+  "@storm-software/pnpm-tools": ^0.7.118
+  "@storm-software/tsconfig": ^0.48.174
+  "@storm-software/untyped": ^0.24.249
+  "@storm-software/workspace-tools": ^1.296.87
   "@napi-rs/cli": ^3.7.3
   "@napi-rs/wasm-runtime": ^1.1.6
   "@tauri-apps/api": ^2.11.1
@@ -52,7 +52,7 @@ catalog:
   signal-exit: ^4.1.0
   nx: 23.0.2
   prettier: ^3.9.5
-  powerlines: ^0.47.143
+  powerlines: ^0.47.144
   jiti: ^2.7.0
   tsdown: ^0.22.8
   rimraf: ^6.1.3
@@ -95,6 +95,11 @@ minimumReleaseAgeExclude:
   - "@stryke/*"
   - "@powerlines/*"
   - powerlines
+  - "@microsoft/api-extractor-model@7.33.9"
+  - "@microsoft/api-extractor@7.58.10"
+  - "@rushstack/node-core-library@5.23.2"
+  - "@rushstack/terminal@0.24.1"
+  - "@rushstack/ts-command-line@5.3.11"
 allowBuilds:
   "@parcel/watcher": true
   "@swc/core": true

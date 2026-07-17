@@ -79,13 +79,30 @@ export CARGO_TARGET_DIR="${CARGO_TARGET_DIR:-$REPO_ROOT/dist/target}"
 export CARGO_BUILD_TARGET_DIR="${CARGO_BUILD_TARGET_DIR:-$CARGO_TARGET_DIR}"
 
 # Windows MSVC cross (cargo-xwin on Linux): host build-script bins SIGSEGV when
-# GTK/Nix LD_LIBRARY_PATH, NIX_LDFLAGS RPATH, or sccache-poisoned objects leak
-# into the host link/runtime. Strip those before cargo runs.
+# GTK/Nix LD_LIBRARY_PATH, NIX_LDFLAGS RPATH (esp. glibc.static -L), sccache, or
+# clang-as-host-linker leak into the host link/runtime. Strip / override those
+# before cargo runs.
 case "$target" in
   *-pc-windows-msvc)
     unset LD_LIBRARY_PATH
     unset NIX_LDFLAGS
+    unset NIX_LDFLAGS_FOR_BUILD
     unset RUSTC_WRAPPER
+    unset RUSTFLAGS
+    unset RUSTDOCFLAGS
+    # Host units compile for the host triple — pin gcc, not clang.
+    if command -v gcc > /dev/null 2>&1; then
+      export CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER="$(command -v gcc)"
+      export CC="$(command -v gcc)"
+    elif command -v cc > /dev/null 2>&1; then
+      export CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER="$(command -v cc)"
+      export CC="$(command -v cc)"
+    fi
+    if command -v g++ > /dev/null 2>&1; then
+      export CXX="$(command -v g++)"
+    elif command -v c++ > /dev/null 2>&1; then
+      export CXX="$(command -v c++)"
+    fi
     ;;
 esac
 
