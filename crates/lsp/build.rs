@@ -25,10 +25,21 @@ fn main() {
 
 fn generate_bindings(manifest_dir: &Path, ts_include: &Path) {
   let wrapper = manifest_dir.join("wrapper.h");
-  let bindings = bindgen::Builder::default()
+  // bindgen only parses headers for Rust FFI. When TARGET is wasm32, libclang
+  // inherits that target and cannot find stdlib.h (no wasi sysroot for bindgen).
+  // Force host triple so host libc headers resolve.
+  let mut builder = bindgen::Builder::default()
     .header(wrapper.to_string_lossy())
     .clang_arg(format!("-I{}", manifest_dir.display()))
-    .clang_arg(format!("-I{}", ts_include.display()))
+    .clang_arg(format!("-I{}", ts_include.display()));
+
+  let target = env::var("TARGET").unwrap_or_default();
+  if target.contains("wasm") {
+    let host = env::var("HOST").unwrap_or_else(|_| "x86_64-unknown-linux-gnu".into());
+    builder = builder.clang_arg(format!("--target={host}"));
+  }
+
+  let bindings = builder
     .allowlist_function("lsp_.*")
     .allowlist_type("CBM.*")
     .allowlist_type("TSNode")

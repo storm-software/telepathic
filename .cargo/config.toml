@@ -1,11 +1,15 @@
 # reference: https://github.com/rust-lang/cargo/issues/3946
+#
+# Nightly: keep [target.*] rustflags (e.g. Windows +crt-static) off host
+# build scripts / proc-macros when cross-compiling.
+# Root key = policy. [unstable] key = enable -Z feature (must be true for host-config).
+# Must be declared before any [table] — TOML bare keys after a header stay in that table.
+target-applies-to-host = false
+
 [env]
 CARGO_WORKSPACE_DIR = { value = "", relative = true }
 WORKSPACE_DIR       = { value = "", relative = true }
 
-# Nightly: keep [target.*] rustflags (e.g. Windows +crt-static) off host
-# build scripts / proc-macros when cross-compiling.
-# host-config defaults target-applies-to-host to false (no separate top-level key).
 [unstable]
 host-config            = true
 target-applies-to-host = true

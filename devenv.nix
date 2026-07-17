@@ -259,6 +259,11 @@ in
       module = {
         env = {
           NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM = "1";
+          # nix cc-wrapper is host-only (arm64 on macos-latest). Apple clang is
+          # multi-arch — required when cross-compiling x86_64-apple-darwin C deps
+          # (tree-sitter / lsp). Without this: "x86_64-apple-macosx != arm64-apple-darwin".
+          CC_x86_64_apple_darwin = "/usr/bin/clang";
+          CXX_x86_64_apple_darwin = "/usr/bin/clang++";
         };
         languages.rust.targets = [ "x86_64-apple-darwin" ];
       };
