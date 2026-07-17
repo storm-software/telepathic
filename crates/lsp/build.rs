@@ -89,6 +89,12 @@ fn dirs_fallback() -> String {
     .unwrap_or_else(|_| "/home/development/.cargo".into())
 }
 
+fn target_is_msvc() -> bool {
+  // Cross-compile: build script runs on host, so cfg(target_env = "msvc") is wrong.
+  // CARGO_CFG_TARGET_ENV reflects the crate being built.
+  env::var("CARGO_CFG_TARGET_ENV").is_ok_and(|env| env == "msvc")
+}
+
 fn compile_grammars(workspace: &Path) {
   let grammars_root = workspace.join("crates/tree-sitter/vendored");
   let keys = [
@@ -106,6 +112,7 @@ fn compile_grammars(workspace: &Path) {
     "tsx",
     "typescript",
   ];
+  let msvc = target_is_msvc();
   for key in keys {
     let grammar_dir = grammars_root.join(key);
     let parser_path = grammar_dir.join("parser.c");
@@ -122,8 +129,9 @@ fn compile_grammars(workspace: &Path) {
       .flag_if_supported("-Wno-unused-variable")
       .flag_if_supported("-Wno-unused-function")
       .flag_if_supported("-Wno-trigraphs");
-    #[cfg(target_env = "msvc")]
-    build.flag("-utf-8");
+    if msvc {
+      build.flag("-utf-8");
+    }
 
     let scanner = grammar_dir.join("scanner.c");
     if scanner.is_file() {
@@ -136,6 +144,8 @@ fn compile_grammars(workspace: &Path) {
 }
 
 fn compile_lsp_runtime(manifest_dir: &Path, vendored: &Path, ts_include: &Path) {
+  let helpers_h = manifest_dir.join("helpers.h");
+  let helpers_h = helpers_h.to_str().expect("helpers.h path must be UTF-8");
   let mut build = cc::Build::new();
   build
     .std("c11")
@@ -143,8 +153,6 @@ fn compile_lsp_runtime(manifest_dir: &Path, vendored: &Path, ts_include: &Path) 
     .include(vendored)
     .include(ts_include)
     .define("_GNU_SOURCE", None)
-    .flag("-include")
-    .flag(manifest_dir.join("helpers.h").to_str().unwrap())
     .flag_if_supported("-Wno-unused-parameter")
     .flag_if_supported("-Wno-unused-but-set-variable")
     .flag_if_supported("-Wno-unused-variable")
@@ -155,8 +163,14 @@ fn compile_lsp_runtime(manifest_dir: &Path, vendored: &Path, ts_include: &Path) 
     .flag_if_supported("-Wno-format-truncation")
     .flag_if_supported("-Wno-error=implicit-function-declaration");
 
-  #[cfg(target_env = "msvc")]
-  build.flag("-utf-8");
+  // GNU `-include` is ignored by clang-cl; next arg becomes a bogus extra source
+  // → "cannot specify -Fo when compiling multiple source files". Use /FI on MSVC.
+  if target_is_msvc() {
+    build.flag(format!("/FI{helpers_h}"));
+    build.flag("-utf-8");
+  } else {
+    build.flag("-include").flag(helpers_h);
+  }
 
   let shim_files = ["arena.c", "helpers.c", "dispatch.c"];
   for name in shim_files {

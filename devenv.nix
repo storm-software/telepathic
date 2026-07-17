@@ -206,6 +206,9 @@ in
           cargo-xwin
           gcc
           libllvm
+          # Unwrapped clang for ring on aarch64-pc-windows-msvc (forces GNU clang;
+          # nix cc-wrapper injects host -fPIC / multi-target warnings).
+          llvmPackages.clang-unwrapped
         ];
         # Host build scripts must use gcc, not clang. devenv languages.rust sets
         # CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER=clang (even with
@@ -223,6 +226,10 @@ in
         # Clear wild/lld RUSTFLAGS inherited from other profiles.
         # sccache off happens in build-native.sh (unset RUSTC_WRAPPER): empty
         # RUSTC_WRAPPER="" makes cargo try to exec "" as the wrapper.
+        #
+        # ring (aarch64-windows) forces GNU `clang` while cargo-xwin CFLAGS use
+        # clang-cl `/imsvc`. build-native.sh shims `clang` → rewrite to -isystem
+        # and exec TELEPATHIC_XWIN_CLANG (this unwrapped binary).
         env = lib.optionalAttrs pkgs.stdenv.isLinux {
           LIBRARY_PATH = "${pkgs.glibc}/lib:${pkgs.glibc.static}/lib";
           LD_LIBRARY_PATH = lib.mkForce "";
@@ -236,6 +243,9 @@ in
           # also unsets these as belt+suspenders.
           NIX_LDFLAGS = lib.mkForce "";
           NIX_LDFLAGS_FOR_BUILD = lib.mkForce "";
+          # Same as wasm: nix hardening (-fPIC) breaks windows-msvc C deps.
+          NIX_HARDENING_ENABLE = "";
+          TELEPATHIC_XWIN_CLANG = "${pkgs.llvmPackages.clang-unwrapped}/bin/clang";
         };
         languages.rust = {
           lld.enable = false;

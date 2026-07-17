@@ -82,6 +82,11 @@ export CARGO_BUILD_TARGET_DIR="${CARGO_BUILD_TARGET_DIR:-$CARGO_TARGET_DIR}"
 # GTK/Nix LD_LIBRARY_PATH, NIX_LDFLAGS RPATH (esp. glibc.static -L), sccache, or
 # clang-as-host-linker leak into the host link/runtime. Strip / override those
 # before cargo runs.
+#
+# Also: cargo-xwin sets clang-cl CFLAGS with `/imsvc`, but `ring` forces the GNU
+# `clang` driver on aarch64-pc-windows-msvc. GNU clang treats `/imsvc` as a path
+# and rejects nix `-fPIC`. Shim `clang` to rewrite `/imsvc` → `-isystem` and call
+# unwrapped clang (see devenv release-windows). Do not shadow `clang-cl`.
 case "$target" in
   *-pc-windows-msvc)
     unset LD_LIBRARY_PATH
@@ -103,6 +108,60 @@ case "$target" in
     elif command -v c++ > /dev/null 2>&1; then
       export CXX="$(command -v c++)"
     fi
+    # Avoid nix cc-wrapper injecting -fPIC / hardening into Windows target C.
+    export NIX_HARDENING_ENABLE=""
+
+    shim_dir="${TMPDIR:-/tmp}/telepathic-xwin-clang-shim-$$"
+    mkdir -p "$shim_dir"
+    cat >"$shim_dir/clang" <<'SHIM'
+#!/bin/sh
+# Prefer devenv-provided unwrapped clang; else first real clang on PATH.
+if [ -n "${TELEPATHIC_XWIN_CLANG:-}" ] && [ -x "${TELEPATHIC_XWIN_CLANG}" ]; then
+  real="${TELEPATHIC_XWIN_CLANG}"
+else
+  self_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+  real=""
+  IFS=:
+  for d in $PATH; do
+    [ "$d" = "$self_dir" ] && continue
+    if [ -x "$d/clang" ]; then
+      real="$d/clang"
+      break
+    fi
+  done
+  unset IFS
+fi
+[ -n "$real" ] || {
+  echo "telepathic-xwin-clang-shim: real clang not found (set TELEPATHIC_XWIN_CLANG)" >&2
+  exit 127
+}
+# Rebuild argv: /imsvc (clang-cl) → -isystem (GNU); drop -fPIC for windows-msvc.
+n=0
+windows_msvc=0
+for a in "$@"; do
+  case "$a" in
+    *windows-msvc*) windows_msvc=1 ;;
+  esac
+done
+for a in "$@"; do
+  [ "$a" = "/imsvc" ] && a="-isystem"
+  if [ "$windows_msvc" -eq 1 ] && [ "$a" = "-fPIC" ]; then
+    continue
+  fi
+  eval "arg_$n=\$a"
+  n=$((n + 1))
+done
+i=0
+set --
+while [ "$i" -lt "$n" ]; do
+  eval "v=\$arg_$i"
+  set -- "$@" "$v"
+  i=$((i + 1))
+done
+exec "$real" "$@"
+SHIM
+    chmod +x "$shim_dir/clang"
+    export PATH="$shim_dir:$PATH"
     ;;
 esac
 
