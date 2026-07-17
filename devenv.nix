@@ -217,17 +217,20 @@ in
         # -L paths into host RPATH and host build-script bins SIGSEGV (proc-macro2,
         # quote, serde_core).
         #
+        # Do NOT set CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER here:
+        # target-applies-to-host=false → that env applies only when linux-gnu is
+        # --target, not to host units. Host rustflags live in .cargo/config [host].
+        #
         # Windows +crt-static still leaks into CARGO_CFG_TARGET_FEATURE for build
         # scripts; cc-rs may pass -static when compiling host tools (rlemon).
         # LIBRARY_PATH (link-time only, dynamic first) covers libc.a without
-        # poisoning host RPATH. Clear desktop GTK LD_LIBRARY_PATH (not needed).
+        # poisoning host RPATH.
         #
-        # .cargo/config.toml sets target-applies-to-host = false so +crt-static
-        # rustflags stay off host artifacts.
+        # Clear desktop GTK LD_LIBRARY_PATH (conflicting Nix .so → host SIGSEGV).
+        # sccache off happens in build-native.sh (unset RUSTC_WRAPPER): empty
+        # RUSTC_WRAPPER="" makes cargo try to exec "" as the wrapper.
         env = lib.optionalAttrs pkgs.stdenv.isLinux {
-          CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER = "${pkgs.stdenv.cc}/bin/cc";
           LIBRARY_PATH = "${pkgs.glibc}/lib:${pkgs.glibc.static}/lib";
-          # Override desktop GTK LD_LIBRARY_PATH from top-level env.
           LD_LIBRARY_PATH = lib.mkForce "";
         };
         languages.rust = {

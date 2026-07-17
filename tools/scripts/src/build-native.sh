@@ -78,6 +78,17 @@ cd "$REPO_ROOT"
 export CARGO_TARGET_DIR="${CARGO_TARGET_DIR:-$REPO_ROOT/dist/target}"
 export CARGO_BUILD_TARGET_DIR="${CARGO_BUILD_TARGET_DIR:-$CARGO_TARGET_DIR}"
 
+# Windows MSVC cross (cargo-xwin on Linux): host build-script bins SIGSEGV when
+# GTK/Nix LD_LIBRARY_PATH, NIX_LDFLAGS RPATH, or sccache-poisoned objects leak
+# into the host link/runtime. Strip those before cargo runs.
+case "$target" in
+  *-pc-windows-msvc)
+    unset LD_LIBRARY_PATH
+    unset NIX_LDFLAGS
+    unset RUSTC_WRAPPER
+    ;;
+esac
+
 if ! pnpm bootstrap; then
   printf '\033[31mAn error occurred while bootstrapping the monorepo\033[0m\n' >&2
   exit 1

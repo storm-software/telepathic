@@ -14,6 +14,12 @@ WORKSPACE_DIR       = { value = "", relative = true }
 host-config            = true
 target-applies-to-host = true
 
+# Host units (build scripts / proc-macros) when cross-compiling.
+# Force dynamic CRT so Windows +crt-static cannot leak into Linux host bins
+# (Nix: static glibc host bins → SIGSEGV in proc-macro2/quote/serde_core).
+[host]
+rustflags = ["-C", "target-feature=-crt-static"]
+
 [build]
 rustdocflags = [
     "--cfg",
