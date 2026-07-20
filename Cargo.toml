@@ -1,7 +1,7 @@
 cargo-features = ["codegen-backend"]
 
 [workspace]
-members = ["crates/*", "apps/desktop/src-tauri"]
+members = ["crates/*", "bindings/*", "apps/desktop/src-tauri"]
 resolver = "3"
 
 [workspace.package]
@@ -105,11 +105,12 @@ rustdoc-args = ["--cfg", "docsrs"]
 # ref: https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#inheriting-a-dependency-from-a-workspace
 [workspace.dependencies]
 # Telepathic
-telepathic-nodejs-sdk = { path = "./crates/nodejs-sdk" }
-telepathic-python-sdk = { path = "./crates/python-sdk" }
+telepathic-nodejs-sdk = { path = "./bindings/nodejs-sdk" }
+telepathic-python-sdk = { path = "./bindings/python-sdk" }
 telepathic-core = { path = "./crates/core" }
 telepathic-embedding = { path = "./crates/embedding" }
-telepathic-engine = { path = "./crates/engine" }
+telepathic-pipeline = { path = "./crates/pipeline" }
+telepathic-sdk = { path = "./crates/sdk" }
 telepathic-models = { path = "./crates/models" }
 telepathic-semantic = { path = "./crates/semantic" }
 telepathic-storage = { path = "./crates/storage" }

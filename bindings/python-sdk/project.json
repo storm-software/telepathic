@@ -1,0 +1,44 @@
+{
+  "name": "python-sdk",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "bindings/python-sdk/src",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "maturin build --release",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "develop": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "maturin develop",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pytest",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "ruff check src tests && ruff format --check src tests",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "mypy",
+        "cwd": "{projectRoot}"
+      }
+    }
+  },
+  "tags": ["platform:python"]
+}

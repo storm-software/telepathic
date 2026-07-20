@@ -5972,26 +5972,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "telepathic-engine"
-version = "0.0.1"
-dependencies = [
- "camino",
- "derive_more",
- "ignore",
- "rayon",
- "serde",
- "serde_json",
- "telepathic-core",
- "telepathic-embedding",
- "telepathic-lsp",
- "telepathic-tree-sitter",
- "tempfile",
- "thiserror 2.0.18",
- "tokio",
- "tracing",
-]
-
-[[package]]
 name = "telepathic-lsp"
 version = "0.0.1"
 dependencies = [
@@ -6036,10 +6016,29 @@ dependencies = [
  "serde_json",
  "static_vcruntime",
  "telepathic-core",
- "telepathic-engine",
+ "telepathic-sdk",
  "telepathic-tracing",
  "winapi",
  "winres",
+]
+
+[[package]]
+name = "telepathic-pipeline"
+version = "0.0.1"
+dependencies = [
+ "camino",
+ "derive_more",
+ "ignore",
+ "rayon",
+ "serde",
+ "serde_json",
+ "telepathic-core",
+ "telepathic-lsp",
+ "telepathic-tree-sitter",
+ "tempfile",
+ "thiserror 2.0.18",
+ "tokio",
+ "tracing",
 ]
 
 [[package]]
@@ -6062,9 +6061,27 @@ dependencies = [
  "regress",
  "serde_json",
  "telepathic-core",
- "telepathic-engine",
+ "telepathic-sdk",
  "telepathic-tracing",
  "tokio",
+]
+
+[[package]]
+name = "telepathic-sdk"
+version = "0.0.1"
+dependencies = [
+ "camino",
+ "derive_more",
+ "ignore",
+ "rayon",
+ "serde",
+ "serde_json",
+ "telepathic-core",
+ "telepathic-embedding",
+ "tempfile",
+ "thiserror 2.0.18",
+ "tokio",
+ "tracing",
 ]
 
 [[package]]

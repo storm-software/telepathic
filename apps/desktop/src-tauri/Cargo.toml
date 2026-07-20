@@ -3,7 +3,7 @@ name = "telepathic-desktop"
 version.workspace = true
 authors.workspace = true
 description = "Telepathic desktop application"
-edition = "2021"
+edition = "2024"
 license.workspace = true
 repository.workspace = true
 

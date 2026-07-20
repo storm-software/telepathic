@@ -797,7 +797,8 @@ if (!nativeBinding) {
 }
 
 module.exports = nativeBinding;
-module.exports.BindingEngine = nativeBinding.BindingEngine;
+module.exports.BindingSdk = nativeBinding.BindingSdk;
+module.exports.BindingSDK = nativeBinding.BindingSDK;
 module.exports.TraceSubscriberGuard = nativeBinding.TraceSubscriberGuard;
 module.exports.BindingLogLevel = nativeBinding.BindingLogLevel;
 module.exports.BindingMode = nativeBinding.BindingMode;

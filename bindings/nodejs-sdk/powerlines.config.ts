@@ -65,7 +65,7 @@ const config: UserConfig = defineConfig({
         "export type MaybePromise<T> = T | Promise<T>\nexport type Nullable<T> = T | null | undefined\ntype VoidNullable<T = void> = T | null | undefined | void\nexport type BindingStringOrRegex = string | RegExp\ntype BindingResult<T> = { errors: BindingError[], isBindingErrors: boolean } | T\n\n",
       npmDir: "npm",
       outputDir: "artifacts",
-      manifestPath: "crates/nodejs-sdk/Cargo.toml"
+      manifestPath: "./Cargo.toml"
     })
   ]
 });

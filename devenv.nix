@@ -52,6 +52,7 @@ in
       libclang
       pkg-config
       openssl
+      maturin
     ]
     ++ lib.optionals pkgs.stdenv.isLinux [
       # Tauri desktop (Linux) — webkitgtk is broken/unsupported on Darwin
@@ -86,7 +87,13 @@ in
     ];
   };
 
-  languages.c.enable = true;
+  languages = {
+    c.enable = true;
+    python = {
+      directory = "bindings/python-sdk";
+      venv.enable = true;
+    };
+  };
 
   tasks = {
     "telepathic:setup:tmp" = {

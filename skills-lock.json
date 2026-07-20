@@ -67,6 +67,12 @@
       "skillPath": ".claude/skills/nix-best-practices/SKILL.md",
       "computedHash": "f6d14bf40d4b505dd50cb389711eae74bc1459740adb27f4641cd75c21042311"
     },
+    "python-pypi-package-builder": {
+      "source": "github/awesome-copilot",
+      "sourceType": "github",
+      "skillPath": "skills/python-pypi-package-builder/SKILL.md",
+      "computedHash": "8873ae86fc80659e5cdfc005c29193ac7fb976fbc9335c2a05194323d60d0e84"
+    },
     "rust-async-patterns": {
       "source": "wshobson/agents",
       "sourceType": "github",

@@ -5,15 +5,12 @@ export type BindingStringOrRegex = string | RegExp;
 type BindingResult<T> =
   { errors: BindingError[]; isBindingErrors: boolean } | T;
 
-export declare class BindingEngine {
+export declare class BindingSdk {
   constructor(options: BindingOptions);
   getSettings(): Promise<BindingResult<BindingGetSettingsOutput>>;
   getSession(): Promise<BindingResult<BindingGetSessionOutput>>;
   getSchema(): Promise<BindingResult<BindingGetSchemaOutput>>;
   listRepositories(): Promise<BindingResult<BindingListRepositoriesOutput>>;
-  indexRepository(
-    input: BindingIndexRepositoryInput
-  ): Promise<BindingResult<BindingIndexRepositoryOutput>>;
   listProjects(
     input: BindingListProjectsInput
   ): Promise<BindingResult<BindingListProjectsOutput>>;
@@ -38,6 +35,7 @@ export declare class BindingEngine {
   close(): Promise<undefined>;
   get isClosed(): boolean;
 }
+export type BindingSDK = BindingSdk;
 
 export declare class TraceSubscriberGuard {
   close(): void;

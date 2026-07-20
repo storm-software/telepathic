@@ -1,0 +1,48 @@
+[package]
+authors       = { workspace = true }
+categories    = { workspace = true }
+description = "🔮 Let your models read your mind."
+documentation = 'https://docs.rs/telepathic'
+edition       = { workspace = true }
+homepage      = { workspace = true }
+keywords      = { workspace = true }
+license       = { workspace = true }
+name          = 'telepathic-pipeline'
+publish       = true
+readme        = './README.md'
+repository    = { workspace = true }
+version       = '0.0.1'
+
+[package.metadata.cargo-shear]
+ignored = ['serde', 'serde_json']
+
+[lib]
+doctest = false
+
+[lints]
+workspace = true
+
+[dependencies]
+camino                 = { workspace = true }
+derive_more            = { workspace = true }
+ignore                 = { workspace = true }
+rayon                  = { workspace = true }
+serde                  = { workspace = true, features = ['derive'], optional = true }
+serde_json             = { workspace = true }
+telepathic-core        = { workspace = true }
+telepathic-lsp         = { workspace = true }
+telepathic-tree-sitter = { workspace = true }
+thiserror              = { workspace = true }
+tokio                  = { workspace = true }
+tracing                = { workspace = true }
+
+[features]
+default      = ['serde']
+experimental = []
+serde        = ['dep:serde']
+testing      = []
+
+[dev-dependencies]
+serde_json = { workspace = true }
+tempfile   = '3.20.0'
+tokio      = { workspace = true, features = ['macros', 'rt-multi-thread'] }

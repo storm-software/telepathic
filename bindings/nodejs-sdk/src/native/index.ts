@@ -38,7 +38,7 @@ import type {
   BindingWriteGraphOutput
 } from "../bindings.cjs";
 import {
-  BindingEngine,
+  BindingSDK,
   shutdownAsyncRuntime,
   startAsyncRuntime
 } from "../bindings.cjs";
@@ -62,17 +62,17 @@ function unwrapBindingResult<T>(
   return result;
 }
 
-export class NativeBindingEngine {
+export class NativeBindingSDK {
   #isClosed = false;
 
-  #binding: BindingEngine;
+  #binding: BindingSDK;
 
   #stopWorkers?: () => Promise<void>;
 
   protected static asyncRuntimeShutdown = false;
 
   public constructor(config: any) {
-    this.#binding = new BindingEngine({
+    this.#binding = new BindingSDK({
       logLevel: config.settings?.logLevel,
       cwd: config.cwd
     });
@@ -84,7 +84,7 @@ export class NativeBindingEngine {
 
   private async prepareBinding(): Promise<void> {
     await this.#stopWorkers?.();
-    if (NativeBindingEngine.asyncRuntimeShutdown) {
+    if (NativeBindingSDK.asyncRuntimeShutdown) {
       startAsyncRuntime();
     }
   }
@@ -201,7 +201,7 @@ export class NativeBindingEngine {
 
     shutdownAsyncRuntime();
 
-    NativeBindingEngine.asyncRuntimeShutdown = true;
+    NativeBindingSDK.asyncRuntimeShutdown = true;
     this.#stopWorkers = undefined;
     this.#isClosed = true;
   }

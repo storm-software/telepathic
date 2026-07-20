@@ -1,5 +1,5 @@
 {
-  "name": "bindings-nodejs-sdk",
+  "name": "nodejs-sdk",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "bindings/nodejs-sdk/src",

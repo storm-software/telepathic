@@ -7,8 +7,10 @@ fn greet(name: String) -> String {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
   // WebKitGTK Wayland/EGL workaround — see tauri-apps/tauri#9394
-  #[cfg(target_os = "linux")]
-  std::env::set_var("WEBKIT_DISABLE_DMABUF_RENDERER", "1");
+  unsafe {
+    #[cfg(target_os = "linux")]
+    std::env::set_var("WEBKIT_DISABLE_DMABUF_RENDERER", "1")
+  };
 
   tauri::Builder::default()
     .plugin(tauri_plugin_opener::init())
