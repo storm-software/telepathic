@@ -71,8 +71,7 @@ mimalloc-safe = { workspace = true, features = [
 ] }
 
 [build-dependencies]
-napi-build       = { workspace = true }
-static_vcruntime = { version = '3.0' }
+napi-build = { workspace = true }
 
 [features]
 default_global_allocator = []

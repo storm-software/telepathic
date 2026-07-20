@@ -3,7 +3,6 @@
 fn main() {
   println!("cargo::rustc-check-cfg=cfg(tokio_unstable)");
 
-  static_vcruntime::metabuild();
   napi_build::setup();
 
   // Embed Windows resource metadata to establish binary legitimacy
