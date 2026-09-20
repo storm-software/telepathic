@@ -100,6 +100,8 @@ minimumReleaseAgeExclude:
   - "@rushstack/node-core-library@5.23.2"
   - "@rushstack/terminal@0.24.1"
   - "@rushstack/ts-command-line@5.3.11"
+  # Renovate security update: pnpm@11.11.0 || 11.27.0
+  - pnpm@11.11.0 || 11.27.0
 allowBuilds:
   "@parcel/watcher": true
   "@swc/core": true
