@@ -4,83 +4,83 @@ packages:
   - bindings/*
   - docs/*
 catalog:
-  "@ls-lint/ls-lint": ^2.3.1
-  "@nx/devkit": 23.0.2
-  "@nx/eslint-plugin": 23.0.2
-  "@nx/js": 23.0.2
-  "@nx/plugin": 23.0.2
-  "@nx/vite": 23.0.2
-  "@nx/vitest": 23.0.2
-  "@nx/workspace": 23.0.2
-  "@emnapi/core": 1.11.2
-  "@emnapi/runtime": 1.11.2
-  "@powerlines/nx": ^0.13.183
-  "@powerlines/tsconfig": ^0.4.192
-  "@powerlines/tsdoc": ^0.2.140
-  "@powerlines/plugin-napi-rs": ^0.2.197
-  "@powerlines/plugin-tsdown": ^0.1.545
-  "@storm-software/config": ^1.138.44
-  "@storm-software/config-tools": ^1.190.107
-  "@storm-software/cspell": ^0.46.175
-  "@storm-software/eslint": ^0.170.141
-  "@storm-software/eslint-plugin-tsdoc": ^0.0.70
-  "@storm-software/git-tools": ^2.131.115
-  "@storm-software/linting-tools": ^1.134.37
-  "@storm-software/markdownlint": ^0.30.263
-  "@storm-software/prettier": ^0.59.160
-  "@storm-software/pnpm-tools": ^0.7.118
-  "@storm-software/tsconfig": ^0.48.174
-  "@storm-software/untyped": ^0.24.249
-  "@storm-software/workspace-tools": ^1.296.87
-  "@napi-rs/cli": ^3.7.3
-  "@napi-rs/wasm-runtime": ^1.1.6
-  "@tauri-apps/api": ^2.11.1
-  "@tauri-apps/cli": ^2.11.4
-  "@tauri-apps/plugin-opener": ^2.5.4
-  "@types/node": ^25.9.5
+  "@ls-lint/ls-lint": ^2.3.2
+  "@nx/devkit": 23.3.1
+  "@nx/eslint-plugin": 23.3.1
+  "@nx/js": 23.3.1
+  "@nx/plugin": 23.3.1
+  "@nx/vite": 23.3.1
+  "@nx/vitest": 23.3.1
+  "@nx/workspace": 23.3.1
+  "@emnapi/core": 1.11.3
+  "@emnapi/runtime": 1.11.3
+  "@powerlines/nx": ^0.13.258
+  "@powerlines/tsconfig": ^0.4.261
+  "@powerlines/tsdoc": ^0.2.209
+  "@powerlines/plugin-napi-rs": ^0.2.276
+  "@powerlines/plugin-tsdown": ^0.1.619
+  "@storm-software/config": ^1.138.91
+  "@storm-software/config-tools": ^1.190.155
+  "@storm-software/cspell": ^0.46.222
+  "@storm-software/eslint": ^0.170.190
+  "@storm-software/eslint-plugin-tsdoc": ^0.0.118
+  "@storm-software/git-tools": ^2.133.0
+  "@storm-software/linting-tools": ^1.134.85
+  "@storm-software/markdownlint": ^0.30.310
+  "@storm-software/prettier": ^0.59.208
+  "@storm-software/pnpm-tools": ^0.7.169
+  "@storm-software/tsconfig": ^0.48.221
+  "@storm-software/untyped": ^0.24.297
+  "@storm-software/workspace-tools": ^1.297.25
+  "@napi-rs/cli": ^3.10.9
+  "@napi-rs/wasm-runtime": ^1.2.6
+  "@tauri-apps/api": ^2.12.4
+  "@tauri-apps/cli": ^2.12.4
+  "@tauri-apps/plugin-opener": ^2.7.2
+  "@types/node": ^25.9.9
   "@types/react": ^19.2.17
   "@types/react-dom": ^19.2.3
-  "@typescript/native-preview": 7.0.0-dev.20251218.3
+  "@typescript/native-preview": 7.0.0-dev.20260707.2
   "@vitejs/plugin-react": ^4.7.0
   copyfiles: ^2.4.1
-  eslint: ^10.7.0
-  emnapi: 1.11.2
+  eslint: ^10.14.0
+  emnapi: 1.11.3
   lefthook: ^1.13.6
   log4brains: ^1.1.0
   react: ^19.2.7
   react-dom: ^19.2.7
   signal-exit: ^4.1.0
   nx: 23.0.2
-  prettier: ^3.9.5
-  powerlines: ^0.47.144
+  prettier: ^3.9.10
+  powerlines: ^0.47.218
   jiti: ^2.7.0
-  tsdown: ^0.22.9
+  tsdown: ^0.23.4
   rimraf: ^6.1.3
-  verdaccio: 6.0.5
-  vite: ^8.1.5
-  vitest: ~4.1.10
+  verdaccio: 6.11.1
+  vite: ^8.3.5
+  vitest: ~4.1.12
   zx: ^8.8.5
 overrides:
   "@telepathic/tools-config": workspace:*
   "@telepathic/tools-scripts": workspace:*
   "@telepathic/tools-cspell": workspace:*
   "@telepathic/bindings": workspace:*
-  cookie: ">=0.7.0"
-  debug: ">=4.4.0"
-  follow-redirects: ">=1.15.9"
-  got: ">=14.4.5"
+  cookie: ">=0.7.2"
+  debug: ">=4.4.3"
+  follow-redirects: ">=1.16.2"
+  got: ">=14.6.6"
   ip: ">=2.0.1"
   loader-utils: ">=3.3.1"
-  markdown-it: ">=14.1.0"
+  markdown-it: ">=14.3.3"
   micromatch: ">=4.0.8"
   node-fetch: ">=3.3.2"
   nth-check: ">=2.1.1"
-  parse-path: ">=7.0.0"
+  parse-path: ">=7.1.0"
   parse-url: ">=9.2.0"
-  path-to-regexp: ">=0.1.12"
-  postcss: ">=8.5.1"
-  shell-quote: ">=1.8.2"
-  simple-git: ">=3.27.0"
+  path-to-regexp: ">=0.2.5"
+  postcss: ">=8.5.32"
+  shell-quote: ">=1.12.0"
+  simple-git: ">=3.36.0"
 shamefullyHoist: true
 fetchTimeout: 450000
 dedupeDirectDeps: true
