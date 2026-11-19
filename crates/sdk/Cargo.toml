@@ -46,5 +46,5 @@ embed-voyage = ['telepathic-embedding/voyage']
 
 [dev-dependencies]
 serde_json = { workspace = true }
-tempfile   = '3.20.0'
+tempfile   = '3.27.0'
 tokio      = { workspace = true, features = ['macros', 'rt-multi-thread'] }
